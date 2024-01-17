@@ -1,0 +1,37 @@
+{% extends 'app/base.html' %}
+
+{% block css %}   
+{% endblock %}
+{% load static %}  
+
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <div class="titulo-general text-center">Contacto</div>
+    <div class="row">
+        <div class="col-sm-10 col-md-8 col-lg-8 p-4 mx-auto">
+            <form method="post" action="#">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                    <label for="floatingInput">Correo Electrónico</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Contraseña</label>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center pt-4">
+                        <button type="button" class="btn btn-outline-primary">Enviar</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

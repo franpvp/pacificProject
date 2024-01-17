@@ -1,0 +1,60 @@
+{% extends 'app/base.html' %}
+
+{% block css %}   
+{% endblock %}
+{% load static %}  
+
+{% block contenido %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="titulo-general text-center">Crear Cuenta</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-12 col-lg-5 pb-4">
+                        <!-- Input Nombre -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nombre" placeholder="nombre">
+                            <label for="floatingInput">Nombre</label>
+                        </div>
+                        <!-- Input Apellidos -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="apellidos" placeholder="apellidos">
+                            <label for="floatingInput">Apellidos</label>
+                        </div>
+                        <!-- Input Correo Electrónico -->
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="correo" placeholder="name@example.com">
+                            <label for="floatingInput">Correo Electrónico</label>
+                        </div>
+                        <!-- Input Celular -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="celular" placeholder="123456789">
+                            <label for="floatingInput">Celular</label>
+                        </div>
+                        <!-- Input Contraseña -->
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                            <label for="floatingPassword">Contraseña</label>
+                        </div>
+                        <!-- Input Confirmar Contraseña -->
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password2" placeholder="Password">
+                            <label for="floatingPassword">Confirmar Contraseña</label>
+                        </div>
+                        <div class="row">
+                            <div class="col d-flex justify-content-center pt-4">
+                                <div class="btn-reg">Registrarse</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
