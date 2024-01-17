@@ -21,45 +21,37 @@
                     <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a href="{% url 'index' %}">
-                                <p class="nav-link btnLink" aria-current="page">Inicio</p>
-                            </a> 
+                <div class="offcanvas-body text-center">
+                    <ul class="navbar-nav justify-content-center flex-grow-1">
+                        <li class="nav-item ml-3 mr-3 mb-3">
+                            <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page">Inicio</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{% url 'habitaciones' %}">
-                                <p class="nav-link btnLink" aria-current="page">Habitaciones</p>
-                            </a>
+                        <li class="nav-item ml-3 mr-3 mb-3">
+                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Habitaciones</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#">
-                                <p class="nav-link btnLink" aria-current="page">Sobre Nosotros</p>
-                            </a>
+                        <li class="nav-item ml-3 mr-3 mb-3">
+                            <a href="#" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#">
-                                <p class="nav-link btnLink" aria-current="page">Contacto</p>
-                            </a>
+                        <li class="nav-item ml-3 mr-3 mb-3">
+                            <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">Contacto</a>
                         </li>
                     </ul>
+                    <div class="d-flex justify-content-center align-item-center">
+                        <a href="{% url 'login' %}">
+                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
+                        </a>
+                        <a href="{% url 'registro' %}" class="btn-reg">
+                            Regístrate
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        
     </nav>
 
     {% block contenido %}
     {% endblock %}
  
-
-
-
-
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

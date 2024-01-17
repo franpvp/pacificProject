@@ -1,10 +1,11 @@
 from django.urls import path
 
-from .views import index, home, registro, habitaciones, metodo_pago, reserva_realizada, contacto
+from .views import index, home, login, registro, habitaciones, metodo_pago, reserva_realizada, contacto
 
 urlpatterns = [
     path('', index, name="index"),
     path('home/', home, name="home"),
+    path('login/', login, name="login"),
     path('registro/', registro, name="registro"),
     path('habitaciones/', habitaciones, name="habitaciones"),
     path('metodo_pago/', metodo_pago, name="metodo_pago"),
