@@ -1,11 +1,52 @@
 {% extends 'app/base.html' %}
 
-{% block css %}   
+{% block css %}
 {% endblock %}
-{% load static %}  
-
+{% load static %}
 
 {% block contenido %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="titulo-general text-center">Iniciar Sesión</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-12 col-lg-5 pb-4">
+                        <!-- Input Correo Electrónico -->
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="correo" placeholder="name@example.com">
+                            <label for="floatingInput">Correo Electrónico</label>
+                        </div>
+                        <!-- Input Contraseña -->
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                            <label for="floatingPassword">Contraseña</label>
+                        </div>
+                        <div class="form-floating mb-3"></div>
+                        <div class="row">
+                            <div class="col d-flex justify-content-center pt-4">
+                                <div class="btn-reg">Iniciar sesión</div>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3 mt-4"> <!-- Agregando mt-4 aquí -->
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">¿No tienes una cuenta?</h5>
+                                    <a href="{% url 'registro' %}">
+                                        Registrarse
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

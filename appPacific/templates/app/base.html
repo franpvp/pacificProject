@@ -7,12 +7,15 @@
     <title>Hotel Pacific</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     
 </head>
 <body>
     <nav class="navbar navbar-expand-lg p-3">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">PacificLogo</a>
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -30,28 +33,49 @@
                             <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Habitaciones</a>
                         </li>
                         <li class="nav-item ml-3 mr-3 mb-3">
-                            <a href="#" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
+                            <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
                         </li>
                         <li class="nav-item ml-3 mr-3 mb-3">
                             <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">Contacto</a>
                         </li>
                     </ul>
                     <div class="d-flex justify-content-center align-item-center">
-                        <a href="{% url 'login' %}">
+                        <a href="{% url 'login' %}" class="btn-reg me-2">
                             <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
+                            Iniciar Sesión
                         </a>
-                        <a href="{% url 'registro' %}" class="btn-reg">
+                        <a href="{% url 'registro' %}" class="btn-reg ms-2">
                             Regístrate
                         </a>
                     </div>
                 </div>
             </div>
-        
+        </div>
     </nav>
 
     {% block contenido %}
     {% endblock %}
+
+    <footer class="fixed-bottom" style="background-color: #3498db; color: #ffffff;">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
+              <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
+              <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
+            </div>
+            <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
+              <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta" class="btn btn-success">
+                <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30" class="mr-2">
+                Contáctanos por WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      
  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </body>
 </html>
