@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pacific</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg p-3">
@@ -30,7 +31,7 @@
                             <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page">Inicio</a>
                         </li>
                         <li class="nav-item ml-3 mr-3 mb-3">
-                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Habitaciones</a>
+                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Explorar</a>
                         </li>
                         <li class="nav-item ml-3 mr-3 mb-3">
                             <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
@@ -40,10 +41,16 @@
                         </li>
                     </ul>
                     <div class="d-flex justify-content-center align-item-center">
-                        <a href="{% url 'login' %}" class="btn-reg me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
+                        <!-- Logo Cambio de Idioma -->
+                        <a class="logo-leng">
+                            <img src="{% static 'img/logo-chile.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
+                        </a>
+                        <!-- Botón Login -->
+                        <a href="{% url 'login' %}" class="btn-login me-2">
+                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                             Iniciar Sesión
                         </a>
+                        <!-- Botón Registro -->
                         <a href="{% url 'registro' %}" class="btn-reg ms-2">
                             Regístrate
                         </a>
@@ -58,24 +65,65 @@
 
     <footer class="fixed-bottom" style="background-color: #3498db; color: #ffffff;">
         <div class="container">
-          <div class="row">
+        <div class="row">
             <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
-              <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
-              <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
+                <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
+                <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
             </div>
             <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
-              <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta" class="btn btn-success">
+            <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta" class="btn btn-success">
                 <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30" class="mr-2">
                 Contáctanos por WhatsApp
-              </a>
+            </a>
             </div>
-          </div>
         </div>
-      </footer>
-      
- 
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        // Inicializar el datepicker
+        $('.date-range').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'D dd M', // Formato para el input
+            clearBtn: true,
+            multidate: true, // Esto permite seleccionar un rango de fechas
+        });
+        var currentDate = new Date();
+
+        // Inicializar el datepicker
+        $('.date-range').datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            format: 'dd/mm/yyyy',
+            clearBtn: true,
+            multidate: true, // Esto permite seleccionar un rango de fechas
+            startDate: currentDate // Restricción para no seleccionar fechas anteriores al día actual
+        }).on('changeDate', function(e) {
+            var dates = e.dates.map(date => {
+                return date.toString().substring(0, 3) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' });
+            });
+            $(this).val(dates.join(', '));
+        }).on('changeDate', function(e) {
+            var selectedDates = e.dates;
+            var dateLength = selectedDates.length;
+            if (dateLength > 1) {
+                var previousDate = selectedDates[dateLength - 2];
+                if (selectedDates[dateLength - 1] <= previousDate) {
+                    $(this).datepicker('setDate', previousDate);
+                }
+            }
+        });
+
+        // Mostrar el calendario debajo del input al hacer clic en él
+        $('.date-range').focus(function() {
+            $(this).datepicker('show');
+        });
+    </script>
 </body>
 </html>

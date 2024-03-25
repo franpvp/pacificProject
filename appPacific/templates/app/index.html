@@ -1,14 +1,55 @@
 {% extends 'app/base.html' %}
 
-{% block css %}   
+{% block css %}
 {% endblock %}
-{% load static %}  
+
+{% load static %}
 
 {% block contenido %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
             <div class="titulo-general text-center">Index</div>
+            <!-- Buscador de Habitaciones -->
+            <div class="d-flex justify-content-center align-item-center">
+                <!-- Barra Custom Buscador -->
+                <div class="search-bar">
+                    <div class="row ">
+                        <div class="col">
+                            <div class="search-inputs ">
+                                <div class="col-md-12 col-lg-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control date-range" placeholder="Selecciona un rango de fechas" style="cursor: pointer;" readonly>
+                                        <div class="input-group-append ml-auto">
+                                            <span class="input-group-text">
+                                                <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-12 col-lg-8">
+                                    <img class="img-fluid mt-2 mr-2" src="{% static 'img/usuario.png' %}" alt="usuario" style="width: 30px; height: 30px;">
+                                    <input type="number" placeholder="Habitaciones" min="1" class="rooms-input">
+                                    <input type="number" placeholder="Adultos" min="1" class="adults-input">
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        <div class="col-lg-1 d-flex justify-content-center align-item-center">
+                            <a href="#" class="ml-auto">
+                                <img class="img-fluid" src="{% static 'img/buscador.png' %}" alt="img-user" style="width: 50px; height: 50px; margin-right: 15px;">
+                            </a>
+                        </div>
+                    </div>
+                        
+                    
+                    
+                </div>
+            </div>
+            
+
         </div>
     </div>
 </div>

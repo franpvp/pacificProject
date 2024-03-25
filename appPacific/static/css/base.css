@@ -24,8 +24,9 @@ a{
     bottom: 0;
     width: 0;
     height: 3px;
-    background-color: #ec4e39;
-    transition: width 0.4s ease-in-out;
+    border-radius: 30px;
+    background-color: #4495E0 !important;
+    transition: width 0.3s ease-in-out;
     transform: translateX(-50%);
     display: inline-block;
 }
@@ -60,16 +61,16 @@ a{
     color: #3498db;
     padding: 25px;
 }
-
+/* Botón registro */
 .btn-reg{
     display: flex;
     align-items: center;
     justify-content: center;
     width: 170px !important;
     height: 50px !important;
-    border: 1px solid #3498db;
+    border: 1px solid #FFA011;
     background: white;
-    color: #3498db;
+    color: #FFA011;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
@@ -77,8 +78,40 @@ a{
 
 .btn-reg:hover{
     color:white;
-    background: #3498db;
+    background: #FFA011;
     transition: all 0.2s ease-in-out;
 }
 
 /* Login CSS */
+/* Botón Login */
+.btn-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 170px !important;
+    height: 50px !important;
+    background: white;
+    color: #3498db;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-login:hover{
+    color:white;
+    background: #3498db;
+    transition: all 0.2s ease-in-out;
+}
+
+.logo-leng{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    background: white;
+    color: #FFA011;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
