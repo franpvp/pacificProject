@@ -14,9 +14,9 @@
             <div class="d-flex justify-content-center align-item-center">
                 <!-- Barra Custom Buscador -->
                 <div class="search-bar">
-                    <div class="row ">
+                    <div class="row">
                         <div class="col">
-                            <div class="search-inputs ">
+                            <div class="search-inputs">
                                 <div class="col-md-12 col-lg-4">
                                     <div class="input-group">
                                         <input type="text" class="form-control date-range" placeholder="Selecciona un rango de fechas" style="cursor: pointer;" readonly>
@@ -28,30 +28,121 @@
                                     </div>
                                     
                                 </div>
-                                <div class="col-md-12 col-lg-8">
+                                <div class="col-md-12 col d-flex align-item-center justify-content-center">
                                     <img class="img-fluid mt-2 mr-2" src="{% static 'img/usuario.png' %}" alt="usuario" style="width: 30px; height: 30px;">
                                     <input type="number" placeholder="Habitaciones" min="1" class="rooms-input">
+                                    
+                                </div>
+                                <div class="col-md-12 col d-flex align-item-center justify-content-center">
                                     <input type="number" placeholder="Adultos" min="1" class="adults-input">
+                                </div>
+                                <div class="col-lg-1 mt-auto mb-auto">
+                                    <a href="#" class="ml-auto">
+                                        <img class="img-fluid" src="{% static 'img/buscador.png' %}" alt="img-user" style="width: 50px; height: 50px; margin-right: 15px;">
+                                    </a>
                                 </div>
                                 
                                 
                             </div>
                         </div>
-                        <div class="col-lg-1 d-flex justify-content-center align-item-center">
-                            <a href="#" class="ml-auto">
-                                <img class="img-fluid" src="{% static 'img/buscador.png' %}" alt="img-user" style="width: 50px; height: 50px; margin-right: 15px;">
-                            </a>
-                        </div>
-                    </div>
                         
-                    
-                    
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Botones Selección Tipo Habitación -->
+    <div class="row mt-3">
+        <div class="col d-flex align-item-center justify-content-center">
+            <a href="#">
+                <div class="btn-hab">
+                    <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
+                    Suite
+                </div>
+            </a>
             
+        </div>
+        <div class="col d-flex align-item-center justify-content-center">
+            <a href="#">
+                <div class="btn-hab">
+                    <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
+                    Premium
+                </div>
+            </a>
+        </div>
+        <div class="col d-flex align-item-center justify-content-center">
+            <a href="#">
+                <div class="btn-hab">
+                    <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
+                    Twin
+                </div>
+            </a>
+        </div>
+        <div class="col d-flex align-item-center justify-content-center">
+            <a href="#">
+                <div class="btn-hab ml-auto">
+                    <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
+                    Filtros
+                </div>
+            </a>
 
         </div>
     </div>
+    <!-- Sección Habitaciones Recomendadas -->
+    <div class="row">
+        <div class="col d-flex align-item-center justify-content-center">
+            <div class="titulo-rec">
+                Recomendados
+            </div>
+            
+        </div>
+    </div>
+    <!-- Contenedores Habitaciones -->
+    <div class="row mt-2">
+        <div class="col"></div>
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
+            <div class="box-rec" data-room="Habitación Twin v1">
+                <img src="{% static 'img/twin_v1.jpg' %}" alt="img-twin">
+            </div>
+            
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
+            <div class="box-rec" data-room="Habitación Premium v1">
+                <!-- Imagen Habitación -->
+                <img src="{% static 'img/premium_v1.jpg' %}" alt="img-twin">
+                
+            </div>
+            
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
+            <div class="box-rec" data-room="Habitación Suite v1">
+                <!-- Imagen Habitación -->
+                <img class="img-fluid" src="{% static 'img/suite_v1.jpg' %}" alt="img-twin">
+                
+            </div>
+            
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
+            <div class="box-rec" data-room="Habitación Suite v1">
+                <!-- Imagen Habitación -->
+                <img class="img-fluid" src="{% static 'img/suite_v1.jpg' %}" alt="img-twin">
+                
+            </div>
+            
+        </div>
+        <div class="col"></div>
+    </div>
 </div>
 
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    
 {% endblock %}
