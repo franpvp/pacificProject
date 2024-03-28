@@ -38,6 +38,7 @@ def contacto(request):
     return render(request, 'app/contacto.html')
 
 
+
 # Vista Habitaciones
 def habitaciones(request):
     return render(request, 'app/habitaciones.html')
@@ -49,3 +50,7 @@ def metodo_pago(request):
 # Vista Reserva Realizada
 def reserva_realizada(request):
     return render(request, 'app/reserva_realizada.html')
+
+# Vista Nosotros
+def nosotros(request):
+    return render(request, 'app/nosotros.html')
