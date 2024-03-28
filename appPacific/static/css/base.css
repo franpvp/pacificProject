@@ -96,11 +96,16 @@ a{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 0 auto;
     border-radius: 100%;
     background: white;
     color: #FFA011;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+}
+
+.navbar-nav{
+    margin: 0 auto;
 }
 
 
@@ -112,14 +117,15 @@ a{
 }
 
 .sidebar{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    height: 100% !important;
+    height: 100%;
     width: 80px;
     background-color: #12171e;
     padding: 0.4rem 0.8rem;
     transition: all 0.5s ease;
+    z-index: 1000;
 
 }
 
@@ -269,16 +275,15 @@ a{
 }
 
 .sidebar.active ul li .tooltip{
-    display: none;
+    display: none !important;
 }
 
 .main-content{
     position: relative;
-    min-height: 100vh;
     top: 0;
     left: 80px;
+    margin-right: 80px;
     transition: all 0.5s ease;
-    padding: 1rem;
 }
 
 .container {
@@ -294,6 +299,3 @@ li{
     margin: 0 auto;
 }
 
-.content-active {
-    margin-left: 200px; /* Ajusta el valor según el ancho de tu sidebar */
-}

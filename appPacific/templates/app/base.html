@@ -17,133 +17,121 @@
 </head>
 <body>
     <div class="container-fluid">
-            <!-- Sidebar -->
-                <!-- Contenido del Sidebar -->
-                <div class="sidebar">
-                    <div class="top mb-4">
-                        <div class="logo">
-                            <i class="bx bxl-codepen"></i>
-                        </div>
-                        <i class="bx bx-menu" id="btn"></i>
-                    </div> 
-                    <ul class="mt-5">
-                        <li class="item">
-                            <a href="#">
-                                <i class="bx bxs-home ml-3"></i>
-                                <p class="nav-item">Inicio</p>
-                            </a>
-                            <div class="tooltip">Inicio</div>
-                            
-                        </li >
-                        <li class="item">
-                            <a href="#">
-                                <i class='bx bxs-search-alt-2 ml-3'></i>
-                                <p class="nav-item">Explorar</p>
-                            </a>
-                            <span class="tooltip">Explorar</span>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <i class="bx bxs-info-circle ml-3"></i>
-                                <p class="nav-item">Sobre Nosotros</p>
-                            </a>
-                            <span class="tooltip">Sobre Nosotros</span>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <i class="bx bxs-contact ml-3"></i>
-                                <p class="nav-item">Contacto</p>
-                            </a>
-                            <span class="tooltip">Contacto</span>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <i class='bx bxs-cog ml-3' ></i>
-                                <p class="nav-item">Configuración</p>
-                            </a>
-                            <span class="tooltip">Configuración</span>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <i class='bx bx-log-out ml-3' ></i>
-                                <p class="nav-item">Cerrar Sesión</p>
-                            </a>
-                            <span class="tooltip">Cerrar Sesión</span>
-                        </li>
-                    </ul>
+        <!-- Sidebar -->
+        <!-- Contenido del Sidebar -->
+        <div class="sidebar">
+            <div class="top mb-4">
+                <div class="logo">
+                    <i class="bx bxl-codepen"></i>
                 </div>
-            <!-- Contenido Principal -->
-                <div class="main-content">
-                    <!-- Contenido principal de la página -->
-                    <nav class="navbar navbar-expand-lg p-3">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="{% url 'index' %}">
-                                <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
-                            </a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="offcanvas offcanvas-end" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                                <div class="offcanvas-header">
-                                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                </div>
-                                <div class="offcanvas-body text-center">
-                                    <ul class="navbar-nav justify-content-center flex-grow-1">
-                                        <li class="nav-item ml-3 mr-3 mb-3">
-                                            <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page">Inicio</a>
-                                        </li>
-                                        <li class="nav-item ml-3 mr-3 mb-3">
-                                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Explorar</a>
-                                        </li>
-                                        <li class="nav-item ml-3 mr-3 mb-3">
-                                            <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
-                                        </li>
-                                        <li class="nav-item ml-3 mr-3 mb-3">
-                                            <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">Contacto</a>
-                                        </li>
-                                    </ul>
-                                    <div class="d-flex justify-content-center align-item-center">
-                                        <!-- Logo Cambio de Idioma -->
-                                        <a class="logo-leng">
-                                            <img src="{% static 'img/logo-chile.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
-                                        </a>
-                                        <!-- Botón Login -->
-                                        <a href="{% url 'login' %}" class="btn-login me-2">
-                                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                                            Iniciar Sesión
-                                        </a>
-                                        <!-- Botón Registro -->
-                                        <a href="{% url 'registro' %}" class="btn-reg ms-2">
-                                            Regístrate
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                    {% block contenido %}
-                    {% endblock %}
-                </div>
-                <footer style="background-color: #3498db; color: #ffffff;">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
-                                <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
-                                <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
-                            </div>
-                            <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
-                            <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta" class="btn btn-success">
-                                <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30" class="mr-2">
-                                Contáctanos por WhatsApp
-                            </a>
+                <i class="bx bx-menu" id="btn"></i>
+            </div> 
+            <ul class="mt-5">
+                <li class="item">
+                    <a href="{% url 'index' %}">
+                        <i class="bx bxs-home ml-3"></i>
+                        <p class="nav-item">Inicio</p>
+                    </a>
+                    
+                </li >
+                <li class="item">
+                    <a href="{% url 'habitaciones' %}">
+                        <i class='bx bxs-search-alt-2 ml-3'></i>
+                        <p class="nav-item">Explorar</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="{% url 'nosotros' %}">
+                        <i class="bx bxs-info-circle ml-3"></i>
+                        <p class="nav-item">Sobre Nosotros</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="{% url 'contacto' %}">
+                        <i class="bx bxs-contact ml-3"></i>
+                        <p class="nav-item">Contacto</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#">
+                        <i class='bx bxs-cog ml-3' ></i>
+                        <p class="nav-item">Configuración</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#">
+                        <i class='bx bx-log-out ml-3' ></i>
+                        <p class="nav-item">Cerrar Sesión</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
+    <!-- Contenido Principal -->
+        <div class="main-content">
+            <!-- Contenido principal de la página -->
+            <nav class="navbar navbar-expand-lg p-3">
+                <div class="container-fluid">
+                    <!-- Logo Hotel Pacific -->
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
+                    </a>
+                    <div class="offcanvas offcanvas-end" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-body text-center">
+                            <ul class="navbar-nav justify-content-center flex-grow-1">
+                                <li class="nav-item">
+                                    <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page">Inicio</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">Explorar</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page">Sobre Nosotros</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">Contacto</a>
+                                </li>
+                            </ul>
+                            <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
+                                <!-- Logo Cambio de Idioma -->
+                                <a class="logo-leng">
+                                    <img src="{% static 'img/logo-chile.png' %}" alt="img-user" style="width: 40px; height: 40px; margin-right: 15px;">
+                                </a>
+                                <!-- Botón Login -->
+                                <a href="{% url 'login' %}" class="btn-login me-2">
+                                    <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
+                                    Iniciar Sesión
+                                </a>
+                                <!-- Botón Registro -->
+                                <a href="{% url 'registro' %}" class="btn-reg">
+                                    Regístrate
+                                </a>
                             </div>
                         </div>
                     </div>
-                </footer>
+                </div>
+            </nav>
+            {% block contenido %}
+            {% endblock %}
+            <footer style="background-color: #3498db; color: #ffffff;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
+                            <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
+                            <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
+                        </div>
+                        <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;"> <!-- Ajuste de margen superior -->
+                        <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta" class="btn btn-success">
+                            <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30" class="mr-2">
+                            Contáctanos por WhatsApp
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        
     </div>
-
-    
     <!-- index.js -->
     <script src="{% static 'js/index.js' %}"></script>
 
@@ -195,8 +183,6 @@
             $(this).datepicker('show');
         });
 
-
-    
     </script>
 
     
