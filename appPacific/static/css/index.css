@@ -130,4 +130,56 @@ a{
     padding: 10px;
 }
 
+.btn-sec{
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 50px;
+    border: 1px solid #D9D9D9;
+    border-radius: 40px;
+    cursor: pointer;
+}
+
+.btn-sec:hover{
+    background: #D9D9D9;
+    transition: all 0.3s ease-in-out;
+}
+
+.box-btn-sec{
+    display: flex;
+    position: absolute;
+    width: 100px;
+    height: 70px;
+    margin-left: 50px;
+    margin-top: 10px;
+    border: 1px solid #D9D9D9;
+    border-radius: 40px;
+    background: #fff;
+    z-index: 100;
+    opacity: 0;
+}
+
+.box-btn-sec.active {
+    opacity: 1;
+}
+
+.contenido-sec{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bx {
+    font-size: 24px; /* Tamaño de los iconos */
+    transition: transform 0.3s; /* Transición para el efecto hover */
+}
+
+.bx:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al hacer hover */
+}
+
 
