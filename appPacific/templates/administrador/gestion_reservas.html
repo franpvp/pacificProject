@@ -1,0 +1,54 @@
+{% extends 'administrador/base_administrador.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+
+{% block contenido %}
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="titulo-general text-center">Bienvenido (a) Nombre del Administrador</div>
+            <div class="subtitulo text-center">Cargo: Administrador del Hotel Pacific</div>
+
+            <!-- Botones -->
+            <div class="row mt-4">
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'crear_reserva_pacific' %}" class="btn btn-primary btn-block btn-lg">
+                        <i class='bx bx-plus'></i> Crear Reserva
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'modificar_reserva_pacific' %}" class="btn btn-warning btn-block btn-lg">
+                        <i class='bx bx-pencil'></i> Modificar Reserva
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'eliminar_reserva_pacific' %}" class="btn btn-danger btn-block btn-lg">
+                        <i class='bx bx-x'></i> Cancelar Reserva
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'ver_reserva_pacific' %}" class="btn btn-info btn-block btn-lg">
+                        <i class='bx bx-show'></i> Ver Reservas
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'ver_calendario_pacific' %}" class="btn btn-secondary btn-block btn-lg">
+                        <i class='bx bx-calendar'></i> Ver Calendario
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
