@@ -1,3 +1,4 @@
+
 /* Nav CSS */
 a{
     text-decoration: none !important;
@@ -278,12 +279,9 @@ a{
     display: none !important;
 }
 
-.main-content{
-    position: relative;
-    top: 0;
-    left: 80px;
-    margin-right: 80px;
-    transition: all 0.5s ease;
+.contenido-main{
+    width: calc(100% -80px);
+    margin-left: 80px;
 }
 
 .container {
@@ -299,3 +297,22 @@ li{
     margin: 0 auto;
 }
 
+.footer-pag{
+    margin-top: 145px;
+}
+
+/* CSS administrador_home.html */
+.info-imagen{
+    position: absolute;
+    margin: 0 auto;
+    margin-left: 200px !important;
+    font-weight: 800;
+    color: white !important;
+    top: 500px;
+    color: red;
+    font-size: 45px;
+}
+
+.fondo-img{
+    opacity: 0.9;
+}

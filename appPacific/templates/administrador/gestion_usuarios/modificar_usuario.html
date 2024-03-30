@@ -6,7 +6,47 @@
 {% load static %}
 
 {% block contenido %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-5 mb-3 text-center">Modificar Usuario</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Usuario</th>
+                            <th scope="col">Rut</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Correo Electrónico</th>
+                            <th scope="col">Celular</th>
+                            <th scope="col">Acciones</th>
 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Rut Usuario</td>
+                            <td>Nombre Usuario</td>
+                            <td>Apellidos Usuario</td>
+                            <td>user@gmail.com</td>
+                            <td>912345678</td>
+                            <td>
+                                <button type="button" class="btn btn-warning">Modificar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
 
 
 {% endblock %}
