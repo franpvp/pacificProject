@@ -6,7 +6,48 @@
 {% load static %}
 
 {% block contenido %}
-
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-lg-6 reg-box">
+            <h1 class="titulo-general text-center">Registro Cliente</h1>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row justify-content-center align-item-center">
+                    <div class="col-12 col-lg-8 pb-4">
+                        <!-- Input Nombre -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nombre" placeholder="nombre">
+                            <label for="floatingInput">Nombre</label>
+                        </div>
+                        <!-- Input Apellidos -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="apellidos" placeholder="apellidos">
+                            <label for="floatingInput">Apellidos</label>
+                        </div>
+                        <!-- Input Rut -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="rut" placeholder="rut">
+                            <label for="floatingInput">Rut</label>
+                        </div>
+                        <!-- Input Correo Electrónico -->
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="correo" placeholder="correo">
+                            <label for="floatingInput">Correo Electrónico</label>
+                        </div>
+                        <div class="row">
+                            <div class="col d-flex justify-content-center pt-4">
+                                <div class="btn-reg">Registrar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-6 img-reg">
+            <img class="img-fluid" src="{% static 'img/fondo-reg.jpg' %}" alt="usuario" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

@@ -31,5 +31,16 @@ class ReporteReserva(models.Model):
     def __str__(self):
         return f"{self.dia_ingreso} - {self.hora_ingreso}"
 
+# Tabla Habitaciones
+class Habitacion(models.Model):
+    id_hab = models.AutoField(primary_key=True, unique=True, verbose_name="Id habitacion")
+    titulo = models.CharField(max_length=50, verbose_name="Titulo habitacion")
+    descripcion = models.CharField(max_length=200, verbose_name="Descripcion")
+    cantidad_disp = models.CharField(max_length=50, verbose_name="Cantidad Habitaciones")
+    precio = models.CharField(max_length=50, verbose_name="Nombres del usuario")
+    imagen = models.ImageField(upload_to='habitacion_imagenes/', null=False, blank=False, verbose_name='Imagen de la habitacion')
+
+    def __str__(self):
+        return self.titulo
 
 

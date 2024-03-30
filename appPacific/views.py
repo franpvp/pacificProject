@@ -62,48 +62,79 @@ def administrador_home(request):
 # Vista Administrador Gestion Habitaciones
 def gestion_habitaciones(request):
     return render(request, 'administrador/gestion_habitaciones.html')
+
 # Vista Administrador Gestion Habitaciones -crear
 def crear_habitacion(request):
+    if request.method == 'POST':
+        # Id tiene que autogenerarse
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+        cantidad = request.POST.get('rut')
+        precio = request.POST.get('precio')
+        imagen = request.POST.get('imagen')
+
+
+
+
+
+
+
+
+
     return render(request, 'administrador/gestion_habitaciones/crear_habitacion.html')
+
 # Vista Administrador Gestion Habitaciones-eliminar
 def eliminar_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/eliminar_habitacion.html')
+
 # Vista Administrador Gestion Habitaciones-modificar
 def modificar_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html')
+
 # Vista Administrador Gestion Habitaciones-ver
 def ver_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html')
+
 # Vista Administrador Gestion Reservas
 def gestion_reservas(request):
     return render(request, 'administrador/gestion_reservas.html')
+
 # Vista Administrador Gestion Reservas -crear
 def crear_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
+
 # Vista Administrador Gestion Reservas -eliminar
 def eliminar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
+
 # Vista Administrador Gestion Reservas -modificar
 def modificar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
+
 # Vista Administrador Gestion Reservas -ver calendario
 def ver_calendario_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html')
+
 # Vista Administrador Gestion Reservas -ver reserva
 def ver_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html')
+
 # Vista Administrador Gestion Usuarios
 def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
+
 # Vista Administrador Gestion Usuarios -crear usuario
 def crear_usuario(request):
     return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
+
 # Vista Administrador Gestion Usuarios -eliminar usuario
 def eliminar_usuario(request):
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html')
+
 # Vista Administrador Gestion Usuarios modificar usuario
 def modificar_usuario(request):
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html')
+    
 # Vista Administrador Gestion Usuarios -ver usuario
 def ver_usuario(request):
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html')

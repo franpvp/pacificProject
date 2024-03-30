@@ -6,7 +6,46 @@
 {% load static %}
 
 {% block contenido %}
-
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-5 mb-3 text-center">Crear Habitación</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Habitación</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Cantidad Disponibles</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Título Habitación</td>
+                            <td>Descripción Habitación 1</td>
+                            <td>1</td>
+                            <td>$ 59.990</td>
+                            <td><img src="{% static 'img/hotel-pacific.jpeg' %}" alt="Imagen del Producto 1" class="img-fluid" style="width: 50px; height: 50px;" ></td>
+                            <td>
+                                <button type="button" class="btn btn-danger">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
 
 
 {% endblock %}

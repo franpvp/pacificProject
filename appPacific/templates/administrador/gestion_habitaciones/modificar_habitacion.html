@@ -6,7 +6,75 @@
 {% load static %}
 
 {% block contenido %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-5 mb-3 text-center">Modificar Habitación</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Habitación</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Cantidad Disponibles</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Título Habitación</td>
+                            <td>Descripción Habitación 1</td>
+                            <td>1</td>
+                            <td>$ 59.990</td>
+                            <td>
+                                <img id="imagenMostrada" src="" alt="Imagen Hab 1" class="img-fluid" style="width: 50px; height: 50px;" >
+                                <input id="cargarImagen" class="ml-3" type="file" accept="image/*">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger">Modificar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
 
+<script>
+    const urlGuardada = localStorage.getItem('imagenURL');
+    if (urlGuardada) {
+        document.getElementById('imagenMostrada').src = urlGuardada;
+    }
+
+  // Capturar el evento de cambio en el input de tipo file
+    document.getElementById('cargarImagen').addEventListener('change', function(event) {
+    // Obtener el archivo cargado
+    const archivo = event.target.files[0];
+    
+    // Validar si se seleccionó un archivo
+    if (archivo) {
+      // Crear un objeto URL para mostrar la imagen cargada
+    const urlImagen = URL.createObjectURL(archivo);
+
+      // Mostrar la imagen en el front-end
+    document.getElementById('imagenMostrada').src = urlImagen;
+
+      // Guardar la URL de la imagen en el almacenamiento local
+    localStorage.setItem('imagenURL', urlImagen);
+    }
+});
+
+</script>
 
 
 {% endblock %}
