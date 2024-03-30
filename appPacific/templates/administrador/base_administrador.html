@@ -21,7 +21,7 @@
 
 <body>
     <div class="container-fluid">
-        <!-- Sidebar -->
+  <!-- Sidebar -->
         <!-- Contenido del Sidebar -->
         <div class="sidebar">
             <div class="top mb-4">
@@ -29,40 +29,47 @@
                     <i class="bx bxl-codepen"></i>
                 </div>
                 <i class="bx bx-menu" id="btn"></i>
-            </div>
+            </div> 
             <ul class="mt-5">
                 <li class="item">
-                    <a href="#">
+                    <a href="{% url 'administrador_home' %}">
                         <i class="bx bxs-home ml-3"></i>
                         <p class="nav-item">Inicio</p>
                     </a>
                     <div class="tooltip">Inicio</div>
 
-                </li>
+                </li >
                 <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-pencil ml-3'></i>
+                    <a href="{% url 'gestion_reservas' %}">
+                        <i class='bx bxs-search-alt-2 ml-3'></i>
                         <p class="nav-item">Reservas</p>
                     </a>
                     <span class="tooltip">Reservas</span>
                 </li>
                 <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-hotel ml-3'></i>
+                    <a href="{% url 'gestion_habitaciones' %}">
+                        <i class="bx bxs-info-circle ml-3"></i>
                         <p class="nav-item">Habitaciones</p>
                     </a>
                     <span class="tooltip">Habitaciones</span>
                 </li>
                 <li class="item">
+                    <a href= "{% url 'gestion_usuarios' %}">
+                        <i class="bx bxs-contact ml-3"></i>
+                        <p class="nav-item">Usuarios</p>
+                    </a>
+                    <span class="tooltip">Usuarios</span>
+                </li>
+                <li class="item">
                     <a href="#">
-                        <i class='bx bxs-cog ml-3'></i>
+                        <i class='bx bxs-cog ml-3' ></i>
                         <p class="nav-item">Configuración</p>
                     </a>
                     <span class="tooltip">Configuración</span>
                 </li>
                 <li class="item">
                     <a href="#">
-                        <i class='bx bx-log-out ml-3'></i>
+                        <i class='bx bx-log-out ml-3' ></i>
                         <p class="nav-item">Cerrar Sesión</p>
                     </a>
                     <span class="tooltip">Cerrar Sesión</span>
