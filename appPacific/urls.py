@@ -1,6 +1,6 @@
 from django.urls import path
-
-from .views import administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuario
+from . import views
+from .views import administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
 
 urlpatterns = [
     path('', index, name="index"),
@@ -25,8 +25,8 @@ urlpatterns = [
     path('ver_calendario_pacific/', ver_calendario_pacific, name="ver_calendario_pacific"),
     path('ver_reserva_pacific/', ver_reserva_pacific, name="ver_reserva_pacific"),
     path('gestion_usuarios/', gestion_usuarios, name="gestion_usuarios"),
-    path('crear_usuario/', crear_usuario, name="crear_usuario"),
-    path('eliminar_usuario/', eliminar_usuario, name="eliminar_usuario"),
-    path('modificar_usuario/', modificar_usuario, name="modificar_usuario"),
-    path('ver_usuario/', ver_usuario, name="ver_usuario"),
+    path('gestion_usuarios/crear_usuario/', crear_usuario_admin, name='crear_usuario_admin'),
+    path('gestion_usuarios/ver_usuario/', ver_usuarios_admin, name='ver_usuarios_admin'),
+    path('gestion_usuarios/modificar_usuario/<int:id_usuario>/', modificar_usuario_admin, name='modificar_usuario_admin'),
+    path('gestion_usuarios/eliminar_usuario/<int:id_usuario>/', eliminar_usuario_admin, name='eliminar_usuario_admin'),
 ]

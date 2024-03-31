@@ -1,15 +1,16 @@
 {% extends 'administrador/base_administrador.html' %}
 
 {% block css %}
+<style>
+    /* Agrega estilos personalizados aquí si es necesario */
+</style>
 {% endblock %}
-
-{% load static %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Historial de Usuarios</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">Usuarios Registrados</h2>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -19,33 +20,36 @@
                     <thead>
                         <tr>
                             <th scope="col">ID Usuario</th>
-                            <th scope="col">Rut</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellidos</th>
                             <th scope="col">Correo Electrónico</th>
                             <th scope="col">Celular</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for usuario in usuarios %}
                         <tr>
-                            <td>1</td>
-                            <td>Rut Usuario</td>
-                            <td>Nombre Usuario</td>
-                            <td>Apellidos Usuario</td>
-                            <td>user@gmail.com</td>
-                            <td>912345678</td>
+                            <td>{{ usuario.id_user }}</td>
+                            <td>{{ usuario.nombres }}</td>
+                            <td>{{ usuario.apellidos }}</td>
+                            <td>{{ usuario.correo }}</td>
+                            <td>{{ usuario.telefono }}</td>
+                            <td>
+                                <!-- Botón para editar -->
+                                <a href="{% url 'modificar_usuario_admin' usuario.id_user %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i></i>Editar</a>
+                                <!-- Botón para eliminar -->
+                                <a href="{% url 'eliminar_usuario_admin' usuario.id_user %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i></i>Eliminar</a>
+                            </td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}
-
 {% endblock %}
