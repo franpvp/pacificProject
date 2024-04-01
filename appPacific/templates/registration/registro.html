@@ -12,50 +12,88 @@
         </div>
         <div class="col-lg-6 reg-box">
             <h1 class="titulo-general text-center">Crear Cuenta</h1>
-            <form action="" method="post">
+            <form action="" method="POST">
                 {% csrf_token %}
                 <div class="row justify-content-center align-item-center">
                     <div class="col-12 col-lg-8 pb-4">
                         <!-- Input Nombre -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nombre" placeholder="nombre">
-                            <label for="floatingInput">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="nombre" name="nombre" onclick="showHiddenElement('nameHidden','nombre')">
+                            <p id="nameHidden" style="font-size: 12px; color: orange;">Debe contener al sólo letras</p>
+                            <label for="nombre">Nombre</label>
                         </div>
                         <!-- Input Apellidos -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="apellidos" placeholder="apellidos">
-                            <label for="floatingInput">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" placeholder="apellidos" name="apellidos" onclick="showHiddenElement('apellidoHidden','apellidos')">
+                            <p id="apellidoHidden" style="font-size: 12px; color: orange;">Debe contener al sólo letras</p>
+                            <label for="apellidos">Apellidos</label>
+                        </div>
+                        <!-- Input Username -->
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" placeholder="username" name="username" onclick="showHiddenElement('usuarioHidden','username')">
+                            <p id="usuarioHidden" style="font-size: 12px; color: orange;">El nombre tiene que tener un mínimo 3 y maximo 11 caracteres</p>
+                            <label for="username">Username</label>
                         </div>
                         <!-- Input Correo Electrónico -->
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="correo" placeholder="name@example.com">
-                            <label for="floatingInput">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="correo" placeholder="name@example.com" name="correo" onclick="showHiddenElement('correoHidden','correo')">
+                            <p id="correoHidden" style="font-size: 12px; color: orange;">El email debe tener formato name@example.com</p>
+                            <label for="correo">Correo Electrónico</label>
                         </div>
                         <!-- Input Celular -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="celular" placeholder="123456789">
+                            <input type="text" class="form-control" id="celular" placeholder="123456789" name="celular" onclick="showHiddenElement('celularHidden','celular')">
+                            <p id="celularHidden" style="font-size: 12px; color: orange;">Ingrese un número válido</p>
                             <label for="floatingInput">Celular</label>
                         </div>
                         <!-- Input Contraseña -->
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Password">
-                            <label for="floatingPassword">Contraseña</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Password" name="password1" onclick="showHiddenElement('pass1Hidden','password1')">
+                            <p id="pass1Hidden" style="font-size: 12px; color: orange;">Debe contener al menos una mayúscula</p>
+                            <label for="password1">Contraseña</label>
                         </div>
                         <!-- Input Confirmar Contraseña -->
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="password2" placeholder="Password">
-                            <label for="floatingPassword">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="password2" placeholder="Password" name="password2" onclick="showHiddenElement('pass2Hidden','password2')">
+                            <p id="pass2Hidden" style="font-size: 12px; color: orange;">Repita la misma contraseña anterior</p>
+                            <label for="password2">Confirmar Contraseña</label>
                         </div>
                         <div class="row">
                             <div class="col d-flex justify-content-center pt-4">
-                                <div class="btn-reg">Registrarse</div>
+                                <button type="submit" class="btn btn-primary">Registrarse</button>
                             </div>
                         </div>
+                        <br>
+                        <!-- Mensajes de Error -->
+                        {% if messages %}
+                        <div class="row justify-content-center align-item-center">
+                            <div class="col-lg-12">
+                                {% for message in messages %}
+                                    {% if message.tags == 'error' %}
+                                        <div class="alert alert-danger"> {{ message }} </div>
+                                    {% elif message.tags == 'success' %}
+                                        <div class="alert alert-success"> {{ message }} </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </form>
+
+            
+
         </div>
     </div>
 </div>
 
 {% endblock %}
+
+
+{% comment %} 
+Code more simple
+<div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% endif %}">
+    {{ message }}
+</div> 
+{% endcomment %}
