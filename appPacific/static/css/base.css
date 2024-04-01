@@ -79,6 +79,7 @@ a{
     margin-right: 10px;
     width: 170px !important;
     height: 50px !important;
+    border: 1px solid #3498db;
     background: white;
     color: #3498db;
     border-radius: 20px;

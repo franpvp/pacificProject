@@ -25,13 +25,6 @@ def index(request):
 def home(request):
     return render(request,'app/home.html')
 
-# Vista Login
-def login(request):
-    return render(request, 'app/login.html')
-
-# Vista Registro
-def registro(request):
-    return render(request, 'registration/registro.html')
 
 # Vista Contacto
 def contacto(request):
