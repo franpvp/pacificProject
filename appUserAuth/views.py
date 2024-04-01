@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
 # Vista Registro
 
@@ -87,3 +88,18 @@ def iniciosesion(request):
             return render(request, 'app/login.html')
 
     return render(request, 'app/login.html')
+
+@login_required
+def cerrarsesion(request):
+    logout(request)
+    return redirect('home')
+
+# Vistas Relacionadas con el usuario registrado:
+
+@login_required
+def misreservas(request):
+    return render(request, 'registration/mireserva.html')
+
+@login_required
+def misdatos(request):
+    return render(request, 'registration/datopersonal.html')
