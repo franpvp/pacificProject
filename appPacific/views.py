@@ -5,13 +5,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import RegistroUsuario, TipoUsuario, ReporteReserva, Habitacion, TipoHabitacion
 from django.http import HttpResponse
-from base64 import b64decode
+from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
 import base64
 
-
 # Create your views here.
+
 # Vista Index
 def index(request):
     if request.method == 'POST':
@@ -99,7 +99,6 @@ def crear_habitacion(request):
 
         # Mostrar un mensaje de éxito
         messages.success(request, '¡La habitación se creó exitosamente!')
-
     return render(request, 'administrador/gestion_habitaciones/crear_habitacion.html')
 
 
@@ -186,3 +185,37 @@ def modificar_usuario(request):
 # Vista Administrador Gestion Usuarios -ver usuario
 def ver_usuario(request):
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html')
+
+def crear_usuario_admin(request):
+    if request.method == 'POST':
+        form = RegistroUsuarioAdminForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_usuarios_admin')
+    else:
+        form = RegistroUsuarioAdminForm()
+
+    return render(request, 'administrador/gestion_usuarios/crear_usuario.html', {'form': form})
+
+def ver_usuarios_admin(request):
+    usuarios = RegistroUsuario.objects.all()
+    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
+
+def modificar_usuario_admin(request, id_usuario):
+    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
+    if request.method == 'POST':
+        form = RegistroUsuarioAdminForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_usuarios_admin')
+    else:
+        form = RegistroUsuarioAdminForm(instance=usuario)
+    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
+
+def eliminar_usuario_admin(request, id_usuario):
+    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+    if request.method == 'POST':
+        usuario.delete()
+        return redirect('ver_usuarios_admin')
+    return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
+

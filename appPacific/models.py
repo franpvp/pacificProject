@@ -11,12 +11,12 @@ class TipoUsuario(models.Model):
         return self.nombre_tipo_usuario
 
 class RegistroUsuario(models.Model):
-    id_user = models.AutoField(primary_key=True, unique=True,verbose_name="Id usuario")
+    id_user = models.AutoField(primary_key=True, unique=True, verbose_name="Id usuario")
     nombres = models.CharField(max_length=50, verbose_name="Nombres del usuario")
     apellidos = models.CharField(max_length=50, verbose_name="Apellidos del usuario")
-    correo = models.EmailField(max_length=50, verbose_name="Correo de usuario")
-    nombre_usuario = models.CharField(max_length=25, verbose_name="Nombre de usuario")
-    direccion = models.CharField(max_length=60, verbose_name="Dirección de usuario")
+    correo = models.EmailField(max_length=50, verbose_name="Correo del usuario")
+    telefono = models.CharField(max_length=25, verbose_name="Teléfono del usuario", default='')
+    contrasena = models.CharField(max_length=25, verbose_name="Contraseña del usuario", default='')
 
     def __str__(self):
         return self.nombres

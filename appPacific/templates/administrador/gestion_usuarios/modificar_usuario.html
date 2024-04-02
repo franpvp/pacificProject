@@ -1,56 +1,29 @@
 {% extends 'administrador/base_administrador.html' %}
-
+{% load static %}
 {% block css %}
 {% endblock %}
 
-{% load static %}
-
 {% block contenido %}
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Modificar Usuario</h2>
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-6 reg-box">
+            <h1 class="titulo-general text-center">Modificar Usuario</h1>
+            <!-- Formulario de edición de usuario -->
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                    <div class="col d-flex justify-content-center pt-4">
+                        <button type="submit" class="btn btn-primary btn-reg">Guardar Cambios</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID Usuario</th>
-                            <th scope="col">Rut</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellidos</th>
-                            <th scope="col">Correo Electrónico</th>
-                            <th scope="col">Celular</th>
-                            <th scope="col">Acciones</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Rut Usuario</td>
-                            <td>Nombre Usuario</td>
-                            <td>Apellidos Usuario</td>
-                            <td>user@gmail.com</td>
-                            <td>912345678</td>
-                            <td>
-                                <button type="button" class="btn btn-warning">Modificar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}
-
+<script>
+    // No se requiere ningún script adicional
+</script>
 {% endblock %}

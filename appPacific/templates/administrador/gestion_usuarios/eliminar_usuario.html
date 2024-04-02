@@ -9,48 +9,44 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Eliminar Usuario</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">Modificar Usuario</h2>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID Usuario</th>
-                            <th scope="col">Rut</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellidos</th>
-                            <th scope="col">Correo Electrónico</th>
-                            <th scope="col">Celular</th>
-                            <th scope="col">Acciones</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Rut Usuario</td>
-                            <td>Nombre Usuario</td>
-                            <td>Apellidos Usuario</td>
-                            <td>user@gmail.com</td>
-                            <td>912345678</td>
-                            <td>
-                                <button type="button" class="btn btn-danger">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <form method="post">
+                    {% csrf_token %}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Usuario</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellidos</th>
+                                <th scope="col">Correo Electrónico</th>
+                                <th scope="col">Celular</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ usuario.id_user }}</td>
+                                <td>{{ usuario.nombres }}</td>
+                                <td>{{ usuario.apellidos }}</td>
+                                <td>{{ usuario.correo }}</td>
+                                <td>{{ usuario.telefono }}</td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
-    
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}
-
 {% endblock %}

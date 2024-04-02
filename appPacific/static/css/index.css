@@ -221,7 +221,6 @@ a{
     transform: scale(1.1); /* Aumenta el tamaño al hacer hover */
 }
 
-
 #btn-plus {
     font-size: 24px; /* Tamaño de los iconos */
     transition: transform 0.3s; /* Transición para el efecto hover */

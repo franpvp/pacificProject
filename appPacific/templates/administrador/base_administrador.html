@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pacific</title>
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/gestion_reservas.css' %}">
@@ -17,124 +18,114 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/boxicons/2.0.7/css/boxicons.min.css">
 </head>
 
 <body>
-    <div class="container-fluid">
-        <!-- Sidebar -->
-        <!-- Contenido del Sidebar -->
-        <div class="sidebar">
-            <div class="top mb-4">
-                <div class="logo">
-                    <i class="bx bxl-codepen"></i>
-                </div>
-                <i class="bx bx-menu" id="btn"></i>
+    <!-- Sidebar -->
+    <!-- Contenido del Sidebar -->
+    <div class="sidebar">
+        <div class="top mb-4">
+            <div class="logo">
+                <i class="bx bxl-codepen"></i>
             </div>
-            <ul class="mt-5">
-                <li class="item">
-                    <a href="#">
-                        <i class="bx bxs-home ml-3"></i>
-                        <p class="nav-item">Inicio</p>
-                    </a>
-                    <div class="tooltip">Inicio</div>
-
-                </li>
-                <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-pencil ml-3'></i>
-                        <p class="nav-item">Reservas</p>
-                    </a>
-                    <span class="tooltip">Reservas</span>
-                </li>
-                <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-hotel ml-3'></i>
-                        <p class="nav-item">Habitaciones</p>
-                    </a>
-                    <span class="tooltip">Habitaciones</span>
-                </li>
-                <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-cog ml-3'></i>
-                        <p class="nav-item">Configuración</p>
-                    </a>
-                    <span class="tooltip">Configuración</span>
-                </li>
-                <li class="item">
-                    <a href="#">
-                        <i class='bx bx-log-out ml-3'></i>
-                        <p class="nav-item">Cerrar Sesión</p>
-                    </a>
-                    <span class="tooltip">Cerrar Sesión</span>
-                </li>
-            </ul>
+            <i class="bx bx-menu" id="btn"></i>
         </div>
-        <!-- Contenido Principal -->
-        <div class="contenido-main">
-            <!-- Contenido principal de la página -->
-            <nav class="navbar navbar-expand-lg p-3">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="{% url 'administrador_home' %}">
-                        <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid"
-                            style="max-width: 200px;">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="offcanvas offcanvas-end" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body text-center">
-                            <ul class="navbar-nav justify-content-center flex-grow-1">
-                                <li class="nav-item ml-3 mr-3 mb-3">
-                                    <a href="{% url 'administrador_home' %}" class="nav-link btnLink"
-                                        aria-current="page">Inicio</a>
-                                </li>
-                                <li class="nav-item ml-3 mr-3 mb-3">
-                                    <a href="{% url 'gestion_reservas' %}" class="nav-link btnLink"
-                                        aria-current="page">Gestión de Reservas</a>
-                                </li>
-                                <li class="nav-item ml-3 mr-3 mb-3">
-                                    <a href="{% url 'gestion_habitaciones' %}" class="nav-link btnLink"
-                                        aria-current="page">Habitaciones</a>
-                                </li>
-                                <li class="nav-item ml-3 mr-3 mb-3">
-                                    <a href="{% url 'gestion_usuarios' %}" class="nav-link btnLink"
-                                        aria-current="page">Usuarios</a>
-                                </li>
-                            </ul>
-                            <div class="d-flex justify-content-center align-item-center">
-                                <!-- Logo Cambio de Idioma -->
-                                <a class="logo-leng">
-                                    <img src="{% static 'img/logo-chile.png' %}" alt="img-user"
-                                        style="width: 40px; height: 40px; margin-right: 15px;">
-                                </a>
-                                <!-- Botón Login -->
-                                <a href="{% url 'login' %}" class="btn-login me-2">
-                                    <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                        style="width: 30px; height: 30px; margin-right: 15px;">
-                                    Iniciar Sesión
-                                </a>
-                                <!-- Botón Registro -->
-                                <a href="{% url 'registro' %}" class="btn-reg ms-2">
-                                    Regístrate
-                                </a>
-                            </div>
+        <ul class="mt-5">
+            <li class="item">
+                <a href="{% url 'index' %}">
+                    <i class="bx bxs-home ml-3"></i>
+                    <p class="nav-item">Inicio</p>
+                </a>
+
+            </li>
+            <li class="item">
+                <a href="{% url 'gestion_reservas' %}">
+                    <i class='bx bxs-search-alt-2 ml-3'></i>
+                    <p class="nav-item">Reservas</p>
+                </a>
+            </li>
+            <li class="item">
+                <a href="{% url 'gestion_habitaciones' %}">
+                    <i class="bx bxs-info-circle ml-3"></i>
+                    <p class="nav-item">Habitaciones</p>
+                </a>
+            </li>
+            <li class="item">
+                <a href="{% url 'gestion_usuarios' %}">
+                    <i class="bx bxs-contact ml-3"></i>
+                    <p class="nav-item">Usuarios</p>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <i class='bx bxs-cog ml-3'></i>
+                    <p class="nav-item">Configuración</p>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#">
+                    <i class='bx bx-log-out ml-3'></i>
+                    <p class="nav-item">Cerrar Sesión</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="contenido-main">
+        <!-- Contenido principal de la página -->
+        <nav class="navbar navbar-expand-lg p-3">
+            <div class="container-fluid">
+                <!-- Logo Hotel Pacific -->
+                <a class="navbar-brand" href="{% url 'administrador_home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid"
+                        style="max-width: 200px;">
+                </a>
+                <div class="offcanvas offcanvas-end" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-body text-center">
+                        <ul class="navbar-nav justify-content-center flex-grow-1">
+                            <li class="nav-item">
+                                <a href="{% url 'administrador_home' %}" class="nav-link btnLink"
+                                    aria-current="page">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'gestion_reservas' %}" class="nav-link btnLink"
+                                    aria-current="page">Gestión de Reservas</a>
+                            </li>
+                            <li class="nav-item ml-3 mr-3 mb-3">
+                                <a href="{% url 'gestion_habitaciones' %}" class="nav-link btnLink"
+                                    aria-current="page">Habitaciones</a>
+                            </li>
+                            <li class="nav-item ml-3 mr-3 mb-3">
+                                <a href="{% url 'gestion_usuarios' %}" class="nav-link btnLink"
+                                    aria-current="page">Usuarios</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
+                            <!-- Logo Cambio de Idioma -->
+                            <a class="logo-leng">
+                                <img src="{% static 'img/logo-chile.png' %}" alt="img-user"
+                                    style="width: 40px; height: 40px; margin-right: 15px;">
+                            </a>
+                            <!-- Botón Login -->
+                            <a href="{% url 'login' %}" class="btn-login me-2">
+                                <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
+                                    style="width: 30px; height: 30px; margin-right: 15px;">
+                                Iniciar Sesión
+                            </a>
+                            <!-- Botón Registro -->
+                            <a href="{% url 'registro' %}" class="btn-reg">
+                                Regístrate
+                            </a>
                         </div>
                     </div>
                 </div>
-            </nav>
-            {% block contenido %}
-            {% endblock %}
-        </div>
-        <footer style="background-color: #3498db; color: #ffffff;">
-            <div class="container">
+            </div>
+        </nav>
+        {% block contenido %}
+        {% endblock %}
+        <footer class="footer-pag" style="background-color: #3498db; color: #ffffff;">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;">
                         <!-- Ajuste de margen superior -->
@@ -155,18 +146,23 @@
         </footer>
     </div>
 
+    <!-- index.js -->
+    <script src="{% static 'js/index.js' %}"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Otros scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 </body>
 
 </html>
-
-<!-- index.js -->
-<script src="{% static 'js/index.js' %}"></script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-   
