@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'appPacific'
+    'appPacific',
+    'appUserAuth',
 ]
 
 MIDDLEWARE = [
@@ -87,9 +88,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pacific_db',
         'USER': 'root',
-        'PASSWORD': 'pacificDUOC',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '3305',
     }
 }
 
@@ -118,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 

@@ -8,3 +8,15 @@
     margin: 0 !important;
     padding: 0 !important;
 }
+
+.alert-danger-c {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #721c24;
+}
+
+.alert-success-c {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #155724;
+}

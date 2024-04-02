@@ -1,12 +1,15 @@
 from django.urls import path
 from . import views
-from .views import administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
 
 urlpatterns = [
     path('', index, name="index"),
     path('home/', home, name="home"),
-    path('login/', login, name="login"),
     path('registro/', registro, name="registro"),
+    path('iniciosesion/', iniciosesion, name='iniciosesion'),
+    path('cerrarsesion/', cerrarsesion, name='cerrarsesion'),
+    path('misreservas/', misreservas, name='misreservas'),
+    path('misdatos/', misdatos, name='misdatos'),
     path('habitaciones/', habitaciones, name="habitaciones"),
     path('metodo_pago/', metodo_pago, name="metodo_pago"),
     path('contacto/', contacto, name="contacto"),
