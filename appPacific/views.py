@@ -23,7 +23,8 @@ def index(request):
         contrasena = request.POST.get('password')
         conf_contrasena = request.POST.get('password2')
         
-    return render(request, 'app/index.html')
+    habitaciones = Habitacion.objects.all()
+    return render(request, 'app/index.html', {'habitaciones': habitaciones})
 
 # Vista Home
 def home(request):
