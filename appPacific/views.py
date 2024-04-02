@@ -3,13 +3,17 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import RegistroUsuario,TipoUsuario
+from .models import RegistroUsuario, TipoUsuario, ReporteReserva, Habitacion, TipoHabitacion
+from django.http import HttpResponse
+from base64 import b64decode
+import binascii
 import requests
+import base64
+
 
 # Create your views here.
 # Vista Index
 def index(request):
-
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
         apellidos = request.POST.get('apellido')
@@ -38,10 +42,10 @@ def contacto(request):
     return render(request, 'app/contacto.html')
 
 
-
 # Vista Habitaciones
 def habitaciones(request):
-    return render(request, 'app/habitaciones.html')
+    habitaciones = Habitacion.objects.all()
+    return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
 # Vista Método Pago
 def metodo_pago(request):
@@ -66,34 +70,78 @@ def gestion_habitaciones(request):
 # Vista Administrador Gestion Habitaciones -crear
 def crear_habitacion(request):
     if request.method == 'POST':
-        # Id tiene que autogenerarse
+        id_tipo_hab = request.POST.get('id_tipo_hab')
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
-        cantidad = request.POST.get('rut')
+        cantidad = request.POST.get('cantidad')
         precio = request.POST.get('precio')
-        imagen = request.POST.get('imagen')
+        imagen_bytes = request.FILES.get('cargarImagen').read()
 
+        # Codificar los bytes de la imagen en base64
+        imagen_base64 = base64.b64encode(imagen_bytes)
+        imagen_base64_str = imagen_base64.decode('utf-8')
 
+        # Buscar el objeto TipoHabitacion con el ID proporcionado (Esto trae Suite, Premium o Twin)
+        # tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab) 
 
+        # Crear la instancia de Habitacion con la imagen codificada en base64
+        habitacion = Habitacion(
+            id_tipo_hab=id_tipo_hab,
+            titulo=titulo,
+            descripcion=descripcion,
+            cantidad=cantidad,
+            precio=precio,
+            imagen=imagen_base64_str  # Almacenar la imagen codificada en base64
+        )
 
+        # Guardar la instancia en la base de datos
+        habitacion.save()
 
-
-
-
+        # Mostrar un mensaje de éxito
+        messages.success(request, '¡La habitación se creó exitosamente!')
 
     return render(request, 'administrador/gestion_habitaciones/crear_habitacion.html')
 
+
 # Vista Administrador Gestion Habitaciones-eliminar
 def eliminar_habitacion(request):
-    return render(request, 'administrador/gestion_habitaciones/eliminar_habitacion.html')
+    if request.method == 'POST':
+        id_hab = request.POST.get('id_hab')
+        habitacion = Habitacion.objects.get(id_hab=id_hab)
+        habitacion.delete()
+    # Se obtienen todos los registros de habitaciones
+    habitaciones = Habitacion.objects.all()
+
+    return render(request, 'administrador/gestion_habitaciones/eliminar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-modificar
 def modificar_habitacion(request):
-    return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html')
+    if request.method == 'POST':
+        id_hab = request.POST.get('id_hab')
+        id_tipo_hab = request.POST.get('id_tipo_hab')
+        titulo = request.POST.get('titulo')
+        descripcion = request.POST.get('descripcion')
+        cantidad = request.POST.get('cantidad')
+        precio = request.POST.get('precio')
+
+        habitacion = Habitacion.objects.get(id_hab=id_hab)
+
+        # Actualizar los campos de la habitación
+        habitacion.id_tipo_hab = id_tipo_hab
+        habitacion.titulo = titulo
+        habitacion.descripcion = descripcion
+        habitacion.cantidad = cantidad
+        habitacion.precio = precio
+
+        habitacion.save()
+    habitaciones = Habitacion.objects.all();
+    return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-ver
 def ver_habitacion(request):
-    return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html')
+    habitaciones = Habitacion.objects.all()
+
+    return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html',{'habitaciones':habitaciones})
 
 # Vista Administrador Gestion Reservas
 def gestion_reservas(request):

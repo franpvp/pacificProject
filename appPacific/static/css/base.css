@@ -316,3 +316,7 @@ li{
 .fondo-img{
     opacity: 0.9;
 }
+
+.no-border{
+    border: none !important;
+}

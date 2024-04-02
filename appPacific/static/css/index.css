@@ -84,16 +84,11 @@ a{
     text-align: center;
     align-items: center;
     justify-content: space-between;
-    height: 300px;
-    width: 460px;
+    height: 320px;
+    width: 400px;
     max-width: 100%;
     border-radius: 30px;
     transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.box-rec:hover {
-    cursor: pointer;
-    transform: scale(1.02);
 }
 
 .box-rec img {
@@ -104,10 +99,8 @@ a{
     
 }
 
-
-
 .box-rec:before {
-    content: 'Disponibles: 5';
+    content: 'Disponibles: ' attr(data-room);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -122,7 +115,7 @@ a{
     background-color: #4495E0 !important;
 }
 
-.box-rec::after {
+/* .box-rec::after {
     content: attr(data-room);
     display: flex;
     align-items: center;
@@ -135,7 +128,7 @@ a{
     font-size: 14px;
     opacity: 0.6;
     background-color: #D9D9D9 !important;
-}
+} */
 
 .contenedor-img{
     padding: 10px;
@@ -237,6 +230,7 @@ a{
 #btn-plus:hover {
     transform: scale(1.1); /* Aumenta el tamaño al hacer hover */
 }
+
 
 
 

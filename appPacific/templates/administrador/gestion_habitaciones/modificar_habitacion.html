@@ -9,70 +9,184 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Modificar Habitación</h2>
+            <h2 class="titulo-general mt-3 mb-3 text-center">Modificar Habitación</h2>
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID Habitación</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Cantidad Disponibles</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Imagen</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Título Habitación</td>
-                            <td>Descripción Habitación 1</td>
-                            <td>1</td>
-                            <td>$ 59.990</td>
-                            <td>
-                                <img id="imagenMostrada" src="" alt="Imagen Hab 1" class="img-fluid" style="width: 50px; height: 50px;" >
-                                <input id="cargarImagen" class="ml-3" type="file" accept="image/*">
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger">Modificar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        {% for habitacion in habitaciones %}
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="table-responsive table-sm">
+                <form id="habitacion-form-{{ habitacion.id_hab }}" method="post" onsubmit="handleSubmit(event)">
+                    {% csrf_token %}
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Habitación</th>
+                                <th scope="col">ID Tipo habitación</th>
+                                <th scope="col">Título</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Cantidad Disponibles</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Imagen</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td>
+                                        {{ habitacion.id_hab }}
+                                    </td>
+                                    <td>
+                                        <input class="editable-input form-control" type="text" name="id_tipo_hab" id="id_tipo_hab" value="{{ habitacion.id_tipo_hab }}" pattern="[1-3]" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="editable-input form-control" type="text" name="titulo" id="titulo" value="{{ habitacion.titulo }}" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="editable-input form-control" type="text" name="descripcion" id="descripcion" value="{{ habitacion.descripcion }}" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="editable-input form-control" type="text" name="cantidad" id="cantidad" value="{{ habitacion.cantidad }}" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="editable-input form-control" type="text" name="precio" id="precio" value="{{ habitacion.precio }}" disabled>
+                                    </td>
+                                    <td>
+                                        <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;">
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
+                                        <div class="btn-editar btn-reg" data-form-id="habitacion-form-{{ habitacion.id_hab }}">Editar</div>
+                                        <button type="submit" class="btn-guardar btn btn-primary" style="display: none;">Guardar</button>
+                                    </td>
+                                </tr>
+                            </form>
+                            
+                        </tbody>
+                    </table>
             </div>
         </div>
+        {% endfor %}
     </div>
     
 </div>
 
 <script>
-    const urlGuardada = localStorage.getItem('imagenURL');
-    if (urlGuardada) {
-        document.getElementById('imagenMostrada').src = urlGuardada;
-    }
+//     const urlGuardada = localStorage.getItem('imagenURL');
+//     if (urlGuardada) {
+//         document.getElementById('imagenMostrada').src = urlGuardada;
+//     }
 
-  // Capturar el evento de cambio en el input de tipo file
-    document.getElementById('cargarImagen').addEventListener('change', function(event) {
-    // Obtener el archivo cargado
-    const archivo = event.target.files[0];
+//   // Capturar el evento de cambio en el input de tipo file
+//     document.getElementById('cargarImagen').addEventListener('change', function(event) {
+//     // Obtener el archivo cargado
+//     const archivo = event.target.files[0];
     
-    // Validar si se seleccionó un archivo
-    if (archivo) {
-      // Crear un objeto URL para mostrar la imagen cargada
-    const urlImagen = URL.createObjectURL(archivo);
+//     // Validar si se seleccionó un archivo
+//     if (archivo) {
+//       // Crear un objeto URL para mostrar la imagen cargada
+//     const urlImagen = URL.createObjectURL(archivo);
 
-      // Mostrar la imagen en el front-end
-    document.getElementById('imagenMostrada').src = urlImagen;
+//       // Mostrar la imagen en el front-end
+//     document.getElementById('imagenMostrada').src = urlImagen;
 
-      // Guardar la URL de la imagen en el almacenamiento local
-    localStorage.setItem('imagenURL', urlImagen);
-    }
+//       // Guardar la URL de la imagen en el almacenamiento local
+//     localStorage.setItem('imagenURL', urlImagen);
+//     }
+
+
+
+    // function previewImage(event) {
+    //         var input = event.target;
+    //         var reader = new FileReader();
+    //         reader.onload = function() {
+    //             var dataURL = reader.result;
+    //             var img = document.getElementById('imagenPreview');
+    //             img.src = dataURL;
+    //         };
+    //         reader.readAsDataURL(input.files[0]);
+    //     }
+
+    
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".btn-editar").forEach(function(btnEditar) {
+        btnEditar.addEventListener("click", function() {
+            var formId = this.getAttribute('data-form-id');
+            console.log("ID del formulario:", formId);
+            var form = document.getElementById(formId);
+
+            if (form) {
+                console.log("Formulario encontrado:", form);
+                console.log("Inputs encontrados:", form.querySelectorAll('.editable-input'));
+
+                form.querySelectorAll('.editable-input').forEach(input => {
+                    console.log("Input encontrado:", input);
+                    input.disabled = false;
+                });
+
+                var btnGuardar = form.querySelector(".btn-guardar");
+                if (btnGuardar) {
+                    console.log("Botón de guardar encontrado:", btnGuardar);
+                    btnGuardar.style.display = "inline-block";
+                }
+                this.style.display = "none";
+            } else {
+                console.error("Formulario no encontrado con el ID:", formId);
+            }
+        });
+    });
 });
+
+
+
+
+function handleSubmit(event) {
+    event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
+
+    var form = event.target; // Obtener el formulario que está siendo enviado
+
+    // Realizar cualquier validación adicional del formulario aquí, si es necesario
+
+    // Enviar el formulario utilizando JavaScript
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+    })
+    .then(response => {
+        if (response.ok) {
+            // El formulario se envió correctamente, puedes hacer algo aquí si es necesario
+            console.log("Formulario enviado correctamente");
+            form.querySelectorAll('.editable-input').forEach(input => {
+                input.disabled = true;
+                form.querySelector(".btn-guardar").style.display = "none";
+                form.querySelector(".btn-editar").style.display = "flex";
+            });
+        } else {
+            // Hubo un problema al enviar el formulario, manejarlo aquí si es necesario
+            console.error("Error al enviar el formulario");
+        }
+    })
+    .catch(error => {
+        // Manejar cualquier error de red aquí
+        console.error("Error de red al enviar el formulario", error);
+    });
+}
+
+
+
+// document.querySelector(".btn-editar").addEventListener("click", function() {
+    
+//     // Habilitar cada campo individualmente
+//     document.getElementById('id_tipo_hab').disabled = false;
+//     document.getElementById('titulo').disabled = false;
+//     document.getElementById('descripcion').disabled = false;
+//     document.getElementById('cantidad').disabled = false;
+//     document.getElementById('precio').disabled = false;
+    
+//     // Mostrar el botón de guardar y ocultar el botón de editar
+//     document.querySelector(".btn-guardar").style.display = "inline-block";
+//     document.querySelector(".btn-editar").style.display = "none";
+// });
 
 </script>
 

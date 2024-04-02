@@ -11,46 +11,24 @@
     <div class="row">
         <div class="col">
             <!-- Contenedores Habitaciones -->
-            <div class="row mt-2">
-                <div class="col"></div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
-                    <div class="box-rec" data-room="Habitación Twin v1">
-                        <img src="{% static 'img/twin_v1.jpg' %}" alt="img-twin">
+            {% for habitacion in habitaciones %}
+            <div class="row mt-2 justify-content-center">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
+                    <div class="card no-border">
+                        <div class="box-rec" data-room="{{ habitacion.cantidad }}" >
+                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                            <p class="card-text">{{ habitacion.descripcion }}</p>
+                            <p class="card-text">${{ habitacion.precio }} CLP</p>
+                            <a href="#" class="btn btn-primary d-flex justify-content-center">Más Información</a>
+                        </div>
                     </div>
-                    
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
-                    <div class="box-rec" data-room="Habitación Premium v1">
-                        <!-- Imagen Habitación -->
-                        <img src="{% static 'img/premium_v1.jpg' %}" alt="img-twin">
-                        
-                    </div>
-                    
-                </div>
-                <div class="col"></div>
             </div>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
-                    <div class="box-rec" data-room="Habitación Suite v1">
-                        <!-- Imagen Habitación -->
-                        <img class="img-fluid" src="{% static 'img/suite_v1.jpg' %}" alt="img-twin">
-                        
-                    </div>
-                    
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 d-flex align-item-center justify-content-center contenedor-img">
-                    <div class="box-rec" data-room="Habitación Suite v1">
-                        <!-- Imagen Habitación -->
-                        <img class="img-fluid" src="{% static 'img/suite_v1.jpg' %}" alt="img-twin">
-                        
-                    </div>
-                    
-                </div>
-                <div class="col"></div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
-
 {% endblock %}

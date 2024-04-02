@@ -14,12 +14,12 @@ let box_ninos = document.querySelector('.box-btn-ninos');
 
 
 btn_adultos.addEventListener('click', function() {
-    event.stopPropagation();
+    // event.stopPropagation();
     box_adultos.classList.toggle('active');
 });
 
 btn_ninos.addEventListener('click', function() {
-    event.stopPropagation();
+    // event.stopPropagation();
     box_ninos.classList.toggle('active');
 });
 
