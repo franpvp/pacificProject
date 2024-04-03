@@ -11,6 +11,7 @@ from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
 import base64
+import re
 
 # Create your views here.
 
@@ -44,11 +45,11 @@ def registro(request):
                 messages.error(request, "Por favor, complete todos los campos.")
                 return redirect('registro')
 
-            if not (nombre.isalpha()):
+            if not re.match(r'^[a-zA-Z\s-]+$', nombre):
                 messages.error(request, "El nombre deben ser sólo letras")
                 return redirect('registro')
             
-            if not (apellidos.isalpha()):
+            if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
                 messages.error(request, "Los apellidos deben ser sólo letras")
                 return redirect('registro')
 
@@ -67,6 +68,7 @@ def registro(request):
             user = User.objects.create_user(username=usuario,password=password1)
             user.first_name = nombre
             user.last_name = apellidos
+            user.email = correo
             user.save()
             login(request,user)
 
@@ -77,7 +79,6 @@ def registro(request):
             messages.error(request, "Error al registrar usuario. Por favor, inténtelo de nuevo.")
             return redirect('registro')
     
-    # return render(request, 'registration/registro.html')
     return render(request, 'registration/registro.html')
 
 def iniciosesion(request):
