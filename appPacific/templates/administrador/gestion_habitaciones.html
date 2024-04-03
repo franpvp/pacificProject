@@ -1,0 +1,47 @@
+{% extends 'administrador/base_administrador.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+
+{% block contenido %}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="titulo-general text-center">Bienvenido (a) Nombre del Administrador</div>
+            <div class="subtitulo text-center">Cargo: Administrador del Hotel Pacific</div>
+            <!-- Botones -->
+            <div class="row mt-4">
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'ver_habitacion' %}" class="btn btn-primary btn-block btn-lg"> Ver Habitación </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'crear_habitacion' %}" class="btn btn-success btn-block btn-lg"> Crear Habitación
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'modificar_habitacion' %}" class="btn btn-warning btn-block btn-lg"> Modificar Habitación
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'eliminar_habitacion' %}" class="btn btn-danger btn-block btn-lg"> Eliminar
+                        Habitación </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

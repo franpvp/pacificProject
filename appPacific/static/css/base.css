@@ -1,3 +1,4 @@
+
 /* Nav CSS */
 a{
     text-decoration: none !important;
@@ -97,11 +98,16 @@ a{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 0 auto;
     border-radius: 100%;
     background: white;
     color: #FFA011;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+}
+
+.navbar-nav{
+    margin: 0 auto;
 }
 
 
@@ -113,14 +119,15 @@ a{
 }
 
 .sidebar{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    height: 100% !important;
+    height: 100%;
     width: 80px;
     background-color: #12171e;
     padding: 0.4rem 0.8rem;
     transition: all 0.5s ease;
+    z-index: 1000;
 
 }
 
@@ -270,16 +277,12 @@ a{
 }
 
 .sidebar.active ul li .tooltip{
-    display: none;
+    display: none !important;
 }
 
-.main-content{
-    position: relative;
-    min-height: 100vh;
-    top: 0;
-    left: 80px;
-    transition: all 0.5s ease;
-    padding: 1rem;
+.contenido-main{
+    width: calc(100% -80px);
+    margin-left: 80px;
 }
 
 .container {
@@ -295,6 +298,26 @@ li{
     margin: 0 auto;
 }
 
-.content-active {
-    margin-left: 200px; /* Ajusta el valor según el ancho de tu sidebar */
+.footer-pag{
+    margin-top: 145px;
+}
+
+/* CSS administrador_home.html */
+.info-imagen{
+    position: absolute;
+    margin: 0 auto;
+    margin-left: 200px !important;
+    font-weight: 800;
+    color: white !important;
+    top: 500px;
+    color: red;
+    font-size: 45px;
+}
+
+.fondo-img{
+    opacity: 0.9;
+}
+
+.no-border{
+    border: none !important;
 }

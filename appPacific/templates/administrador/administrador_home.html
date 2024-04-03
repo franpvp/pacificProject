@@ -1,0 +1,43 @@
+{% extends 'administrador/base_administrador.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="titulo-general text-center">Bienvenido (a) Nombre del Administrador</div>
+            <div class="subtitulo text-center">Cargo: Administrador del Hotel Pacific</div> <!-- Subtítulo agregado -->
+            <br>
+            <hr>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <img class="fondo-img img-fluid" src="{% static 'img/fondo-reg.jpg' %}" alt="fondo" style="width: 100%;">
+            <div class="info-imagen">
+                Bienvenido (a) a tu segundo hogar, <span style="color: #3498db;">Hotel Pacific</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    hr {
+            border: none; /* Quitamos el borde predeterminado */
+            background-color: gray; /* Cambiamos el color de fondo */
+            height: 1px; /* Ajustamos la altura de la línea */
+        }
+</style>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    
+{% endblock %}

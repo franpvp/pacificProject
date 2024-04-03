@@ -1,0 +1,146 @@
+{% extends 'administrador/base_administrador.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-3 mb-3 text-center">Crear Habitación</h2>
+        </div>
+    </div>
+    <form id="formulario-crear" method="post" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
+        {% csrf_token %}
+        <div class="row justify-content-center mt-3 mb-3">
+            <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID Tipo Habitación</th>
+                                    <th scope="col">Título</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Cantidad Disponibles</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Imagen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input name="id_tipo_hab" id="id_tipo_hab" min="1" max="3" type="text" placeholder="ID Tipo Habitación" required>
+                                    </td>
+                                    <td>
+                                        <input name="titulo" id="titulo" type="text" placeholder="Título" required>
+                                    </td>
+                                    <td>
+                                        <input name="descripcion" id="descripcion" type="text" placeholder="Descripción" required>
+                                    </td>
+                                    <td>
+                                        <input name="cantidad" id="cantidad" min="1" type="text" placeholder="Cantidad" required>
+                                    </td>
+                                    <td>
+                                        <input name="precio" id="precio" min="1" type="text" placeholder="Precio" required>
+                                    </td>
+                                    <td>
+                                        <img id="imagenMostrada" src="" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;" >
+                                        <input name="cargarImagen" id="cargarImagen" class="ml-3" type="file" required>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+            </div>
+        </div>
+        <div class="container">
+            <div class="row m-auto justify-content-center">
+                <div class="col">
+                    ID Tipo Habitación: 
+                </div>
+                <div class="col">
+                    <div class="info-tipo-hab">
+                        1 = Suite
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-tipo-hab">
+                        2 = Premium
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="info-tipo-hab">
+                        3 = Twin
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row m-auto justify-content-center">
+            <div class="col mt-4 mb-4">
+                <div class="d-grid gap-2 col-2 mx-auto">
+                    <button class="btn btn-success" type="submit"> + Agregar</button>
+                </div>
+            </div>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    </form>
+    
+</div>
+
+<script>
+    const urlGuardada = localStorage.getItem('imagenURL');
+    if (urlGuardada) {
+        document.getElementById('imagenMostrada').src = urlGuardada;
+    }
+
+  // Capturar el evento de cambio en el input de tipo file
+    document.getElementById('cargarImagen').addEventListener('change', function(event) {
+    // Obtener el archivo cargado
+    const archivo = event.target.files[0];
+    
+    // Validar si se seleccionó un archivo
+    if (archivo) {
+      // Crear un objeto URL para mostrar la imagen cargada
+    const urlImagen = URL.createObjectURL(archivo);
+
+      // Mostrar la imagen en el front-end
+    document.getElementById('imagenMostrada').src = urlImagen;
+
+      // Guardar la URL de la imagen en el almacenamiento local
+    localStorage.setItem('imagenURL', urlImagen);
+    }
+    localStorage.clear();
+
+    function handleSubmit(event) {
+        // Prevenir el comportamiento predeterminado del envío del formulario
+        event.preventDefault();
+
+    }
+
+});
+
+</script>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

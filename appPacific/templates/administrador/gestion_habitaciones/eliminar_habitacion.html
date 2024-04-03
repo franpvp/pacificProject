@@ -1,0 +1,62 @@
+{% extends 'administrador/base_administrador.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-5 mb-3 text-center">Eliminar Habitación</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Habitación</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Cantidad Disponibles</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for habitacion in habitaciones %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{ habitacion.id_hab }}</td>
+                                <td>{{ habitacion.titulo }}</td>
+                                <td>{{ habitacion.descripcion }}</td>
+                                <td>{{ habitacion.cantidad }}</td>
+                                <td>$ {{ habitacion.precio }} CLP</td>
+                                <td>
+                                    <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}" class="img-fluid" style="width: 50px; height: 50px;">
+                                </td>
+                                <td>
+                                    <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
+                                    <button type="submit" name="eliminar_habitacion" class="btn btn-danger">Eliminar</button>
+                                </td>
+                            </tr>
+                        </form>  
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
