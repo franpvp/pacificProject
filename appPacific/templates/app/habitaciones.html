@@ -8,11 +8,10 @@
 {% block contenido %}
 <div class="container-fluid">
     <div class="row">
-        <div class="titulo-general text-center mt-4">Habitaciones</div>
         <div class="col">
             <!-- Botones Selección Tipo Habitación -->
             <div class="row justify-content-center mt-3">
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
                     <a href="#" class="btn-filtrar" data-id-tipo-hab="1">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
@@ -20,7 +19,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
                     <a href="#" class="btn-filtrar" data-id-tipo-hab="2">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
@@ -28,7 +27,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
                     <a href="#" class="btn-filtrar" data-id-tipo-hab="3">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
@@ -44,9 +43,10 @@
                     <!-- Contenido Filtros -->
                     <div class="filtro-op">
                         <ul>
-                            <div class="recomendados">
+                            <!-- <div class="recomendados">
+                                <i class='bx bxs-star mr-1' ></i>
                                 Recomendados
-                            </div>
+                            </div> -->
                             <div class="mas-economicos">
                                 Más Económicos
                             </div>
@@ -54,13 +54,12 @@
                                 Más Caros
                             </div>
                         </ul>
-                        
                     </div>
                 </div>
             </div>
             <!-- Contenedores Habitaciones -->
-            {% for habitacion in habitaciones %}
             <div class="row mt-2 habitacion tipo-{{ habitacion.id_tipo_hab }}">
+                {% for habitacion in habitaciones %}
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 d-flex align-item-center justify-content-center contenedor-img">
                     <div class="card no-border">
                         <a href="#">
@@ -68,16 +67,15 @@
                                 <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
                             </div>
                         </a>
-                        <div class="card-body">
+                        <div class="card-body text-center">
                             <h5 class="card-title">{{ habitacion.titulo }}</h5>
                             <p class="card-text">{{ habitacion.descripcion }}</p>
-                            <p class="card-text">$ {{ habitacion.precio }} CLP</p>
-                            <a href="#" class="btn btn-primary d-flex justify-content-center">Más Información</a>
+                            <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>

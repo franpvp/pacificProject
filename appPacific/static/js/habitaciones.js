@@ -33,3 +33,8 @@ window.addEventListener('click', function(event) {
         contenedorFiltro.classList.add('active');
     }
 });
+
+// Filtrar por más ecónomicos o más caros
+
+
+

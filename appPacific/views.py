@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-from .models import RegistroUsuario, TipoUsuario, ReporteReserva, Habitacion, TipoHabitacion
+from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion
 from django.http import HttpResponse
 from .forms import RegistroUsuarioAdminForm
 import binascii
@@ -114,7 +114,6 @@ def cerrarsesion(request):
     return redirect('home')
 
 # Vistas Relacionadas con el usuario registrado:
-
 @login_required
 def misreservas(request):
     return render(request, 'registration/mireserva.html')
@@ -231,7 +230,6 @@ def modificar_habitacion(request):
 # Vista Administrador Gestion Habitaciones-ver
 def ver_habitacion(request):
     habitaciones = Habitacion.objects.all()
-
     return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html',{'habitaciones':habitaciones})
 
 # Vista Administrador Gestion Reservas
@@ -240,6 +238,17 @@ def gestion_reservas(request):
 
 # Vista Administrador Gestion Reservas -crear
 def crear_reserva_pacific(request):
+    reservas = Reserva
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        nombre_cli = request.POST.get('nombre_cli')
+        apellidos_cli = request.POST.get('apellidos_cli')
+        rut_cli = request.POST.get('rut_cli')
+        metodo_pago = request.POST.get('metodo_pago')
+        pago_reserva = request.POST.get('pago_reserva')
+        total_restante = request.POST.get('total_restante')
+        estado_pago = request.POST.get('estado_pago')
+
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -eliminar

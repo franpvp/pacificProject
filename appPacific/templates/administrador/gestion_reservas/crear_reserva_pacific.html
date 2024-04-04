@@ -7,7 +7,85 @@
 
 {% block contenido %}
 
-
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-3 mb-3 text-center">Crear Reserva</h2>
+        </div>
+    </div>
+    <form id="formulario-crear" method="post" onsubmit="handleSubmit(event)">
+        {% csrf_token %}
+        <div class="row justify-content-center mt-3 mb-3">
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Nombre Cliente">
+                    <label for="floatingInput">Nombre Cliente</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Apellidos Cliente">
+                    <label for="floatingInput">Apellidos Cliente</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente">
+                    <label for="floatingInput">Rut Cliente</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Correo">
+                    <label for="floatingInput">Correo</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Celular">
+                    <label for="floatingInput">Celular</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <select class="form-select form-select-md mb-3" aria-label="Large select example">
+                    <option selected>Seleccione Método de Pago</option>
+                    <option value="1">Débito</option>
+                    <option value="2">Crédito</option>
+                    <option value="3">Transferencia</option>
+                </select>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="input-group">
+                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Llegada" style="cursor: pointer;" readonly>
+                    <div class="input-group-append ml-auto">
+                        <span class="input-group-text">
+                            <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="input-group">
+                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Salida" style="cursor: pointer;" readonly>
+                    <div class="input-group-append ml-auto">
+                        <span class="input-group-text">
+                            <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
+                        <input type="hidden" name="id_venta" value="{{ venta.id_venta }}">
+                        <button class="btn btn-primary" type="submit">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 {% endblock %}
 

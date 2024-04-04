@@ -16,46 +16,85 @@
         {% csrf_token %}
         <div class="row justify-content-center mt-3 mb-3">
             <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID Tipo Habitación</th>
-                                    <th scope="col">Título</th>
-                                    <th scope="col">Descripción</th>
-                                    <th scope="col">Cantidad Disponibles</th>
-                                    <th scope="col">Precio</th>
-                                    <th scope="col">Imagen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input name="id_tipo_hab" id="id_tipo_hab" min="1" max="3" type="text" placeholder="ID Tipo Habitación" required>
-                                    </td>
-                                    <td>
-                                        <input name="titulo" id="titulo" type="text" placeholder="Título" required>
-                                    </td>
-                                    <td>
-                                        <input name="descripcion" id="descripcion" type="text" placeholder="Descripción" required>
-                                    </td>
-                                    <td>
-                                        <input name="cantidad" id="cantidad" min="1" type="text" placeholder="Cantidad" required>
-                                    </td>
-                                    <td>
-                                        <input name="precio" id="precio" min="1" type="text" placeholder="Precio" required>
-                                    </td>
-                                    <td>
-                                        <img id="imagenMostrada" src="" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;" >
-                                        <input name="cargarImagen" id="cargarImagen" class="ml-3" type="file" required>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                
+                <!-- <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Tipo Habitación</th>
+                                <th scope="col">Título</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Cantidad Disponibles</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Imagen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input name="id_tipo_hab" id="id_tipo_hab" min="1" max="3" type="text" placeholder="ID Tipo Habitación" required>
+                                </td>
+                                <td>
+                                    <input name="titulo" id="titulo" type="text" placeholder="Título" required>
+                                </td>
+                                <td>
+                                    <input name="descripcion" id="descripcion" type="text" placeholder="Descripción" required>
+                                </td>
+                                <td>
+                                    <input name="cantidad" id="cantidad" min="1" type="text" placeholder="Cantidad" required>
+                                </td>
+                                <td>
+                                    <input name="precio" id="precio" min="1" type="text" placeholder="Precio" required>
+                                </td>
+                                <td>
+                                    <img id="imagenMostrada" src="" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;" >
+                                    <input name="cargarImagen" id="cargarImagen" class="ml-3" type="file" required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
             </div>
         </div>
+
+
+        <div class="row justify-content-center align-item-center">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-6 pb-4">
+                <!-- Input ID Tipo Habitación -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="id_tipo_hab" name="id_tipo_hab" placeholder="Tipo Habitación" required>
+                    <label for="id_tipo_hab">ID Tipo Habitación</label>
+                </div>
+                <!-- Input Título -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="titulo" required>
+                    <label for="titulo">Título</label>
+                </div>
+                <!-- Input Descripción -->
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="descripcion" name="descripcion" style="height: 100px"></textarea>
+                    <label for="descripcion">Descripción</label>
+                </div>
+                <!-- Input Cantidad Disponibles -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="cantidad" name="cantidad" placeholder="cantidad" required>
+                    <label for="cantidad">Cantidad</label>
+                </div>
+                <!-- Input Cantidad Disponibles -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="precio" name="precio" placeholder="precio" required>
+                    <label for="precio">Precio</label>
+                </div>
+                <!-- Input Imagen -->
+                <div class="form-group">
+                    <label for="cargarImagen">Selecciona una imagen:</label>
+                    <img id="imagenMostrada" src="" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;">
+                    <input name="cargarImagen" id="cargarImagen" class="ml-3" type="file" required onchange="mostrarImagenSeleccionada(event)">
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="container">
             <div class="row m-auto justify-content-center">
                 <div class="col">
