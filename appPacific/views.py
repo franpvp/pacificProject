@@ -97,7 +97,9 @@ def iniciosesion(request):
                 login(request,user)
                 messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
-                return render(request,'app/home.html',{'name':name})
+                # Obtener habitaciones
+                habitaciones = Habitacion.objects.all()
+                return render(request,'app/index.html',{'name':name, 'habitaciones': habitaciones})
             else:
                 messages.error(request,"Usuario o contraseña no es correcta")
                 return render(request, 'app/login.html')
@@ -111,7 +113,7 @@ def iniciosesion(request):
 @login_required
 def cerrarsesion(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # Vistas Relacionadas con el usuario registrado:
 @login_required
