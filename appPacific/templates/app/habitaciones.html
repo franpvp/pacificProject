@@ -12,7 +12,7 @@
             <!-- Botones Selección Tipo Habitación -->
             <div class="row justify-content-center mt-3">
                 <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="1">
+                    <a class="btn-filtrar" data-id-tipo-hab="1" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                             Suite
@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="2">
+                    <a class="btn-filtrar" data-id-tipo-hab="2" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                             Premium
@@ -28,7 +28,7 @@
                     </a>
                 </div>
                 <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="3">
+                    <a class="btn-filtrar" data-id-tipo-hab="3" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                             Twin
@@ -36,7 +36,7 @@
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
-                    <div class="btn-hab" id="filtro">
+                    <div class="btn-hab filtro">
                         <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
                         Filtros
                     </div>
@@ -58,15 +58,13 @@
                 </div>
             </div>
             <!-- Contenedores Habitaciones -->
-            <div class="row mt-2 habitacion tipo-{{ habitacion.id_tipo_hab }}">
+            <div class="row mt-2 justify-content-center">
                 {% for habitacion in habitaciones %}
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 d-flex align-item-center justify-content-center contenedor-img">
+                <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
                     <div class="card no-border">
-                        <a href="#">
-                            <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
-                            </div>
-                        </a>
+                        <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                        </div>
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ habitacion.titulo }}</h5>
                             <p class="card-text">{{ habitacion.descripcion }}</p>
