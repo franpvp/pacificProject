@@ -86,18 +86,18 @@ btn_plus_ninos.addEventListener('click', function() {
 });
 
 // Botones Filtrar
+// Función para filtrar habitaciones por tipo
 document.querySelectorAll('.btn-filtrar').forEach(btn => {
     btn.addEventListener('click', function() {
         const idTipoHab = this.getAttribute('data-id-tipo-hab');
 
-        // Ocultar todas las habitaciones
+        // Mostrar solo las habitaciones del tipo seleccionado y habilitar las que estaban ocultas
         document.querySelectorAll('.habitacion').forEach(hab => {
-            hab.style.display = 'none';
-        });
-
-        // Mostrar solo las habitaciones del tipo seleccionado
-        document.querySelectorAll('.tipo-' + idTipoHab).forEach(hab => {
-            hab.style.display = 'block';
+            if (hab.classList.contains('tipo-' + idTipoHab)) {
+                hab.style.display = 'block';
+            } else {
+                hab.style.display = 'none';
+            }
         });
     });
 });
@@ -155,8 +155,13 @@ function ordenarPorPrecioMayorAMenor() {
 }
 
 // Agregar event listener al botón para ordenar de mayor a menor precio
-document.querySelector('.mas-caros').addEventListener('click', ordenarPorPrecioMayorAMenor);
-
+document.querySelector('.mas-caros').addEventListener('click', function() {
+    ordenarPorPrecioMayorAMenor();
+    // Mostrar todas las habitaciones nuevamente
+    document.querySelectorAll('.habitacion').forEach(hab => {
+        hab.style.display = 'block';
+    });
+});
 
 
 // Función para ordenar las habitaciones por precio de menor a mayor
@@ -174,4 +179,30 @@ function ordenarPorPrecioMenorAMayor() {
 }
 
 // Agregar event listener al botón para ordenar de menor a mayor precio
-document.querySelector('.mas-economicos').addEventListener('click', ordenarPorPrecioMenorAMayor);
+document.querySelector('.mas-economicos').addEventListener('click', function() {
+    ordenarPorPrecioMenorAMayor();
+    // Mostrar todas las habitaciones nuevamente
+    document.querySelectorAll('.habitacion').forEach(hab => {
+        hab.style.display = 'block';
+    });
+});
+
+// Se guardar los campos del buscador
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('form-busqueda').addEventListener('submit', function(event) {
+        // Obtener los valores de los campos de entrada
+        var fechaLlegada = document.getElementById('fecha_llegada').value;
+        var fechaSalida = document.getElementById('fecha_salida').value;
+        var contadorAdultos = parseInt(document.getElementById('contador-adultos').innerText);
+        var contadorNinos = parseInt(document.getElementById('contador-ninos').innerText);
+        
+        // Validar que las fechas de llegada y salida estén ingresadas y que al menos un adulto esté seleccionado
+        if (fechaLlegada.trim() === '' || fechaSalida.trim() === '') {
+            alert('Por favor ingrese las fechas de llegada y salida.');
+            event.preventDefault(); // Evitar el envío del formulario si hay campos vacíos
+        } else if (contadorAdultos < 1) {
+            alert('Debe seleccionar al menos 1 adulto.');
+            event.preventDefault(); // Evitar el envío del formulario si no hay adultos seleccionados
+        }
+    });
+});

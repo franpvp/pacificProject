@@ -18,36 +18,36 @@
         <div class="row justify-content-center mt-3 mb-3">
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Nombre Cliente">
-                    <label for="floatingInput">Nombre Cliente</label>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Nombre Cliente" required>
+                    <label for="floatingInput">Nombres Cliente</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Apellidos Cliente">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Apellidos Cliente" required>
                     <label for="floatingInput">Apellidos Cliente</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente" required>
                     <label for="floatingInput">Rut Cliente</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Correo">
-                    <label for="floatingInput">Correo</label>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente" required>
+                    <label for="floatingInput">Cantidad Adultos</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Celular">
-                    <label for="floatingInput">Celular</label>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente">
+                    <label for="floatingInput">Cantidad Niños</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
-                <select class="form-select form-select-md mb-3" aria-label="Large select example">
+                <select class="form-select form-select-md mb-3" aria-label="Large select example" required>
                     <option selected>Seleccione Método de Pago</option>
                     <option value="1">Débito</option>
                     <option value="2">Crédito</option>
@@ -56,7 +56,7 @@
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Llegada" style="cursor: pointer;" readonly>
+                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Llegada" style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
                             <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
@@ -66,7 +66,7 @@
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Salida" style="cursor: pointer;" readonly>
+                    <input type="text" class="form-control date-range" placeholder="Ingrese Fecha Salida" style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
                             <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">

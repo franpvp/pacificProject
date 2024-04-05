@@ -22,21 +22,29 @@ class RegistroUsuario(models.Model):
     def __str__(self):
         return self.nombres
 
+class MetodoPago(models.Model):
+    id_metodo_pago = models.AutoField(primary_key=True, unique=True, verbose_name="Id Metodo Pago")
+    tipo_metodo_pago = models.CharField(max_length=20, verbose_name="Metodo Pago")
+
+    def __str__(self):
+        return self.tipo_metodo_pago
+
 # Tabla Creación Reserva (Con datos cliente)
 class Reserva(models.Model):
     id_reserva = models.AutoField(primary_key=True, unique=True, verbose_name="Id reserva")
-    nombre_cli = models.CharField(max_length=30, verbose_name="Nombre cliente")
-    apellidos_cli = models.CharField(max_length=30, verbose_name="Apellidos cliente")
-    rut_cli = models.CharField(max_length=25, verbose_name="Rut cliente")
-    correo_cli = models.CharField(max_length=40, verbose_name="Correo cliente")
-    celular_cli = models.CharField(max_length=40, verbose_name="Celular cliente")
-    metodo_pago = models.CharField(max_length=20, verbose_name="Metodo Pago cliente")
-    pago_reserva = models.CharField(max_length=20, verbose_name="Pago Reserva")
-    total_restante = models.CharField(max_length=20, verbose_name="Total Restante")
-    estado_pago = models.CharField(max_length=20, verbose_name="Estado Pago")
+    id_user = models.CharField(max_length=20, verbose_name="Id Usuario")
+    fecha_llegada = models.DateField(null=False, verbose_name="Fecha Llegada")
+    fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
+    cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
+    cant_ninos = models.IntegerField(verbose_name="Cantidad Niños", null=True)
+    
+    tipo_metodo_pago = models.CharField(max_length=20, verbose_name="Metodo Pago cliente")
+    pago_reserva = models.IntegerField(verbose_name="Pago Reserva")
+    total_restante = models.IntegerField(verbose_name="Total Restante")
+    estado_pago = models.CharField(max_length=20, verbose_name="Estado Pago", default="Pendiente")
 
     def __str__(self):
-            return self.nombre_cli
+            return self.id_user
 
 # Tabla Reporte Reserva
 class ReporteReserva(models.Model):

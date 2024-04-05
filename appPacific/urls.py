@@ -33,4 +33,6 @@ urlpatterns = [
     path('gestion_usuarios/modificar_usuario/<int:id_usuario>/', modificar_usuario_admin, name='modificar_usuario_admin'),
     path('gestion_usuarios/eliminar_usuario/<int:id_usuario>/', eliminar_usuario_admin, name='eliminar_usuario_admin'),
     path('gestion_usuarios/tipo_usuario_admin/<int:id_usuario>/', tipo_usuario_admin, name='tipo_usuario_admin'),
+    path('api/orders', views.create_order, name='create_order'),
+    path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
 ]

@@ -10,20 +10,25 @@ from django.http import HttpResponse
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
+from django.conf import settings
+import json
+from django.http import JsonResponse
 import base64
+from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
 
 # Create your views here.
 
 # Vista Index
 def index(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        apellidos = request.POST.get('apellido')
-        rut = request.POST.get('rut')
-        correo = request.POST.get('correo')
-        celular = request.POST.get('celular')
-        contrasena = request.POST.get('password')
-        conf_contrasena = request.POST.get('password2')
+        # Input Buscador
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+        contador_adultos = int(request.POST.get('contador_adultos', 0))
+        contador_ninos = int(request.POST.get('contador_ninos', 0))
         
     habitaciones = Habitacion.objects.all()
     return render(request, 'app/index.html', {'habitaciones': habitaciones})
@@ -137,8 +142,21 @@ def contacto(request):
 
 # Vista Habitaciones
 def habitaciones(request):
+    # Obtener los parámetros de la URL
+    fecha_llegada = request.GET.get('fecha_llegada')
+    fecha_salida = request.GET.get('fecha_salida')
+    contador_adultos = int(request.GET.get('contador_adultos', 0))
+    contador_ninos = int(request.GET.get('contador_ninos', 0))
+
+    datos_busqueda = {
+        'fecha_llegada': fecha_llegada,
+        'fecha_salida': fecha_salida,
+        'contador_adultos': contador_adultos,
+        'contador_ninos': contador_ninos
+    }
+
     habitaciones = Habitacion.objects.all()
-    return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
+    return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones, 'datos_busqueda': datos_busqueda})
 
 # Vista Método Pago
 def metodo_pago(request):
@@ -232,7 +250,11 @@ def modificar_habitacion(request):
 # Vista Administrador Gestion Habitaciones-ver
 def ver_habitacion(request):
     habitaciones = Habitacion.objects.all()
-    return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html',{'habitaciones':habitaciones})
+    paginator = Paginator(habitaciones, 2)  # Número de habitaciones por página
+    num_pages = paginator.num_pages
+    page_range = range(1, num_pages + 1)
+    return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html', {'habitaciones': habitaciones, 'page_range': page_range})
+
 
 # Vista Administrador Gestion Reservas
 def gestion_reservas(request):
@@ -322,3 +344,90 @@ def tipo_usuario_admin(request, id_usuario):
     else:
         return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario})
     
+
+
+
+# Vistas PAYPAL
+@csrf_exempt
+@require_POST
+def create_order(request):
+    try:
+        data = json.loads(request.body)
+        cart = data.get('cart')
+
+        access_token = generate_access_token()
+
+        payload = {
+            "intent": "CAPTURE",
+            "purchase_units": [
+                {
+                    "amount": {
+                        "currency_code": "USD",
+                        "value": "100.00"  # You may need to calculate this from the cart
+                    }
+                }
+            ]
+        }
+
+        response = requests.post(
+            f"{settings.PAYPAL_BASE_URL}/v2/checkout/orders",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}"
+            },
+            json=payload
+        )
+
+        return handle_response(response)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+@csrf_exempt
+@require_POST
+def capture_order(request, order_id):
+    try:
+        access_token = generate_access_token()
+
+        response = requests.post(
+            f"{settings.PAYPAL_BASE_URL}/v2/checkout/orders/{order_id}/capture",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}"
+            }
+        )
+
+        return handle_response(response)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+def generate_access_token():
+    try:
+        if not (settings.PAYPAL_CLIENT_ID and settings.PAYPAL_CLIENT_SECRET):
+            raise Exception("MISSING_API_CREDENTIALS")
+
+        auth = base64.b64encode(
+            f"{settings.PAYPAL_CLIENT_ID}:{settings.PAYPAL_CLIENT_SECRET}".encode()
+        ).decode()
+
+        response = requests.post(
+            f"{settings.PAYPAL_BASE_URL}/v1/oauth2/token",
+            data={"grant_type": "client_credentials"},
+            headers={"Authorization": f"Basic {auth}"}
+        )
+
+        data = response.json()
+        return data.get("access_token")
+
+    except Exception as e:
+        raise Exception(f"Failed to generate Access Token: {str(e)}")
+
+
+def handle_response(response):
+    try:
+        response_data = response.json()
+        return JsonResponse(response_data, status=response.status_code)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

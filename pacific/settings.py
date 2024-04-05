@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'appPacific',
 ]
+# Define las variables de entorno para las credenciales de PayPal
+PAYPAL_CLIENT_ID = "AZtOiLY8L2BhBPH8aqBxJkvI-aK1pSLADShO9wLz731eKKbtJDqs1nSs-LkoIFFFTqFpTjyR0MqofsuK"
+PAYPAL_CLIENT_SECRET = "EKFNYIRfEwLOGqHQnMhkiEL1djG20QFxt4ABVOteWGKmwdT3Jvdyd-yDmAT_ZKPT7PQUaqRTjOfQC0ki"
+
+# Define la URL base de PayPal
+PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"  # URL de sandbox para pruebas
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,14 +91,11 @@ WSGI_APPLICATION = 'pacific.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BBDD',
+        'NAME': 'pacific_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'pacificDUOC',
         'HOST': 'localhost',
         'PORT': '3306',
-        'OPTIONS': {
-            'unix_socket': '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
-        },
     }
 }
 
@@ -140,3 +143,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

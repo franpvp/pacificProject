@@ -19,7 +19,7 @@
                     {% csrf_token %}
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">ID Usuario</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Apellidos</th>
@@ -29,7 +29,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="text-center">
                                 <td>{{ usuario.id_user }}</td>
                                 <td>{{ usuario.nombres }}</td>
                                 <td>{{ usuario.apellidos }}</td>
@@ -44,7 +44,10 @@
                             </tr>
                         </tbody>
                     </table>
-                    <button type="submit" class="btn btn-secondary">Guardar</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-secondary">Guardar</button>
+                    </div>
+                    
                 </form>
             </div>
         </div>

@@ -18,9 +18,9 @@
                 <p class="text-center">No hay habitaciones disponibles en este momento.</p>
             {% else %}
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th scope="col">ID Habitación</th>
                             <th scope="col">ID Tipo Habitación</th>
                             <th scope="col">Título</th>
@@ -30,7 +30,7 @@
                             <th scope="col">Imagen</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="habitaciones-table">
                         {% for habitacion in habitaciones %}
                         <tr class="text-center">
                             <td>{{ habitacion.id_hab }}</td>
@@ -50,6 +50,30 @@
             {% endif %}
         </div>
     </div>
+    <div class="container justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" id="previous-page">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% for page_num in page_range %}
+                    <li class="page-item">
+                        <a class="page-link" href="#" onclick="goToPage(event, {page_num} )">{{ page_num }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item" id="next-page">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    
+    
     <div class="container">
         <div class="row m-auto">
             <a href="{% url 'habitaciones' %}">
@@ -63,9 +87,63 @@
     
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rowsPerPage = 5; // Número de registros por página
+    let currentPage = 0; // Página actual (0-indexed)
+
+    const habitacionesRows = document.querySelectorAll('.habitaciones-table tr');
+    const numPages = Math.ceil(habitacionesRows.length / rowsPerPage);
+
+    function showPage(page) {
+        const start = page * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        habitacionesRows.forEach((row, index) => {
+            if (index >= start && index < end) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    function goToPage(page) {
+        if (page >= 0 && page < numPages) { // Asegurarse de que la página esté dentro del rango
+            currentPage = page;
+            showPage(currentPage);
+        }
+    }
+
+    function goToPreviousPage() {
+        goToPage(currentPage - 1);
+    }
+
+    function goToNextPage() {
+        goToPage(currentPage + 1);
+    }
+
+    showPage(currentPage);
+
+    document.getElementById('previous-page').addEventListener('click', goToPreviousPage);
+    document.getElementById('next-page').addEventListener('click', goToNextPage);
+
+    // Agregar eventos a los enlaces numéricos de las páginas
+    const pageLinks = document.querySelectorAll('.page-link');
+    pageLinks.forEach((link, index) => {
+        link.addEventListener('click', function() {
+            const pageNumber = parseInt(this.textContent) - 1; // Obtener el número de página desde el texto del enlace
+            goToPage(pageNumber);
+        });
+    });
+});
+
+</script>
+
 
 {% endblock %}
 
 {% block scripts %}
 
 {% endblock %}
+
