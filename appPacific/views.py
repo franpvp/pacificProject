@@ -12,6 +12,7 @@ import binascii
 import requests
 import base64
 import re
+from django.utils.translation import gettext as _
 
 # Create your views here.
 
@@ -42,27 +43,27 @@ def registro(request):
             password2 = request.POST['password2']
 
             if not (nombre and apellidos and correo and celular and password1 and password2):
-                messages.error(request, "Por favor, complete todos los campos.")
+                messages.error(request, _("Por favor, complete todos los campos."))
                 return redirect('registro')
 
             if not re.match(r'^[a-zA-Z\s-]+$', nombre):
-                messages.error(request, "El nombre deben ser sólo letras")
+                messages.error(request, _("El nombre deben ser sólo letras"))
                 return redirect('registro')
             
             if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
-                messages.error(request, "Los apellidos deben ser sólo letras")
+                messages.error(request, _("Los apellidos deben ser sólo letras"))
                 return redirect('registro')
 
             if password1 != password2:
-                messages.error(request, "Las contraseñas no coinciden")
+                messages.error(request, _("Las contraseñas no coinciden"))
                 return redirect('registro')
             
             if User.objects.filter(username=usuario).exists():
-                messages.error(request, "Nombre de usuario ya existe")
+                messages.error(request, _("Nombre de usuario ya existe"))
                 return redirect('registro')
             
             if User.objects.filter(email=correo).exists():
-                messages.error(request, "Ya existe una cuenta con ese correo")
+                messages.error(request, _("Ya existe una cuenta con ese correo"))
                 return redirect('registro')
 
             user = User.objects.create_user(username=usuario,password=password1)
@@ -72,11 +73,11 @@ def registro(request):
             user.save()
             login(request,user)
 
-            messages.success(request, "Registro Exitoso, por favor inicie sesion")
+            messages.success(request, _("Registro Exitoso, por favor inicie sesion"))
             return redirect('iniciosesion')
         
         except IntegrityError:  
-            messages.error(request, "Error al registrar usuario. Por favor, inténtelo de nuevo.")
+            messages.error(request, _("Error al registrar usuario. Por favor, inténtelo de nuevo."))
             return redirect('registro')
     
     return render(request, 'registration/registro.html')
@@ -89,22 +90,22 @@ def iniciosesion(request):
             password1 = request.POST.get('password')
 
             if not (usuario and password1):
-                messages.error(request,"Debe llenar los campos indicados")
+                messages.error(request, _("Debe llenar los campos indicados"))
                 return render(request,'app/login.html')
 
             user = authenticate(request,username=usuario,password=password1)
 
             if user is not None:
                 login(request,user)
-                messages.success(request,"Inicio de sesión correcta")
+                messages.success(request, _("Inicio de sesión correcta"))
                 name = request.user.first_name
                 return render(request,'app/home.html',{'name':name})
             else:
-                messages.error(request,"Usuario o contraseña no es correcta")
+                messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
             
         except Exception as e:
-            messages.error(request, "Error al iniciar sesión. Por favor, inténtelo de nuevo.")
+            messages.error(request, _("Error al iniciar sesión. Por favor, inténtelo de nuevo."))
             return render(request, 'app/login.html')
 
     return render(request, 'app/login.html')
@@ -191,7 +192,7 @@ def crear_habitacion(request):
         habitacion.save()
 
         # Mostrar un mensaje de éxito
-        messages.success(request, '¡La habitación se creó exitosamente!')
+        messages.success(request, _('¡La habitación se creó exitosamente!'))
     return render(request, 'administrador/gestion_habitaciones/crear_habitacion.html')
 
 
