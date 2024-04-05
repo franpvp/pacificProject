@@ -15,7 +15,7 @@ let btn_minus_adultos = document.querySelector('#btn-minus-adultos');
 let btn_plus_adultos = document.querySelector('#btn-plus-adultos');
 let btn_minus_ninos = document.querySelector('#btn-minus-ninos');
 let btn_plus_ninos = document.querySelector('#btn-plus-ninos');
-var btnFiltro = document.getElementById('filtro');
+var btnFiltro = document.querySelector('.filtro');
 var contenedorFiltro = document.querySelector('.filtro-opciones');
 
 btn_adultos.addEventListener('click', function() {
@@ -104,8 +104,19 @@ document.querySelectorAll('.btn-filtrar').forEach(btn => {
 
 btnFiltro.addEventListener('click', function() {
     var contenedorFiltro = document.querySelector('.filtro-opciones');
-    contenedorFiltro.classList.toggle('active');
-})
+    if (contenedorFiltro.classList.contains('active')) {
+        contenedorFiltro.classList.remove('active');
+    } else {
+        contenedorFiltro.classList.add('active');
+    }
+});
+
+document.addEventListener('click', function(event) {
+    var contenedorFiltro = document.querySelector('.filtro-opciones');
+    if (!contenedorFiltro.contains(event.target) && event.target !== btnFiltro) {
+        contenedorFiltro.classList.remove('active');
+    }
+});
 
 // Detectar clics fuera del botón
 window.addEventListener('click', function(event) {
@@ -121,10 +132,46 @@ window.addEventListener('click', function(event) {
     } else{
         box_ninos.classList.add('active');
     }
-    if (!btnFiltro.contains(event.target)) {
-        // Ocultar el contenido aquí
-        contenedorFiltro.classList.remove('active');
-    } else{
-        contenedorFiltro.classList.add('active');
-    }
+    // if (!btnFiltro.contains(event.target)) {
+    //     contenedorFiltro.classList.remove('active');
+    // } else{
+    //     contenedorFiltro.classList.add('active');
+    // }
 });
+
+// Botón Filtrar (Más económicos, más caros)
+// Función para ordenar las habitaciones por precio de mayor a menor
+function ordenarPorPrecioMayorAMenor() {
+    const habitacionesArray = Array.from(document.querySelectorAll('.habitacion'));
+    const row = document.querySelector('.row.mt-2.justify-content-center'); // Seleccionamos la fila existente
+    habitacionesArray.sort((a, b) => {
+        const precioA = parseFloat(a.querySelector('.card-text[data-precio]').getAttribute('data-precio').replace('$', '').replace(' CLP', ''));
+        const precioB = parseFloat(b.querySelector('.card-text[data-precio]').getAttribute('data-precio').replace('$', '').replace(' CLP', ''));
+        return precioB - precioA;
+    });
+    habitacionesArray.forEach(habitacion => {
+        row.appendChild(habitacion); // Añadimos cada habitación ordenada a la fila existente
+    });
+}
+
+// Agregar event listener al botón para ordenar de mayor a menor precio
+document.querySelector('.mas-caros').addEventListener('click', ordenarPorPrecioMayorAMenor);
+
+
+
+// Función para ordenar las habitaciones por precio de menor a mayor
+function ordenarPorPrecioMenorAMayor() {
+    const habitacionesArray = Array.from(document.querySelectorAll('.habitacion'));
+    const row = document.querySelector('.row.mt-2.justify-content-center'); // Seleccionamos la fila existente
+    habitacionesArray.sort((a, b) => {
+        const precioA = parseFloat(a.querySelector('.card-text[data-precio]').getAttribute('data-precio').replace('$', '').replace(' CLP', ''));
+        const precioB = parseFloat(b.querySelector('.card-text[data-precio]').getAttribute('data-precio').replace('$', '').replace(' CLP', ''));
+        return precioA - precioB; // Cambiamos el orden de la resta para ordenar de menor a mayor
+    });
+    habitacionesArray.forEach(habitacion => {
+        row.appendChild(habitacion); // Añadimos cada habitación ordenada a la fila existente
+    });
+}
+
+// Agregar event listener al botón para ordenar de menor a mayor precio
+document.querySelector('.mas-economicos').addEventListener('click', ordenarPorPrecioMenorAMayor);

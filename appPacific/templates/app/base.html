@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/registro.css' %}">
     <link rel="stylesheet" href="{% static 'css/habitaciones.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reserva_realizada.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/crear_usuario.css' %}"> -->
     
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -23,7 +24,7 @@
         <div class="sidebar">
             <div class="top mb-4">
                 <div class="logo">
-                    <i class="bx bxl-codepen"></i>
+                    <i class='bx bx-building'></i>
                 </div>
                 <i class="bx bx-menu" id="btn"></i>
             </div> 
@@ -171,16 +172,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
 
     <script>
-        // Calendario
-        var currentDate = new Date();
+    // Calendario
+    var currentDate = new Date();
 
-        $(document).ready(function(){
+    $(document).ready(function(){
         $('.date-range').datepicker({
             autoclose: true,
             todayHighlight: true,
             format: '      D dd M    ',
             clearBtn: true,
-            multidate: true,
+            multidate: false, // Permite solo una fecha seleccionada
             startDate: currentDate, 
             language: 'es' // Establece el idioma a español
         }).on('changeDate', function(e) {
@@ -189,12 +190,24 @@
             });
             $(this).val(dates.join(', '));
         }).on('changeDate', function(e) {
-            var selectedDates = e.dates;
-            var dateLength = selectedDates.length;
-            if (dateLength > 1) {
-                var previousDate = selectedDates[dateLength - 2];
-                if (selectedDates[dateLength - 1] <= previousDate) {
-                    $(this).datepicker('setDate', previousDate);
+            var selectedDate = e.date;
+            var inputId = $(this).attr('id');
+            var otherInputId = inputId === 'fecha_llegada' ? 'fecha_salida' : 'fecha_llegada';
+            var otherInput = $('#' + otherInputId);
+            var otherDate = otherInput.datepicker('getDate');
+
+            if (otherDate !== null && selectedDate !== null) {
+                if (inputId === 'fecha_llegada' && selectedDate > otherDate) {
+                    otherInput.datepicker('setDate', selectedDate);
+                } else if (inputId === 'fecha_salida' && selectedDate < otherDate) {
+                    otherInput.datepicker('setDate', selectedDate);
+                }
+                if ($('#fecha_llegada').datepicker('getDate') !== null && $('#fecha_salida').datepicker('getDate') !== null && $('#fecha_llegada').datepicker('getDate') >= $('#fecha_salida').datepicker('getDate')) {
+                    if (inputId === 'fecha_llegada') {
+                        otherInput.datepicker('setDate', new Date(selectedDate.getTime() + 86400000)); // Agrega un día a la fecha de llegada
+                    } else {
+                        otherInput.datepicker('setDate', null);
+                    }
                 }
             }
         });
@@ -204,6 +217,8 @@
             $(this).datepicker('show');
         });
     });
+
+
     </script>
     
 </body>

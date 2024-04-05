@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Eliminar Usuario</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">Otorgar Privilegio de Vendedor</h2>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -25,7 +25,7 @@
                                 <th scope="col">Apellidos</th>
                                 <th scope="col">Correo Electrónico</th>
                                 <th scope="col">Celular</th>
-                                <th scope="col">Acciones</th>
+                                <th scope="col">Rol</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,11 +36,15 @@
                                 <td>{{ usuario.correo }}</td>
                                 <td>{{ usuario.telefono }}</td>
                                 <td>
-                                    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                                    <select name="rol" class="form-select">
+                                        <option value="Vendedor">Vendedor</option>
+                                        <option value="Cliente">Cliente</option>
+                                    </select>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <button type="submit" class="btn btn-secondary">Guardar</button>
                 </form>
             </div>
         </div>

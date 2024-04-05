@@ -9,13 +9,13 @@
 <div class="container-fluid">
     <div class="row mt-5">
         <div class="col"></div>
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
             <!-- Barra Custom Buscador -->
             <div class="search-bar mb-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-4 d-flex align-items-center mt-3 mb-3">
+                    <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
                         <div class="input-group">
-                            <input type="text" class="form-control date-range" placeholder="Selecciona un rango de fechas" style="cursor: pointer;" readonly>
+                            <input id="fecha_llegada" type="text" class="form-control date-range text-center" placeholder="Ingrese Fecha Llegada" style="cursor: pointer;" readonly>
                             <div class="input-group-append ml-auto">
                                 <span class="input-group-text">
                                     <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
@@ -23,10 +23,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mt-3 mb-3">
+                    <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                        <div class="input-group">
+                            <input id="fecha_salida" type="text" class="form-control date-range text-center" placeholder="Ingrese Fecha Salida" style="cursor: pointer;" readonly>
+                            <div class="input-group-append ml-auto">
+                                <span class="input-group-text">
+                                    <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3 ml-3 mr-3">
                         <!-- Selector Cantidad Adultos -->
                         <div class="btn-adultos">
-                            Cantidad Adultos
+                            Adultos
                         </div>
                         <div class="box-btn-adultos">
                             <div class="contenido-sec">
@@ -36,10 +46,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mt-3 mb-3">
+                    <div class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3">
                         <!-- Selector Cantidad Niños -->
                         <div class="btn-ninos">
-                            Cantidad Niños
+                            Niños
                         </div>
                         <div class="box-btn-ninos">
                             <div class="contenido-sec">
@@ -49,7 +59,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 d-flex justify-content-end align-item-center ml-3 mt-3 mb-3">
+                    <!-- Botón Buscador -->
+                    <div class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3 ">
                         <a href="{% url 'habitaciones' %}">
                             <img src="{% static 'img/buscador.png' %}" alt="img-user" style="width: 50px; height: 50px; margin-right: 15px;">
                         </a>
@@ -62,41 +73,42 @@
     
     <!-- Botones Selección Tipo Habitación -->
     <div class="row justify-content-center">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="1">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="1" style="cursor: pointer;">
                 <div class="btn-hab">
                     <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                     Suite
                 </div>
             </a>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="2">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="2" style="cursor: pointer;">
                 <div class="btn-hab">
                     <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                     Premium
                 </div>
             </a>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="3">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="3" style="cursor: pointer;">
                 <div class="btn-hab">
                     <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
                     Twin
                 </div>
             </a>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
-            <div class="btn-hab" id="filtro">
+        <div class="col-xs-6 col-sm-4 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
+            <div class="btn-hab filtro" style="cursor: pointer;">
                 <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
                 Filtros
             </div>
             <!-- Contenido Filtros -->
             <div class="filtro-opciones">
                 <ul>
-                    <div class="recomendados">
+                    <!-- <div class="recomendados">
+                        <i class='bx bxs-star mr-1' ></i>
                         Recomendados
-                    </div>
+                    </div> -->
                     <div class="mas-economicos">
                         Más Económicos
                     </div>
@@ -117,25 +129,22 @@
     </div>
 
     <!-- Contenedores Habitaciones -->
-    {% for habitacion in habitaciones %}
-    <div class="row mt-2 habitacion tipo-{{ habitacion.id_tipo_hab }}">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 d-flex align-item-center justify-content-center contenedor-img">
+    <div class="row mt-2 justify-content-center">
+        {% for habitacion in habitaciones %}
+        <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img">
             <div class="card no-border">
-                <a href="#">
-                    <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                        <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
-                    </div>
-                </a>
-                <div class="card-body">
+                <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                    <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                </div>
+                <div class="card-body text-center">
                     <h5 class="card-title">{{ habitacion.titulo }}</h5>
                     <p class="card-text">{{ habitacion.descripcion }}</p>
-                    <p class="card-text">${{ habitacion.precio }} CLP</p>
-                    <a href="#" class="btn btn-primary d-flex justify-content-center">Más Información</a>
+                    <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
 

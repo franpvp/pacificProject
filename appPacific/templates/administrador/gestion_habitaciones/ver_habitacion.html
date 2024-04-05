@@ -14,6 +14,9 @@
     </div>
     <div class="row justify-content-center">
         <div class="col">
+            {% if habitaciones|length == 0 %}
+                <p class="text-center">No hay habitaciones disponibles en este momento.</p>
+            {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -29,7 +32,7 @@
                     </thead>
                     <tbody>
                         {% for habitacion in habitaciones %}
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ habitacion.id_hab }}</td>
                             <td>{{ habitacion.id_tipo_hab }}</td>
                             <td>{{ habitacion.titulo }}</td>
@@ -44,6 +47,7 @@
                     </tbody>
                 </table>
             </div>
+            {% endif %}
         </div>
     </div>
     <div class="container">

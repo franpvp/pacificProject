@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-from .models import RegistroUsuario, TipoUsuario, ReporteReserva, Habitacion, TipoHabitacion
+from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion
 from django.http import HttpResponse
 from .forms import RegistroUsuarioAdminForm
 import binascii
@@ -97,7 +97,9 @@ def iniciosesion(request):
                 login(request,user)
                 messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
-                return render(request,'app/home.html',{'name':name})
+                # Obtener habitaciones
+                habitaciones = Habitacion.objects.all()
+                return render(request,'app/index.html',{'name':name, 'habitaciones': habitaciones})
             else:
                 messages.error(request,"Usuario o contraseña no es correcta")
                 return render(request, 'app/login.html')
@@ -111,10 +113,9 @@ def iniciosesion(request):
 @login_required
 def cerrarsesion(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # Vistas Relacionadas con el usuario registrado:
-
 @login_required
 def misreservas(request):
     return render(request, 'registration/mireserva.html')
@@ -231,7 +232,6 @@ def modificar_habitacion(request):
 # Vista Administrador Gestion Habitaciones-ver
 def ver_habitacion(request):
     habitaciones = Habitacion.objects.all()
-
     return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html',{'habitaciones':habitaciones})
 
 # Vista Administrador Gestion Reservas
@@ -240,6 +240,17 @@ def gestion_reservas(request):
 
 # Vista Administrador Gestion Reservas -crear
 def crear_reserva_pacific(request):
+    reservas = Reserva
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        nombre_cli = request.POST.get('nombre_cli')
+        apellidos_cli = request.POST.get('apellidos_cli')
+        rut_cli = request.POST.get('rut_cli')
+        metodo_pago = request.POST.get('metodo_pago')
+        pago_reserva = request.POST.get('pago_reserva')
+        total_restante = request.POST.get('total_restante')
+        estado_pago = request.POST.get('estado_pago')
+
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -eliminar
@@ -263,21 +274,6 @@ def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
 # Vista Administrador Gestion Usuarios -crear usuario
-def crear_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
-
-# Vista Administrador Gestion Usuarios -eliminar usuario
-def eliminar_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html')
-
-# Vista Administrador Gestion Usuarios modificar usuario
-def modificar_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html')
-    
-# Vista Administrador Gestion Usuarios -ver usuario
-def ver_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html')
-
 def crear_usuario_admin(request):
     if request.method == 'POST':
         form = RegistroUsuarioAdminForm(request.POST)
@@ -289,10 +285,13 @@ def crear_usuario_admin(request):
 
     return render(request, 'administrador/gestion_usuarios/crear_usuario.html', {'form': form})
 
+# Vista Administrador Gestion Usuarios -ver usuario
 def ver_usuarios_admin(request):
     usuarios = RegistroUsuario.objects.all()
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
 
+
+# Vista Administrador Gestion Usuarios modificar usuario
 def modificar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
     if request.method == 'POST':
@@ -304,6 +303,7 @@ def modificar_usuario_admin(request, id_usuario):
         form = RegistroUsuarioAdminForm(instance=usuario)
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
 
+# Vista Administrador Gestion Usuarios -eliminar usuario
 def eliminar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
     if request.method == 'POST':
@@ -311,3 +311,14 @@ def eliminar_usuario_admin(request, id_usuario):
         return redirect('ver_usuarios_admin')
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
+# Vista Administrador Gestion Usuarios -tipo de usuario
+def tipo_usuario_admin(request, id_usuario):
+    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+    if request.method == 'POST':
+        nuevo_rol = request.POST.get('rol')  
+        usuario.rol = nuevo_rol
+        usuario.save()
+        return redirect('ver_usuarios_admin')
+    else:
+        return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario})
+    

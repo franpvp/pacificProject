@@ -24,6 +24,7 @@
                             <th scope="col">Apellidos</th>
                             <th scope="col">Correo Electrónico</th>
                             <th scope="col">Celular</th>
+                            <th scope="col">Rol</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -35,11 +36,14 @@
                             <td>{{ usuario.apellidos }}</td>
                             <td>{{ usuario.correo }}</td>
                             <td>{{ usuario.telefono }}</td>
+                            <td>{{ usuario.rol }}</td>
                             <td>
                                 <!-- Botón para editar -->
                                 <a href="{% url 'modificar_usuario_admin' usuario.id_user %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i></i>Editar</a>
                                 <!-- Botón para eliminar -->
                                 <a href="{% url 'eliminar_usuario_admin' usuario.id_user %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i></i>Eliminar</a>
+                                <!-- Botón para tipo de usuario -->
+                                <a href="{% url 'tipo_usuario_admin' usuario.id_user %}" class="btn btn-secondary btn-sm"><i class='bx bx-cog'></i></i>Privilegios</a>
                             </td>
                         </tr>
                         {% endfor %}

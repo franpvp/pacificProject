@@ -1,0 +1,35 @@
+.datos-cliente{
+    height: 220px;
+    border: 1px solid #d9d9d9;
+    border-radius: 30px;
+    background: #fff;
+    padding: 30px;
+}
+
+.datos-cliente p {
+    text-align: center;
+    display: block;
+}
+
+hr {
+    border: none; 
+    background-color: black;
+    height: 2px;
+    border-radius: 10px;
+}
+
+.datos-reserva{
+    height: 220px;
+    border: 1px solid #d9d9d9;
+    border-radius: 30px;
+    background: #fff;
+    padding: 30px;
+}
+
+.contenedor-info{
+    height: 150px;
+    border: 1px solid #FFD952;
+    border-radius: 30px;
+    background: #fff;
+    padding: 30px;
+}
