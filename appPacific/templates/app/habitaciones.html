@@ -58,25 +58,28 @@
                 </div>
             </div>
             <!-- Contenedores Habitaciones -->
-            <div class="row mt-2 justify-content-center">
-                {% for habitacion in habitaciones %}
-                <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
-                    <div class="card no-border">
-                        <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
-                        </div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ habitacion.titulo }}</h5>
-                            <p class="card-text">{{ habitacion.descripcion }}</p>
-                            <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
-                            <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
-                                <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+            <form method="post" action="{% url 'metodo_pago' %}">
+                {% csrf_token %}
+                <div class="row mt-2 justify-content-center">
+                    {% for habitacion in habitaciones %}
+                    <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
+                        <div class="card no-border">
+                            <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                                <p class="card-text">{{ habitacion.descripcion }}</p>
+                                <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
+                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
+                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
+            </form>
         </div>
     </div>
 </div>

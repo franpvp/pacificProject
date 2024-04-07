@@ -25,10 +25,19 @@ from django.views.decorators.http import require_POST
 def index(request):
     if request.method == 'POST':
         # Input Buscador
-        fecha_llegada = request.POST.get('fecha_llegada')
-        fecha_salida = request.POST.get('fecha_salida')
-        contador_adultos = int(request.POST.get('contador_adultos', 0))
-        contador_ninos = int(request.POST.get('contador_ninos', 0))
+        fecha_llegada = request.POST.get('fecha_llegada') or request.GET.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida') or request.GET.get('fecha_salida')
+        contador_adultos = int(request.POST.get('contador_adultos', 0)) or int(request.GET.get('contador_adultos', 0))
+        contador_ninos = int(request.POST.get('contador_ninos', 0)) or int(request.GET.get('contador_ninos', 0))
+
+        # Guardar datos de búsqueda en la sesión
+        request.session['fecha_llegada'] = fecha_llegada
+        request.session['fecha_salida'] = fecha_salida
+        request.session['contador_adultos'] = contador_adultos
+        request.session['contador_ninos'] = contador_ninos
+        
+        # Redirigir a la vista 'habitaciones'
+        return redirect('habitaciones')
         
     habitaciones = Habitacion.objects.all()
     return render(request, 'app/index.html', {'habitaciones': habitaciones})
@@ -143,20 +152,25 @@ def contacto(request):
 # Vista Habitaciones
 def habitaciones(request):
     # Obtener los parámetros de la URL
-    fecha_llegada = request.GET.get('fecha_llegada')
-    fecha_salida = request.GET.get('fecha_salida')
-    contador_adultos = int(request.GET.get('contador_adultos', 0))
-    contador_ninos = int(request.GET.get('contador_ninos', 0))
+    fecha_llegada = request.session.get('fecha_llegada')
+    fecha_salida = request.session.get('fecha_salida')
+    contador_adultos = request.session.get('contador_adultos')
+    contador_ninos = request.session.get('contador_ninos')
+    print(fecha_llegada)
+    print(fecha_salida)
+    print(contador_adultos)
+    print(contador_ninos)
 
-    datos_busqueda = {
-        'fecha_llegada': fecha_llegada,
-        'fecha_salida': fecha_salida,
-        'contador_adultos': contador_adultos,
-        'contador_ninos': contador_ninos
-    }
+    if request.method == 'POST':
+        if fecha_llegada and fecha_salida and contador_adultos > 0:
+            return render(request, 'app/metodo_pago.html')
+        else:
+            # Datos de búsqueda incompletos, mostrar mensaje de error o redireccionar a otra vista
+            return HttpResponse("Datos de búsqueda incompletos. Por favor, vuelva atrás y complete todos los campos.")
+
 
     habitaciones = Habitacion.objects.all()
-    return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones, 'datos_busqueda': datos_busqueda})
+    return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
 # Vista Método Pago
 def metodo_pago(request):

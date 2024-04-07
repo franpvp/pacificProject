@@ -12,7 +12,7 @@
         <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
             <!-- Barra Custom Buscador -->
             <div class="search-bar mb-5">
-                <form id="form-busqueda" method="post" action="/habitaciones/">
+                <form id="form-busqueda" method="post" action="{% url 'index' %}">
                     {% csrf_token %}
                     <div class="row justify-content-center">
                         <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
@@ -43,7 +43,7 @@
                             <div class="box-btn-adultos">
                                 <div class="contenido-sec">
                                     <i id="btn-minus-adultos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                    <div id="contador-adultos" class="contador-adultos" name="contador-adultos">0</div>
+                                    <div id="contador-adultos" class="contador-adultos" name="contador_adultos">0</div>
                                     <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                             <div class="box-btn-ninos">
                                 <div class="contenido-sec">
                                     <i id="btn-minus-ninos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                    <div id="contador-ninos" class="contador-ninos" name="contador-ninos">0</div>
+                                    <div id="contador-ninos" class="contador-ninos" name="contador_ninos">0</div>
                                     <i id="btn-plus-ninos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
                                 </div>
                             </div>
