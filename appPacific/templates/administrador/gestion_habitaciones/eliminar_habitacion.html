@@ -4,12 +4,13 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Eliminar Habitación</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">{% trans "Eliminar Habitación"%}</h2>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -18,13 +19,13 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">ID Habitación</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Cantidad Disponibles</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Imagen</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col">{% trans "ID Habitación"%}</th>
+                            <th scope="col">{% trans "Título"%}</th>
+                            <th scope="col">{% trans "Descripción"%}</th>
+                            <th scope="col">{% trans "Cantidad Disponibles"%}</th>
+                            <th scope="col">{% trans "Precio"%}</th>
+                            <th scope="col">{% trans "Imagen"%}</th>
+                            <th scope="col">{% trans "Acciones"%}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,7 +43,7 @@
                                 </td>
                                 <td>
                                     <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
-                                    <button type="submit" name="eliminar_habitacion" class="btn btn-danger">Eliminar</button>
+                                    <button type="submit" name="eliminar_habitacion" class="btn btn-danger">{% trans "Eliminar"%}</button>
                                 </td>
                             </tr>
                         </form>  

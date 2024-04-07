@@ -3,6 +3,7 @@
 {% block css %}   
 {% endblock %}
 {% load static %}  
+{% load i18n %} 
 
 {% block contenido %}
 <div class="container-fluid">
@@ -11,56 +12,56 @@
             <img class="img-fluid" src="{% static 'img/fondo-reg.jpg' %}" alt="usuario" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <div class="col-lg-6 reg-box">
-            <h1 class="titulo-general text-center">Crear Cuenta</h1>
+            <h1 class="titulo-general text-center">{% trans "Crear Cuenta" %}</h1>
             <form action="" method="POST">
                 {% csrf_token %}
                 <div class="row justify-content-center align-item-center">
                     <div class="col-12 col-lg-8 pb-4">
                         <!-- Input Nombre -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nombre" placeholder="nombre" name="nombre" onclick="showHiddenElement('nameHidden','nombre')">
-                            <p id="nameHidden" style="font-size: 12px; color: orange;">Debe contener al sólo letras</p>
-                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="{% trans 'nombre' %}" name="nombre" onclick="showHiddenElement('nameHidden','nombre')">
+                            <p id="nameHidden" style="font-size: 12px; color: orange;"> {% trans "Debe contener solamente letras" %}</p>
+                            <label for="nombre">{% trans "Nombre" %}</label>
                         </div>
                         <!-- Input Apellidos -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="apellidos" placeholder="apellidos" name="apellidos" onclick="showHiddenElement('apellidoHidden','apellidos')">
-                            <p id="apellidoHidden" style="font-size: 12px; color: orange;">Debe contener al sólo letras</p>
-                            <label for="apellidos">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" placeholder="{% trans 'apellidos' %}" name="apellidos" onclick="showHiddenElement('apellidoHidden','apellidos')">
+                            <p id="apellidoHidden" style="font-size: 12px; color: orange;">{% trans "Igual que el campo anterior, debe contener sólo letras" %}</p>
+                            <label for="apellidos">{% trans "Apellidos" %}</label>
                         </div>
                         <!-- Input Username -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="username" placeholder="username" name="username" onclick="showHiddenElement('usuarioHidden','username')">
-                            <p id="usuarioHidden" style="font-size: 12px; color: orange;">El nombre tiene que tener un mínimo 3 y maximo 11 caracteres</p>
-                            <label for="username">Username</label>
+                            <p id="usuarioHidden" style="font-size: 12px; color: orange;">{% trans "El nombre tiene que tener un mínimo 3 y maximo 11 caracteres" %}</p>
+                            <label for="username">{% trans "Usuario" %}</label>
                         </div>
                         <!-- Input Correo Electrónico -->
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control" id="correo" placeholder="name@example.com" name="correo" onclick="showHiddenElement('correoHidden','correo')">
-                            <p id="correoHidden" style="font-size: 12px; color: orange;">El email debe tener formato name@example.com</p>
-                            <label for="correo">Correo Electrónico</label>
+                            <p id="correoHidden" style="font-size: 12px; color: orange;">{% trans "El email debe tener formato name@example.com" %}</p>
+                            <label for="correo">{% trans "Correo Electrónico" %}</label>
                         </div>
                         <!-- Input Celular -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="celular" placeholder="123456789" name="celular" onclick="showHiddenElement('celularHidden','celular')">
-                            <p id="celularHidden" style="font-size: 12px; color: orange;">Ingrese un número válido</p>
-                            <label for="floatingInput">Celular</label>
+                            <p id="celularHidden" style="font-size: 12px; color: orange;">{% trans "Ingrese un número válido" %}</p>
+                            <label for="floatingInput">{% trans "Celular" %}</label>
                         </div>
                         <!-- Input Contraseña -->
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="password1" placeholder="Password" name="password1" onclick="showHiddenElement('pass1Hidden','password1')">
-                            <p id="pass1Hidden" style="font-size: 12px; color: orange;">Debe contener al menos una mayúscula</p>
+                            <p id="pass1Hidden" style="font-size: 12px; color: orange;"> {% trans "Debe contener al menos una mayúscula" %} </p>
                             <label for="password1">Contraseña</label>
                         </div>
                         <!-- Input Confirmar Contraseña -->
                         <div class="form-floating">
                             <input type="password" class="form-control" id="password2" placeholder="Password" name="password2" onclick="showHiddenElement('pass2Hidden','password2')">
-                            <p id="pass2Hidden" style="font-size: 12px; color: orange;">Repita la misma contraseña anterior</p>
-                            <label for="password2">Confirmar Contraseña</label>
+                            <p id="pass2Hidden" style="font-size: 12px; color: orange;"> {% trans "Repita la misma contraseña anterior" %}</p>
+                            <label for="password2">{% trans "Confirmar Contraseña" %}</label>
                         </div>
                         <div class="row">
                             <div class="col d-flex justify-content-center pt-4">
-                                <button type="submit" class="btn btn-primary">Registrarse</button>
+                                <button type="submit" class="btn btn-primary">{% trans "Regístrate" %}</button>
                             </div>
                         </div>
                         <br>

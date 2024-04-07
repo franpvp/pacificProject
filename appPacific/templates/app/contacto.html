@@ -2,42 +2,41 @@
 
 {% block css %}   
 {% endblock %}
-{% load static %}  
-
+{% load static %}
+{% load i18n %}
 
 {% block contenido %}
 
 <div class="container-fluid">
-    <div class="titulo-general text-center">Contacto</div>
+    <div class="container-fluid">
+        <div class="titulo-general text-center">{% trans "Contacto" %}</div>
+    </div>
     <div class="row">
         <div class="col-sm-10 col-md-8 col-lg-8 p-4 mx-auto">
             <p style="text-align: justify; line-height: 1.6;">
-                ¿Necesitas contactarte con nosotros? Completa el siguiente formulario:
+                {% trans "¿Necesitas contactarte con nosotros? Completa el siguiente formulario:" %}
             </p>
             <form method="post" action="#">
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">Correo Electrónico</label>
+                    <label for="floatingInput">{% trans "Correo Electrónico" %}</label>
                 </div>
                 <div class="form-floating mb-3"> <!-- Agregamos la clase 'mb-3' para un margen inferior -->
                     <input type="text" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Contraseña</label>
+                    <label for="floatingPassword">{% trans "Contraseña" %}</label>
                 </div>
                 <div class="form-floating">
                     <textarea class="form-control" id="floatingQuery" placeholder="Ingresa tu consulta" style="height: 100px;"></textarea>
-                    <label for="consulta">Ingresa tu consulta</label>
+                    <label for="consulta">{% trans "Ingresa tu consulta" %}</label>
                 </div>
                 <div class="row">
                     <div class="col d-flex justify-content-center pt-4">
-                        <button type="button" class="btn btn-outline-primary">Enviar</button>
+                        <button type="button" class="btn btn-outline-primary">{% trans "Enviar" %}</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
-
 
 {% endblock %}

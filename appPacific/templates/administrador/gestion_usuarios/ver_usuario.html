@@ -1,5 +1,5 @@
 {% extends 'administrador/base_administrador.html' %}
-
+{% load i18n %}
 {% block css %}
 <style>
     /* Agrega estilos personalizados aquí si es necesario */
@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Usuarios Registrados</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">{% trans "Usuarios Registrados"%}</h2>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -19,13 +19,13 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr class="text-center">
-                            <th scope="col">ID Usuario</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellidos</th>
-                            <th scope="col">Correo Electrónico</th>
-                            <th scope="col">Celular</th>
-                            <th scope="col">Rol</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col">{% trans "ID Usuario"%}</th>
+                            <th scope="col">{% trans "Nombre"%}</th>
+                            <th scope="col">{% trans "Apellidos"%}</th>
+                            <th scope="col">{% trans "Correo Electrónico"%}</th>
+                            <th scope="col">{% trans "Celular"%}</th>
+                            <th scope="col">{% trans "Rol"%}</th>
+                            <th scope="col">{% trans "Acciones"%}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,11 +39,11 @@
                             <td>{{ usuario.rol }}</td>
                             <td>
                                 <!-- Botón para editar -->
-                                <a href="{% url 'modificar_usuario_admin' usuario.id_user %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i></i>Editar</a>
+                                <a href="{% url 'modificar_usuario_admin' usuario.id_user %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i>{% trans "Editar"%}</a>
                                 <!-- Botón para eliminar -->
-                                <a href="{% url 'eliminar_usuario_admin' usuario.id_user %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i></i>Eliminar</a>
+                                <a href="{% url 'eliminar_usuario_admin' usuario.id_user %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i>{% trans "Eliminar"%}</a>
                                 <!-- Botón para tipo de usuario -->
-                                <a href="{% url 'tipo_usuario_admin' usuario.id_user %}" class="btn btn-secondary btn-sm"><i class='bx bx-cog'></i></i>Privilegios</a>
+                                <a href="{% url 'tipo_usuario_admin' usuario.id_user %}" class="btn btn-secondary btn-sm"><i class='bx bx-cog'></i>{% trans "Privilegios"%}</a>
                             </td>
                         </tr>
                         {% endfor %}

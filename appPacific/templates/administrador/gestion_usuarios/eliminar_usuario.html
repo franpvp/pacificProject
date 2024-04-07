@@ -4,12 +4,13 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-5 mb-3 text-center">Eliminar Usuario</h2>
+            <h2 class="titulo-general mt-5 mb-3 text-center">{% trans "Eliminar Usuario"%}</h2>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -20,12 +21,12 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">ID Usuario</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Apellidos</th>
-                                <th scope="col">Correo Electrónico</th>
-                                <th scope="col">Celular</th>
-                                <th scope="col">Acciones</th>
+                                <th scope="col">{% trans "ID Usuario"%}</th>
+                                <th scope="col">{% trans "Nombre"%}</th>
+                                <th scope="col">{% trans "Apellidos"%}</th>
+                                <th scope="col">{% trans "Correo Electrónico"%}</th>
+                                <th scope="col">{% trans "Celular"%}</th>
+                                <th scope="col">{% trans "Acciones"%}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,7 +37,7 @@
                                 <td>{{ usuario.correo }}</td>
                                 <td>{{ usuario.telefono }}</td>
                                 <td>
-                                    <button type="submit" class="btn btn-danger">Eliminar Usuario</button>
+                                    <button type="submit" class="btn btn-danger">{% trans "Eliminar Usuario"%}</button>
                                 </td>
                             </tr>
                         </tbody>

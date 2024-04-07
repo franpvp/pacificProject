@@ -4,12 +4,13 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">Cancelar Reserva</h2>
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Cancelar Reserva"%}</h2>
         </div>
     </div>
     <form id="formulario-cancelar" method="post" onsubmit="handleSubmit(event)">
@@ -21,13 +22,13 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID Reserva</th>
-                                    <th scope="col">Tipo Habitación</th>
-                                    <th scope="col">Cantidad</th>
-                                    <th scope="col">Pago Reserva</th>
-                                    <th scope="col">Total Restante</th>
-                                    <th scope="col">Estado Pago</th>
-                                    <th scope="col">Acciones</th>
+                                    <th scope="col">{% trans "ID Reserva"%}</th>
+                                    <th scope="col">{% trans "Tipo Habitación"%}</th>
+                                    <th scope="col">{% trans "Cantidad"%}</th>
+                                    <th scope="col">{% trans "Pago Reserva"%}</th>
+                                    <th scope="col">{% trans "Total Restante"%}</th>
+                                    <th scope="col">{% trans "Estado Pago"%}</th>
+                                    <th scope="col">{% trans "Acciones"%}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,7 +44,7 @@
                                         <td>$ {{ reserva.estado_pago }} CLP</td>
                                         <td>
                                             <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
-                                            <button type="submit" name="cancelar_reserva" class="btn btn-danger">Eliminar</button>
+                                            <button type="submit" name="cancelar_reserva" class="btn btn-danger">{% trans "Eliminar"%}</button>
                                         </td>
                                     </tr>
                                 </form>  

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load i18n %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Pacific</title>
+    <title>{% trans "Hotel Pacific" %}</title>
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
@@ -34,38 +35,38 @@
             <li class="item">
                 <a href="{% url 'administrador_home' %}">
                     <i class="bx bxs-home ml-3"></i>
-                    <p class="nav-item">Inicio</p>
+                    <p class="nav-item">{% trans "Inicio" %}</p>
                 </a>
 
             </li>
             <li class="item">
                 <a href="{% url 'gestion_reservas' %}">
                     <i class='bx bxs-book-alt ml-3'></i>
-                    <p class="nav-item">Reservas</p>
+                    <p class="nav-item">{% trans "Reservas" %}</p>
                 </a>
             </li>
             <li class="item">
                 <a href="{% url 'gestion_habitaciones' %}">
                     <i class='bx bxs-hotel ml-3'></i>
-                    <p class="nav-item">Habitaciones</p>
+                    <p class="nav-item">{% trans "Habitaciones" %}</p>
                 </a>
             </li>
             <li class="item">
                 <a href="{% url 'gestion_usuarios' %}">
                     <i class='bx bxs-user-detail ml-3'></i>
-                    <p class="nav-item">Usuarios</p>
+                    <p class="nav-item">{% trans "Usuarios" %}</p>
                 </a>
             </li>
             <li class="item">
                 <a href="#">
                     <i class='bx bxs-cog ml-3'></i>
-                    <p class="nav-item">Configuración</p>
+                    <p class="nav-item">{% trans "Configuración" %}</p>
                 </a>
             </li>
             <li class="item">
                 <a href="{% url 'index' %}">
                     <i class='bx bx-log-out ml-3'></i>
-                    <p class="nav-item">Cerrar Sesión</p>
+                    <p class="nav-item">{% trans "Cerrar Sesión" %}</p>
                 </a>
             </li>
         </ul>
@@ -78,7 +79,7 @@
             <div class="container-fluid">
                 <!-- Logo Hotel Pacific -->
                 <a class="navbar-brand" href="{% url 'administrador_home' %}">
-                    <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid"
+                    <img src="{% static 'img/logo.png' %}" alt= "PacificLogo" class="img-fluid"
                         style="max-width: 200px;">
                 </a>
                 <div class="offcanvas offcanvas-end" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -86,36 +87,46 @@
                         <ul class="navbar-nav justify-content-center flex-grow-1">
                             <li class="nav-item">
                                 <a href="{% url 'administrador_home' %}" class="nav-link btnLink"
-                                    aria-current="page">Inicio</a>
+                                    aria-current="page">{% trans "Inicio" %}</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{% url 'gestion_reservas' %}" class="nav-link btnLink"
-                                    aria-current="page">Gestión de Reservas</a>
+                                    aria-current="page">{% trans "Gestión de Reservas" %}</a>
                             </li>
                             <li class="nav-item ml-3 mr-3 mb-3">
                                 <a href="{% url 'gestion_habitaciones' %}" class="nav-link btnLink"
-                                    aria-current="page">Habitaciones</a>
+                                    aria-current="page">{% trans "Habitaciones" %}</a>
                             </li>
                             <li class="nav-item ml-3 mr-3 mb-3">
                                 <a href="{% url 'gestion_usuarios' %}" class="nav-link btnLink"
-                                    aria-current="page">Usuarios</a>
+                                    aria-current="page">{% trans "Usuarios" %}</a>
                             </li>
                         </ul>
                         <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
                             <!-- Logo Cambio de Idioma -->
-                            <a class="logo-leng">
-                                <img src="{% static 'img/logo-chile.png' %}" alt="img-user"
-                                    style="width: 40px; height: 40px; margin-right: 15px;">
-                            </a>
+                            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                                <select name="language">
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                            {{ language.name_local }} ({{ language.code }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">{% trans "Traducir" %}</button>
+                            </form>
                             <!-- Botón Login -->
                             <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
                                 <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
                                     style="width: 30px; height: 30px; margin-right: 15px;">
-                                Iniciar Sesión
+                                {% trans "Iniciar Sesión" %}
                             </a>
                             <!-- Botón Registro -->
                             <a href="{% url 'registro' %}" class="btn-reg">
-                                Regístrate
+                                {% trans "Regístrate" %}
                             </a>
                         </div>
                     </div>
@@ -129,8 +140,8 @@
                 <div class="row">
                     <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;">
                         <!-- Ajuste de margen superior -->
-                        <p class="mb-0">Hotel Pacific - Todos los derechos reservados</p>
-                        <p style="font-size: 14px;">Santiago de Chile, Moneda #85</p> <!-- Dirección ficticia -->
+                        <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                        <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p> <!-- Dirección ficticia -->
                     </div>
                     <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;">
                         <!-- Ajuste de margen superior -->
@@ -138,7 +149,7 @@
                             class="btn btn-success">
                             <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30"
                                 class="mr-2">
-                            Contáctanos por WhatsApp
+                            {% trans "Contáctanos por WhatsApp" %}
                         </a>
                     </div>
                 </div>

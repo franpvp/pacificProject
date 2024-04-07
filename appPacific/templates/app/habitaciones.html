@@ -3,6 +3,7 @@
 {% block css %}   
 {% endblock %}
 {% load static %}  
+{% load i18n%}
 
 
 {% block contenido %}
@@ -15,7 +16,7 @@
                     <a class="btn-filtrar" data-id-tipo-hab="1" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Suite
+                            {% trans "Suite" %}
                         </div>
                     </a>
                 </div>
@@ -23,7 +24,7 @@
                     <a class="btn-filtrar" data-id-tipo-hab="2" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Premium
+                            {% trans "Premium" %}
                         </div>
                     </a>
                 </div>
@@ -31,14 +32,14 @@
                     <a class="btn-filtrar" data-id-tipo-hab="3" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Twin
+                            {% trans "Twin" %}
                         </div>
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
                     <div class="btn-hab filtro">
                         <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
-                        Filtros
+                        {% trans "Filtros" %}
                     </div>
                     <!-- Contenido Filtros -->
                     <div class="filtro-op">
@@ -48,10 +49,10 @@
                                 Recomendados
                             </div> -->
                             <div class="mas-economicos">
-                                Más Económicos
+                                {% trans "Más Económicos" %}
                             </div>
                             <div class="mas-caros">
-                                Más Caros
+                                {% trans "Más Caros" %}
                             </div>
                         </ul>
                     </div>
@@ -70,7 +71,7 @@
                             <p class="card-text">{{ habitacion.descripcion }}</p>
                             <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
                             <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
-                                <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                                <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %} </button>
                             </div>
                         </div>
                     </div>

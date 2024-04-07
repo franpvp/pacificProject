@@ -2,20 +2,19 @@
 
 {% block css %}   
 {% endblock %}
-{% load static %}  
-
+{% load i18n %}
 {% block contenido %}
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="titulo-general text-center">Reserva Realizada Exitosamente</div>
+            <div class="titulo-general text-center"> {% trans "Reserva Realizada Exitosamente" %} </div>
         </div>
     </div>
     <hr>
     <div class="row mt-4">
         <!-- Contenido Datos Cliente -->
         <div class="col-lg-4 d-flex flex-column align-items-center">
-            <h1 class="mt-4" style="font-size: 22px;">Datos Cliente</h1>
+            <h1 class="mt-4" style="font-size: 22px;"> {% trans "Datos Cliente" %}</h1>
             <div class="datos-cliente mt-3">
                 <p>Rut: 12.345.678-9</p>
                 <p>Nombre: Juan</p>

@@ -4,13 +4,14 @@
 {% endblock %}
 
 {% load static %}
+{%load i18n %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="titulo-general text-center">Bienvenido (a) Nombre del Administrador</div>
-            <div class="subtitulo text-center">Cargo: Administrador del Hotel Pacific</div> <!-- Subtítulo agregado -->
+            <div class="titulo-general text-center">{% trans "Bienvenido (a) Nombre del Administrador" %}</div>
+            <div class="subtitulo text-center">{% trans "Cargo: Administrador del Hotel Pacific" %}</div> <!-- Subtítulo agregado -->
             <br>
             <hr>
         </div>
@@ -19,7 +20,7 @@
         <div class="col-lg-12">
             <img class="fondo-img img-fluid" src="{% static 'img/fondo-reg.jpg' %}" alt="fondo" style="width: 100%;">
             <div class="info-imagen">
-                Bienvenido (a) a tu segundo hogar, <span style="color: #3498db;">Hotel Pacific</span>
+                {% trans "Bienvenido (a) a tu segundo hogar, " %} <span style="color: #3498db;">Hotel Pacific</span>
             </div>
         </div>
     </div>
