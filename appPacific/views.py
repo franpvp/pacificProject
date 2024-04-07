@@ -286,22 +286,6 @@ def ver_reserva_pacific(request):
 def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
-# Vista Administrador Gestion Usuarios -crear usuario
-def crear_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
-
-# Vista Administrador Gestion Usuarios -eliminar usuario
-def eliminar_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html')
-
-# Vista Administrador Gestion Usuarios modificar usuario
-def modificar_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html')
-    
-# Vista Administrador Gestion Usuarios -ver usuario
-def ver_usuario(request):
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html')
-
 @admin_required
 def crear_usuario_admin(request):
     if request.method == 'POST':
