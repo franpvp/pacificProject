@@ -1,15 +1,17 @@
 {% extends 'app/base.html' %}
 
+{% load static %}
+{% load i18n %}
+
 {% block css %}   
 {% endblock %}
-{% load static %}  
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="titulo-general text-center">Home</div>
-            <div class="titulo-general text-center">Bienvenido {{ name }}</div>
+            <div class="titulo-general text-center">{% trans "Inicio" %}</div>
+            <div class="titulo-general text-center">{% trans "Bienvenido" %} {{ name }}</div>
         </div>
     </div>
 </div>

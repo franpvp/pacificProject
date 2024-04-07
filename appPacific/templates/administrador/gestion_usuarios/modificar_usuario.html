@@ -1,19 +1,20 @@
 {% extends 'administrador/base_administrador.html' %}
 {% load static %}
+{% load i18n %}
 {% block css %}
 {% endblock %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center mt-4">
-        <h1 class="titulo-general text-center">Modificar Usuario</h1>
+        <h1 class="titulo-general text-center">{% trans "Modificar Usuario"%}</h1>
         <div class="col-lg-6 reg-box d-flex align-item-center justify-content-center">
             <!-- Formulario de edición de usuario -->
             <form method="post" class="form-group col-md-6">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="col d-flex justify-content-center pt-4">
-                    <button type="submit" class="btn btn-primary btn-reg">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
                 </div>
             </form>
         </div>

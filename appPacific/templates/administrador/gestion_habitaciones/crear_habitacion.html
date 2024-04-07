@@ -4,12 +4,13 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">Crear Habitación</h2>
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Crear Habitación"%}</h2>
         </div>
     </div>
     <form id="formulario-crear" method="post" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
@@ -62,31 +63,31 @@
                 <!-- Input ID Tipo Habitación -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="id_tipo_hab" name="id_tipo_hab" placeholder="Tipo Habitación" required>
-                    <label for="id_tipo_hab">ID Tipo Habitación</label>
+                    <label for="id_tipo_hab">{% trans "ID Tipo Habitación"%}</label>
                 </div>
                 <!-- Input Título -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="titulo" required>
-                    <label for="titulo">Título</label>
+                    <label for="titulo">{% trans "Título"%}</label>
                 </div>
                 <!-- Input Descripción -->
                 <div class="form-floating mb-3">
                     <textarea class="form-control" placeholder="Leave a comment here" id="descripcion" name="descripcion" style="height: 100px"></textarea>
-                    <label for="descripcion">Descripción</label>
+                    <label for="descripcion">{% trans "Descripción"%}</label>
                 </div>
                 <!-- Input Cantidad Disponibles -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="cantidad" name="cantidad" placeholder="cantidad" required>
-                    <label for="cantidad">Cantidad</label>
+                    <label for="cantidad">{% trans "Cantidad"%}</label>
                 </div>
                 <!-- Input Cantidad Disponibles -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="precio" name="precio" placeholder="precio" required>
-                    <label for="precio">Precio</label>
+                    <label for="precio">{% trans "Precio"%}</label>
                 </div>
                 <!-- Input Imagen -->
                 <div class="form-group">
-                    <label for="cargarImagen">Selecciona una imagen:</label>
+                    <label for="cargarImagen">{% trans "Selecciona una imagen:"%}</label>
                     <img id="imagenMostrada" src="" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;">
                     <input name="cargarImagen" id="cargarImagen" class="ml-3" type="file" required onchange="mostrarImagenSeleccionada(event)">
                 </div>
@@ -98,7 +99,7 @@
         <div class="container">
             <div class="row m-auto justify-content-center">
                 <div class="col">
-                    ID Tipo Habitación: 
+                    {% trans "ID Tipo Habitación:"%} 
                 </div>
                 <div class="col">
                     <div class="info-tipo-hab">
@@ -121,7 +122,7 @@
         <div class="row m-auto justify-content-center">
             <div class="col mt-4 mb-4">
                 <div class="d-grid gap-2 col-2 mx-auto">
-                    <button class="btn btn-success" type="submit"> + Agregar</button>
+                    <button class="btn btn-success" type="submit"> {% trans "+ Agregar"%}</button>
                 </div>
             </div>
         </div>

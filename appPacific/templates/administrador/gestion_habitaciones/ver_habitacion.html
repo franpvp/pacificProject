@@ -4,30 +4,30 @@
 {% endblock %}
 
 {% load static %}
-
+{% load i18n %}
 {% block contenido %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">Historial de Habitaciones</h2>
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Historial de Habitaciones"%}</h2>
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col">
             {% if habitaciones|length == 0 %}
-                <p class="text-center">No hay habitaciones disponibles en este momento.</p>
+                <p class="text-center">{% trans "No hay habitaciones disponibles en este momento."%}/p>
             {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr class="text-center">
-                            <th scope="col">ID Habitación</th>
-                            <th scope="col">ID Tipo Habitación</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Imagen</th>
+                            <th scope="col">{% trans "ID Habitación"%}</th>
+                            <th scope="col">{% trans "ID Tipo Habitación"%}</th>
+                            <th scope="col">{% trans "Título"%}</th>
+                            <th scope="col">{% trans "Descripción"%}</th>
+                            <th scope="col">{% trans "Cantidad"%}</th>
+                            <th scope="col">{% trans "Precio"%}</th>
+                            <th scope="col">{% trans "Imagen"%}</th>
                         </tr>
                     </thead>
                     <tbody class="habitaciones-table">
@@ -78,7 +78,7 @@
         <div class="row m-auto">
             <a href="{% url 'habitaciones' %}">
                 <div class="col mt-3 mb-4">
-                    <button type="button" class="btn btn-primary mb-5">Ver Sitio Web</button>
+                    <button type="button" class="btn btn-primary mb-5">{% trans "Ver Sitio Web"%}</button>
                 </div>
             </a>
             
