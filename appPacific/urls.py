@@ -32,4 +32,5 @@ urlpatterns = [
     path('gestion_usuarios/ver_usuario/', ver_usuarios_admin, name='ver_usuarios_admin'),
     path('gestion_usuarios/modificar_usuario/<int:id_usuario>/', modificar_usuario_admin, name='modificar_usuario_admin'),
     path('gestion_usuarios/eliminar_usuario/<int:id_usuario>/', eliminar_usuario_admin, name='eliminar_usuario_admin'),
+    path('cerrarsesionadmin/', views.cerrarsesionadmin, name='cerrarsesionadmin'),
 ]

@@ -13,6 +13,7 @@ import requests
 import base64
 import re
 from django.utils.translation import gettext as _
+from .decorators import admin_required
 
 # Create your views here.
 
@@ -98,8 +99,14 @@ def iniciosesion(request):
             if user is not None:
                 login(request,user)
                 messages.success(request, _("Inicio de sesión correcta"))
-                name = request.user.first_name
-                return render(request,'app/home.html',{'name':name})
+
+                #Valida si el user es superusuario:
+                if user.is_superuser:
+                    name = request.user.first_name
+                    return render(request, 'administrador/administrador_home.html', {'nameadmin':name})
+                else:
+                    name = request.user.first_name
+                    return render(request,'app/home.html', {'name':name})
             else:
                 messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
@@ -153,15 +160,20 @@ def reserva_realizada(request):
 def nosotros(request):
     return render(request, 'app/nosotros.html')
 
+# VISTAS DEL ADMINISTRADOR
+
 # Vista Administrador Home
+@admin_required
 def administrador_home(request):
     return render(request, 'administrador/administrador_home.html')
 
 # Vista Administrador Gestion Habitaciones
+@admin_required
 def gestion_habitaciones(request):
     return render(request, 'administrador/gestion_habitaciones.html')
 
 # Vista Administrador Gestion Habitaciones -crear
+@admin_required
 def crear_habitacion(request):
     if request.method == 'POST':
         id_tipo_hab = request.POST.get('id_tipo_hab')
@@ -197,6 +209,7 @@ def crear_habitacion(request):
 
 
 # Vista Administrador Gestion Habitaciones-eliminar
+@admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -208,6 +221,7 @@ def eliminar_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/eliminar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-modificar
+@admin_required
 def modificar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -227,40 +241,48 @@ def modificar_habitacion(request):
         habitacion.precio = precio
 
         habitacion.save()
-    habitaciones = Habitacion.objects.all();
+    habitaciones = Habitacion.objects.all()
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-ver
+@admin_required
 def ver_habitacion(request):
     habitaciones = Habitacion.objects.all()
 
     return render(request, 'administrador/gestion_habitaciones/ver_habitacion.html',{'habitaciones':habitaciones})
 
 # Vista Administrador Gestion Reservas
+@admin_required
 def gestion_reservas(request):
     return render(request, 'administrador/gestion_reservas.html')
 
 # Vista Administrador Gestion Reservas -crear
+@admin_required
 def crear_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -eliminar
+@admin_required
 def eliminar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -modificar
+@admin_required
 def modificar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -ver calendario
+@admin_required
 def ver_calendario_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html')
 
 # Vista Administrador Gestion Reservas -ver reserva
+@admin_required
 def ver_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html')
 
 # Vista Administrador Gestion Usuarios
+@admin_required
 def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
@@ -280,21 +302,60 @@ def modificar_usuario(request):
 def ver_usuario(request):
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html')
 
+@admin_required
 def crear_usuario_admin(request):
     if request.method == 'POST':
-        form = RegistroUsuarioAdminForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('ver_usuarios_admin')
-    else:
-        form = RegistroUsuarioAdminForm()
+        nombre = request.POST['nombres']
+        apellido = request.POST['apellidos']
+        usuario = request.POST['nombreusuario']
+        correo = request.POST['correo']
+        telefono = request.POST['telefono']
+        password1 = request.POST['contrasena1']
+        password2 = request.POST['contrasena2']
+        is_superuser = request.POST.get('superusuario', False)
 
-    return render(request, 'administrador/gestion_usuarios/crear_usuario.html', {'form': form})
+        if not (nombre and apellido and usuario and correo and telefono and password1 and password2):
+            messages.error(request, _("Debes llenar todos los campos"))
+            return redirect('crear_usuario_admin')
+        
+        if not re.match(r'^[a-zA-Z\s-]+$', nombre):
+            messages.error(request, _("El nombre deben ser sólo letras"))
+            return redirect('crear_usuario_admin')
+            
+        if not re.match(r'^[a-zA-Z\s-]+$', apellido):
+            messages.error(request, _("Los apellidos deben ser sólo letras"))
+            return redirect('crear_usuario_admin')
 
+        if password1 != password2:
+            messages.error(request, _("Las contraseñas no coinciden"))
+            return redirect('crear_usuario_admin')
+        
+        if User.objects.filter(username=usuario).exists():
+            messages.error(request, _("Nombre de usuario ya existe"))
+            return redirect('crear_usuario_admin')
+
+        if User.objects.filter(email=correo).exists():
+            messages.error(request, _("El correo ya es usado por otro usuario"))
+            return redirect('crear_usuario_admin')
+        
+        user = User.objects.create_user(username=usuario,password=password1)
+        user.first_name = nombre
+        user.last_name = apellido
+        user.email = correo
+        user.is_superuser = bool(is_superuser)
+        user.save()
+
+        messages.success(request, _("Usuario creado con exito"))
+        return redirect('ver_usuarios_admin')
+    
+    return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
+
+@admin_required
 def ver_usuarios_admin(request):
-    usuarios = RegistroUsuario.objects.all()
+    usuarios = User.objects.all()
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
 
+@admin_required
 def modificar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
     if request.method == 'POST':
@@ -306,6 +367,7 @@ def modificar_usuario_admin(request, id_usuario):
         form = RegistroUsuarioAdminForm(instance=usuario)
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
 
+@admin_required
 def eliminar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
     if request.method == 'POST':
@@ -313,3 +375,7 @@ def eliminar_usuario_admin(request, id_usuario):
         return redirect('ver_usuarios_admin')
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
+@admin_required
+def cerrarsesionadmin(request):
+    logout(request)
+    return redirect('home')
