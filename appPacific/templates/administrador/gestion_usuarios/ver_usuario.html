@@ -46,6 +46,13 @@
                     </tbody>
                 </table>
             </div>
+            {% if success_message %}
+            <div class="alert alert-success" role="alert">
+                {% for message in success_message %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

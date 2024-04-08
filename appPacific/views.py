@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .models import RegistroUsuario, TipoUsuario, ReporteReserva, Habitacion, TipoHabitacion
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
@@ -14,6 +14,7 @@ import base64
 import re
 from django.utils.translation import gettext as _
 from .decorators import admin_required
+from urllib.parse import unquote, urlencode
 
 # Create your views here.
 
@@ -287,6 +288,22 @@ def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
 @admin_required
+def ver_usuarios_admin(request):
+    usuarios = User.objects.all()
+    success_message = request.GET.get('success_message')
+    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios, 'success_message': success_message})
+
+def eliminar_usuario_admin(request, id_usuario):
+    usuario = get_object_or_404(User, id=id_usuario)
+    if request.method == 'POST':
+        usuario.delete()
+        success_message = _("Usuario eliminado con éxito")
+        #encoded_success_message = urlencode({'success_message': success_message})
+        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{success_message}')
+
+    return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
+
+@admin_required
 def crear_usuario_admin(request):
     if request.method == 'POST':
         nombre = request.POST['nombres']
@@ -334,32 +351,65 @@ def crear_usuario_admin(request):
     
     return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
 
-@admin_required
-def ver_usuarios_admin(request):
-    usuarios = User.objects.all()
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
 
 @admin_required
 def modificar_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
+    usuario = get_object_or_404(User, id=id_usuario)
     if request.method == 'POST':
-        form = RegistroUsuarioAdminForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            return redirect('ver_usuarios_admin')
-    else:
-        form = RegistroUsuarioAdminForm(instance=usuario)
-    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
+        nombre = request.POST['nombres']
+        apellido = request.POST['apellidos']
+        username = request.POST['nombreusuario']
+        email = request.POST['correo']
+        is_superuser = request.POST.get('superusuario',False)
 
-@admin_required
-def eliminar_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
-    if request.method == 'POST':
-        usuario.delete()
-        return redirect('ver_usuarios_admin')
-    return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
+        if not (nombre and apellido and username and email):
+            messages.error(request, _("Debes llenar todos los campos"))
+            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
+        
+        if not re.match(r'^[a-zA-Z\s-]+$', nombre):
+            messages.error(request, _("El nombre deben ser sólo letras"))
+            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
+            
+        if not re.match(r'^[a-zA-Z\s-]+$', apellido):
+            messages.error(request, _("Los apellidos deben ser sólo letras"))
+            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
+
+        usuario.first_name = nombre
+        usuario.last_name = apellido
+        usuario.username = username
+        usuario.email = email
+        usuario.is_superuser = bool(is_superuser)
+        usuario.save()
+
+        success_message = _("Usuario modificado con éxito")
+        encoded = urlencode({'success_message': success_message}) # Sin esta linea no se ve los mensajes
+        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{encoded}')
+    
+    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
 
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
     return redirect('home')
+
+# @admin_required
+# def modificar_usuario_admin(request, id_usuario):
+#     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
+#     if request.method == 'POST':
+#         form = RegistroUsuarioAdminForm(request.POST, instance=usuario)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('ver_usuarios_admin')
+#     else:
+#         form = RegistroUsuarioAdminForm(instance=usuario)
+#     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
+
+# @admin_required
+# def eliminar_usuario_admin(request, id_usuario):
+#     usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+#     if request.method == 'POST':
+#         usuario.delete()
+#         return redirect('ver_usuarios_admin')
+#     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
+
+

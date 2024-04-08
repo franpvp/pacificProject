@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
 
 urlpatterns = [
     path('', index, name="index"),
