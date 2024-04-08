@@ -14,7 +14,8 @@ import base64
 import re
 from django.utils.translation import gettext as _
 from .decorators import admin_required
-from urllib.parse import unquote, urlencode
+from urllib.parse import urlencode
+from django.db import connection
 
 # Create your views here.
 
@@ -289,9 +290,24 @@ def gestion_usuarios(request):
 
 @admin_required
 def ver_usuarios_admin(request):
-    usuarios = User.objects.all()
+    # Llamo al procedimiento creado en mysql (el cuál está en la línea 432)
+    with connection.cursor() as c:
+        c.callproc('obtener_todos_usuarios')
+        resultado = c.fetchall()
+        #creo una lista vacia para almacenar "resultado":
+        usuarios = []
+        for row in resultado:
+            user_result = {}
+            for i, column in enumerate(c.description):
+                column_name = column[0]
+                #Utilizar índice entero para acceder a elementos de una tupla
+                column_value = row[i] 
+                user_result[column_name] = column_value
+            usuarios.append(user_result)
+
     success_message = request.GET.get('success_message')
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios, 'success_message': success_message})
+    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', 
+                  {'usuarios': usuarios, 'success_message': success_message})
 
 def eliminar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(User, id=id_usuario)
@@ -412,4 +428,13 @@ def cerrarsesionadmin(request):
 #         return redirect('ver_usuarios_admin')
 #     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
+
+# DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
+# DELIMITER $
+# CREATE PROCEDURE obtener_todos_usuarios()
+# BEGIN
+# 	SELECT * FROM auth_user;
+# END $
+# DELIMITER ;
+# CALL obtener_todos_usuarios();
 
