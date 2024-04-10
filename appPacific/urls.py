@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_usuario_admin, registro, habitaciones, metodo_pago, reserva_realizada, contacto, nosotros, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', index, name="index"),
@@ -33,4 +34,8 @@ urlpatterns = [
     path('gestion_usuarios/modificar_usuario/<int:id_usuario>/', modificar_usuario_admin, name='modificar_usuario_admin'),
     path('gestion_usuarios/eliminar_usuario/<int:id_usuario>/', eliminar_usuario_admin, name='eliminar_usuario_admin'),
     path('cerrarsesionadmin/', views.cerrarsesionadmin, name='cerrarsesionadmin'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="recuperacion/a-reset.html"), name="reset_password"),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="recuperacion/b-done.html"), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="recuperacion/c-confirm.html"), name="password_reset_confirm"),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="recuperacion/d-complete.html"), name="password_reset_complete"),
 ]
