@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/registro.css' %}">
     <link rel="stylesheet" href="{% static 'css/habitaciones.css' %}">
+    <link rel="stylesheet" href="{% static 'css/switch.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/crear_usuario.css' %}"> -->
     
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -127,6 +128,10 @@
                                         {% translate "Datos Personales" %}
                                     </a>
                                 {% endif %}
+                                <li class="switch">
+                                    <i class="bx bxs-sun"></i>
+                                    <i class="bx bxs-moon"></i>
+                                </li>
                             </div>
                         </div>
                     </div>
@@ -156,6 +161,7 @@
     <script src="{% static 'js/index.js' %}"></script>
     <script src="{% static 'js/habitaciones.js' %}"></script>
     <script src="{% static 'js/register.js' %}"></script>
+    <script src="{% static 'js/darktheme.js' %}"></script>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
