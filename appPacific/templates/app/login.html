@@ -32,7 +32,6 @@
                             </div>
                         </div>
                         <br>
-
                         <!--Mensajes de error-->
                         {% if messages %}
                         <div class="row justify-content-center align-item-center">
@@ -41,13 +40,12 @@
                                     {% if message.tags == 'error' %}
                                         <div class="alert alert-danger"> {{ message }} </div>
                                     {% elif message.tags == 'success' %}
-                                        <div class="alert alert-success"> {{ message }} </div>
+                                        <div class="alert alert-success text-center"> {{ message }} </div>
                                     {% endif %}
                                 {% endfor %}
                             </div>
                         </div>
                         {% endif %}
-
                         <div class="form-floating mb-3 mt-4"> <!-- Agregando mt-4 aquí -->
                             <div class="card">
                                 <div class="card-body text-center">

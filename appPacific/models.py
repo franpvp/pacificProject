@@ -37,11 +37,12 @@ class Reserva(models.Model):
     fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
     cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
     cant_ninos = models.IntegerField(verbose_name="Cantidad Niños", null=True)
-    
     tipo_metodo_pago = models.CharField(max_length=20, verbose_name="Metodo Pago cliente")
-    pago_reserva = models.IntegerField(verbose_name="Pago Reserva")
-    total_restante = models.IntegerField(verbose_name="Total Restante")
+    total = models.IntegerField(verbose_name="Total Reserva")
+    pago_inicial = models.IntegerField(verbose_name="Pago Inicial Reserva")
+    pago_pendiente = models.IntegerField(verbose_name="Pago Pendiente")
     estado_pago = models.CharField(max_length=20, verbose_name="Estado Pago", default="Pendiente")
+    fecha_creacion = models.DateField(auto_now_add=True)
 
     def __str__(self):
             return self.id_user
@@ -49,13 +50,21 @@ class Reserva(models.Model):
 # Tabla Reporte Reserva
 class ReporteReserva(models.Model):
     id_reserva = models.AutoField(primary_key=True, unique=True, verbose_name="Id reserva")
-    dia_ingreso = models.DateField(auto_now_add=True)
-    hora_ingreso = models.TimeField(auto_now=True)
-    dia_salida = models.DateField()
-    hora_salida = models.TimeField()
+    dia_ingreso = models.DateField(null=False, verbose_name="Dia Ingreso")
+    hora_ingreso = models.TimeField(null=True, blank=True)
+    dia_salida = models.DateField(null=False, verbose_name="Dia Salida")
+    hora_salida = models.TimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.dia_ingreso} - {self.hora_ingreso}"
+
+    def hacer_checkin(self, hora_checkin):
+        self.hora_checkin = hora_checkin
+        self.save()
+
+    def hacer_checkout(self, hora_checkout):
+        self.hora_checkout = hora_checkout
+        self.save()
 
 # Tipo Habitacion (Suite, Premium, Twin)
 class TipoHabitacion(models.Model):
@@ -77,6 +86,17 @@ class Habitacion(models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class DatosBancarios(models.Model):
+    id_banco = models.AutoField(primary_key=True, unique=True, verbose_name="Id Banco")
+    beneficiario = models.CharField(max_length=50, verbose_name="Beneficiario")
+    cuenta = models.CharField(max_length=50, verbose_name="Cuenta")
+    nro_cuenta = models.CharField(max_length=50, verbose_name="Número cuenta bancaria")
+    correo_banco = models.CharField(max_length=50, verbose_name="Correo Banco")
+
+    def __str__(self):
+        return self.beneficiario
 
 
 

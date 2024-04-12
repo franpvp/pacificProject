@@ -22,12 +22,9 @@ document.querySelectorAll('.btn-filtrar').forEach(btn => {
 
 
 // Contenedor Botón Filtrar
-// var btnFiltro = document.querySelector('.filtro');
+// var btnFiltro = document.querySelector('.filtro-hab');
 // var contenedorFiltro = document.querySelector('.filtro-op');
-// btnFiltro.addEventListener('click', function() {
-//     contenedorFiltro.classList.toggle('active');
-    
-// })
+
 
 // Detectar clics fuera del botón
 // window.addEventListener('click', function(event) {
@@ -68,6 +65,38 @@ function ordenarHabitaciones(orden) {
     });
 }
 
+
+// Mostrar info de las habitaciones
+const enlaceMostrarInfo = document.getElementById('btn-mostrar-info');
+const divMasInformacion = document.querySelector('.mas-informacion');
+const divBtnClose = document.querySelector('.btn-close');
+const fondoOpaco = document.querySelector('.fondo-opaco');
+
+// Agregar evento de clic al botón de "Más Información"
+enlaceMostrarInfo.addEventListener('click', function() {
+    // Mostrar la ventana de información con un retraso pequeño para permitir que el fondo opaco se muestre primero
+    setTimeout(function() {
+        divMasInformacion.style.display = 'block';
+        divMasInformacion.classList.add('active'); // Agregar la clase 'active' para mostrar la ventana de información
+    }, 200);
+    fondoOpaco.style.display = 'block'; // Mostrar el fondo semi-transparente
+});
+
+// Agregar evento de clic al botón de "Cerrar" en la ventana de información
+divBtnClose.addEventListener('click', function() {
+    // Ocultar la ventana de información
+    divMasInformacion.classList.remove('active'); // Quitar la clase 'active' para ocultar la ventana de información
+    setTimeout(function() {
+        divMasInformacion.style.display = 'none';
+    }, 300); // Retrasar un poco para que la transición tenga tiempo de completarse
+    fondoOpaco.style.display = 'none'; // Ocultar el fondo semi-transparente
+});
+
+
+function mostrarMensaje() {
+    alert("Debe iniciar sesión antes de realizar una reserva.");
+    window.location.href = "/iniciosesion";
+}
 
 
 

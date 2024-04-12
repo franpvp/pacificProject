@@ -106,6 +106,12 @@ a{
     transition: all 0.2s ease-in-out;
 }
 
+/* Ajuste del ancho del nav para tener en cuenta el espacio ocupado por la barra lateral */
+.navbar {
+    left: 80px;
+    width: calc(100% - 80px) !important;
+}
+
 .navbar-nav{
     margin: 0 auto;
 }
@@ -126,18 +132,13 @@ a{
     width: 80px;
     background-color: #12171e;
     padding: 0.4rem 0.8rem;
-    transition: all 0.5s ease;
-    z-index: 1000;
+    transition: all 0.4s ease;
+    z-index: 2000;
 
-}
-
-.sidebar.active ~ .main-content{
-    left: 250px;
-    width: calc(100% - 250px);
 }
 
 .sidebar.active{
-    width: 250px;
+    width: 300px;
 }
 
 .sidebar #btn {
@@ -204,15 +205,15 @@ a{
     position: relative;
     list-style-type: none;
     height: 50px;
-    width: 90%;
-    line-height: 100px !important;
-    margin-bottom: 30px;
+    width: 100%;
 }
 
 .sidebar ul li a {
     color: #fff;
+    margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
     border-radius: 0.8rem;
     max-height: 50px;
@@ -244,6 +245,10 @@ a{
 
 .siderbar .nav-item{
     opacity: 0;
+}
+
+.siderbar.active .item{
+    
 }
 
 .siderbar.active .nav-item{
@@ -283,6 +288,7 @@ a{
 .contenido-main{
     width: calc(100% -80px);
     margin-left: 80px;
+    padding-top: 180px;
 }
 
 .container {

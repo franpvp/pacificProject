@@ -1,0 +1,53 @@
+{% extends 'app/base.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block css %}   
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="titulo-general text-center"> {% trans "Depósito con Transferencia Bancaria" %} </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-lg-8">
+            <div class="contenedor-transf">
+                <ul class="text-center justify-content-center" style="list-style-type: none;">
+                    <p>Ha seleccionado el pago incial de la reserva mediante transferencia bancaria.
+                        Le facilitamos los datos de la cuenta bancaria en la que deberá hacer el ingreso
+                        por del pago inicial, correspondiente al 30% del total de la reserva.
+                    </p>
+                    <li>
+                        Beneficiario: <strong>{{ datos.beneficiario }}</strong>
+                        
+                    </li>
+                    <li>
+                        Cuenta: <strong>{{ datos.cuenta }}</strong>
+                    </li>
+                    <li>
+                        Número de cuenta: <strong>{{ datos.nro_cuenta }}</strong>
+                    </li>
+                    <li>
+                        Correo Electrónico: <strong>{{ datos.correo_banco }}</strong>
+                    </li>
+                    <li>
+                        Pago Inicial (30% del total): <strong>$ {{ datos.pago_inicial }} CLP</strong>
+                    </li>
+                    <p class="mt-4">
+                        <strong>
+                            <i class='bx bxs-info-circle'></i>
+                            Tienes 1 hora para realizar del pago inicial de la reserva
+                        </strong>
+                    </p>
+                </ul>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}

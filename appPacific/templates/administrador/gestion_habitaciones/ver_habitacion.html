@@ -7,6 +7,18 @@
 {% load i18n %}
 {% block contenido %}
 <div class="container-fluid">
+    <div class="row">
+        <div class="col d-flex m-auto justify-content-center">
+            <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'gestion_habitaciones' %}">Gestión Habitaciones</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Historial Habitaciones</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col">
             <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Historial de Habitaciones"%}</h2>
@@ -15,7 +27,7 @@
     <div class="row justify-content-center">
         <div class="col">
             {% if habitaciones|length == 0 %}
-                <p class="text-center">{% trans "No hay habitaciones disponibles en este momento."%}/p>
+                <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}<p>
             {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">

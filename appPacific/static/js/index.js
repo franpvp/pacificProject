@@ -17,6 +17,8 @@ let btn_minus_ninos = document.querySelector('#btn-minus-ninos');
 let btn_plus_ninos = document.querySelector('#btn-plus-ninos');
 var btnFiltro = document.querySelector('.filtro');
 var contenedorFiltro = document.querySelector('.filtro-opciones');
+var contadorAdultosInput = document.getElementById('contador_adultos_input');
+var contadorNinosInput = document.getElementById('contador_ninos_input');
 
 btn_adultos.addEventListener('click', function() {
     // event.stopPropagation();
@@ -40,6 +42,7 @@ btn_minus_adultos.addEventListener('click', function() {
     if(contador_1 > 0){
         contador_1--;
         contador_adultos.textContent = contador_1;
+        contadorAdultosInput.value = contador_1;
         if(contador_1 != 1){
             btn_adultos.textContent = "Adultos: " + contador_1;
         } else{
@@ -52,6 +55,7 @@ btn_minus_adultos.addEventListener('click', function() {
 btn_plus_adultos.addEventListener('click', function() {
     contador_1++;
     contador_adultos.textContent = contador_1;
+    contadorAdultosInput.value = contador_1;
     if(contador_1 != 1){
         btn_adultos.textContent = "Adultos: " + contador_1;
     } else{
@@ -65,6 +69,7 @@ btn_minus_ninos.addEventListener('click', function() {
     if(contador_2 > 0){
         contador_2--;
         contador_ninos.textContent = contador_2;
+        contadorNinosInput.value = contador_2;
         if(contador_2 != 1){
             btn_ninos.textContent = "Niños: " + contador_2;
         } else{
@@ -77,6 +82,7 @@ btn_minus_ninos.addEventListener('click', function() {
 btn_plus_ninos.addEventListener('click', function() {
     contador_2++;
     contador_ninos.textContent = contador_2;
+    contadorNinosInput.value = contador_2;
     if(contador_2 != 1){
         btn_ninos.textContent = "Niños: " + contador_2;
     } else{
@@ -206,3 +212,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+var btnFiltro = document.querySelector('.filtro');
+var iconoFiltro = document.getElementById('icono-filtro');
+
+// Añadimos un evento de clic al botón de filtro
+btnFiltro.addEventListener('click', function() {
+    // Alternamos la clase 'rotated' en el icono
+    iconoFiltro.classList.toggle('rotated');
+});
+
+// Volvemos al estado original cuando se hace clic en cualquier lugar de la página excepto en el botón de filtro
+document.addEventListener('click', function(event) {
+    if (!event.target.matches('.filtro')) {
+        // Eliminamos la clase 'rotated' del icono si no se hizo clic en el botón de filtro
+        iconoFiltro.classList.remove('rotated');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener todos los elementos de precio
+    const precios = document.querySelectorAll('.precio');
+
+    // Iterar sobre cada elemento de precio
+    precios.forEach(function(precioElement) {
+        // Obtener el precio sin formato de los datos del atributo data
+        const precioSinFormato = precioElement.getAttribute('data-precio');
+
+        // Convertir el precio sin formato a un número y formatearlo con el formato 99.999
+        const precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CL');
+
+        // Actualizar el contenido del elemento con el precio formateado
+        precioElement.innerHTML = `<strong>$${precioFormateado} CLP </strong> noche`;
+    });
+});
+
+function mostrarMensaje() {
+    alert("Debe iniciar sesión antes de realizar una reserva.");
+    window.location.href = "/iniciosesion";
+}

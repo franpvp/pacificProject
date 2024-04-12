@@ -16,18 +16,26 @@
             <!-- Botones -->
             <div class="row mt-4">
                 <div class="col-md-4 mb-3">
-                    <a href="{% url 'ver_habitacion' %}" class="btn btn-primary btn-block btn-lg"> {% trans "Ver Habitación"%}</a>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <a href="{% url 'crear_habitacion' %}" class="btn btn-success btn-block btn-lg"> {% trans "Crear Habitación"%}
+                    <a href="{% url 'crear_habitacion' %}" class="btn btn-success btn-block btn-lg"> 
+                        <i class='bx bx-plus'></i>
+                        {% trans "Crear Habitación"%}
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{% url 'modificar_habitacion' %}" class="btn btn-warning btn-block btn-lg"> {% trans "Modificar Habitación"%}
+                    <a href="{% url 'modificar_habitacion' %}" class="btn btn-warning btn-block btn-lg"> 
+                        <i class='bx bx-pencil'></i>
+                        {% trans "Modificar Habitación"%}
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{% url 'eliminar_habitacion' %}" class="btn btn-danger btn-block btn-lg"> {% trans "Eliminar Habitación"%}</a>
+                    <a href="{% url 'eliminar_habitacion' %}" class="btn btn-danger btn-block btn-lg"> 
+                        <i class='bx bx-x'></i>
+                        {% trans "Eliminar Habitación"%}</a>
+                </div>
+                <div class="col-md-4 mb-3 m-auto">
+                    <a href="{% url 'ver_habitacion' %}" class="btn btn-primary btn-block btn-lg"> 
+                        <i class='bx bx-show'></i>
+                        {% trans "Ver Habitación"%}</a>
                 </div>
             </div>
         </div>

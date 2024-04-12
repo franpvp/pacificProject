@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'appPacific',
 ]
 # Define las variables de entorno para las credenciales de PayPal
-PAYPAL_CLIENT_ID = "AZtOiLY8L2BhBPH8aqBxJkvI-aK1pSLADShO9wLz731eKKbtJDqs1nSs-LkoIFFFTqFpTjyR0MqofsuK"
-PAYPAL_CLIENT_SECRET = "EKFNYIRfEwLOGqHQnMhkiEL1djG20QFxt4ABVOteWGKmwdT3Jvdyd-yDmAT_ZKPT7PQUaqRTjOfQC0ki"
+PAYPAL_CLIENT_ID = "AWgG5g7s-D_KZzah1gTofJ9r7Y8b-KUQvwLkDM74OmlMKJ39xVky-sWR0w6hNXHAQ3e1wxrgL1JCMzMJ"
+PAYPAL_CLIENT_SECRET = "ECFVjjOYYabzRA7X0hm6Jh3o9QqFy6Do40w5ZQt5UR7wGJumIKLuadaAxSYAFIMH2WfuJarHa3TgYo8F"
 
 # Define la URL base de PayPal
 PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"  # URL de sandbox para pruebas
@@ -92,14 +92,11 @@ WSGI_APPLICATION = 'pacific.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BBDD',
+        'NAME': 'pacific_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'pacificDUOC',
         'HOST': 'localhost',
         'PORT': '3306',
-        'OPTIONS': {
-            'unix_socket': '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
-        },
     }
 }
 
