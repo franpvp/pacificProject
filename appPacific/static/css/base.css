@@ -138,7 +138,8 @@ a{
 }
 
 .sidebar.active{
-    width: 300px;
+    width: 250px;
+    max-width: 100%;
 }
 
 .sidebar #btn {
@@ -247,10 +248,6 @@ a{
     opacity: 0;
 }
 
-.siderbar.active .item{
-    
-}
-
 .siderbar.active .nav-item{
     opacity: 1;
 }
@@ -288,7 +285,6 @@ a{
 .contenido-main{
     width: calc(100% -80px);
     margin-left: 80px;
-    padding-top: 180px;
 }
 
 .container {

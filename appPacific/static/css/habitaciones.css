@@ -17,7 +17,7 @@
     z-index: 100;
 }
 
-.active {
+.filtro-op.active {
     display: flex;
     padding-top: 10px;
     opacity: 1 !important;
