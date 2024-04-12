@@ -71,6 +71,8 @@ class Habitacion(models.Model):
     id_tipo_hab = models.IntegerField(verbose_name="ID tipo habitación")
     titulo = models.CharField(max_length=50, verbose_name="Titulo habitación")
     descripcion = models.CharField(max_length=200, verbose_name="Descripción")
+    titulo_en = models.CharField(max_length=50, verbose_name="Titulo habitación en inglés")
+    descripcion_en = models.CharField(max_length=200, verbose_name="Descripción en inglés")
     cantidad = models.CharField(max_length=50, verbose_name="Cantidad Habitaciones")
     precio = models.CharField(max_length=50, verbose_name="Precio")
     imagen = models.TextField(null=True, blank=True, verbose_name='Datos de la imagen en base64')

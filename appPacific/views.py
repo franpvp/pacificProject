@@ -17,6 +17,10 @@ import base64
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils.translation import activate
+from django.db.models import F
+
+from appPacific import models
 
 
 # Create your views here.
@@ -38,8 +42,17 @@ def index(request):
         
         # Redirigir a la vista 'habitaciones'
         return redirect('habitaciones')
-        
+    
+    idioma = request.LANGUAGE_CODE
+
+    # Obtener todas las habitaciones
     habitaciones = Habitacion.objects.all()
+
+    for habitacion in habitaciones:
+        if idioma == 'en':
+            habitacion.titulo = habitacion.titulo_en
+            habitacion.descripcion = habitacion.descripcion_en
+    
     return render(request, 'app/index.html', {'habitaciones': habitaciones})
 
 def registro(request):
@@ -168,8 +181,15 @@ def habitaciones(request):
             # Datos de búsqueda incompletos, mostrar mensaje de error o redireccionar a otra vista
             return HttpResponse("Datos de búsqueda incompletos. Por favor, vuelva atrás y complete todos los campos.")
 
+    idioma = request.LANGUAGE_CODE
 
+    # Obtener todas las habitaciones
     habitaciones = Habitacion.objects.all()
+
+    for habitacion in habitaciones:
+        if idioma == 'en':
+            habitacion.titulo = habitacion.titulo_en
+            habitacion.descripcion = habitacion.descripcion_en
     return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
 # Vista Método Pago
@@ -198,6 +218,8 @@ def crear_habitacion(request):
         id_tipo_hab = request.POST.get('id_tipo_hab')
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
+        titulo_en = request.POST.get('titulo_en')
+        descripcion_en = request.POST.get('descripcion_en')
         cantidad = request.POST.get('cantidad')
         precio = request.POST.get('precio')
         imagen_bytes = request.FILES.get('cargarImagen').read()
@@ -214,6 +236,8 @@ def crear_habitacion(request):
             id_tipo_hab=id_tipo_hab,
             titulo=titulo,
             descripcion=descripcion,
+            titulo_en=titulo_en,
+            descripcion_en=descripcion_en,
             cantidad=cantidad,
             precio=precio,
             imagen=imagen_base64_str  # Almacenar la imagen codificada en base64

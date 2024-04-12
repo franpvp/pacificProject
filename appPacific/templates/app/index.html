@@ -156,8 +156,13 @@
                     <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
                 </div>
                 <div class="card-body text-center">
+                    {% if idioma_seleccionado == 'en' %}
+                    <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
+                    <p class="card-text"> {{ habitacion.descripcion_en }}</p>
+                    {% else %}
                     <h5 class="card-title"> {{ habitacion.titulo }}</h5>
                     <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    {% endif %}
                     <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p>
                 </div>
             </div>

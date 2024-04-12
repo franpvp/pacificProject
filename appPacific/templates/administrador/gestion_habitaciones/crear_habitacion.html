@@ -67,13 +67,23 @@
                 </div>
                 <!-- Input Título -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="titulo" required>
-                    <label for="titulo">{% trans "Título"%}</label>
+                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="{% trans 'Título' %}" required>
+                    <label for="titulo">{% trans "Título" %}</label>
                 </div>
                 <!-- Input Descripción -->
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="descripcion" name="descripcion" style="height: 100px"></textarea>
-                    <label for="descripcion">{% trans "Descripción"%}</label>
+                    <textarea class="form-control" placeholder="{% trans 'Descripción' %}" id="descripcion" name="descripcion" style="height: 100px"></textarea>
+                    <label for="descripcion">{% trans "Descripción" %}</label>
+                </div>
+                <!-- Input Título Inglés-->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="titulo_en" name="titulo_en" placeholder="{% trans 'Título en inglés' %}" required>
+                    <label for="titulo_en">{% trans "Título en inglés" %}</label>
+                </div>
+                <!-- Input Descripción Inglés -->
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" placeholder="{% trans 'Descripción en inglés' %}" id="descripcion_en" name="descripcion_en" style="height: 100px"></textarea>
+                    <label for="descripcion_en">{% trans "Descripción en inglés" %}</label>
                 </div>
                 <!-- Input Cantidad Disponibles -->
                 <div class="form-floating mb-3">
