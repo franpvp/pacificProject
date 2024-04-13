@@ -17,10 +17,11 @@ import base64
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.utils.translation import activate
-from django.db.models import F
-
 from appPacific import models
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.views.generic import View
 
 
 # Create your views here.
@@ -634,3 +635,4 @@ def handle_response(response):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
