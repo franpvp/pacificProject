@@ -406,16 +406,28 @@ def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
 # Vista Administrador Gestion Usuarios -crear usuario
-def crear_usuario_admin(request):
+def  crear_usuario_admin(request):
     if request.method == 'POST':
-        form = RegistroUsuarioAdminForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('ver_usuarios_admin')
-    else:
-        form = RegistroUsuarioAdminForm()
+        id_user = request.POST.get('id_user')
+        nombres = request.POST.get('nombres')
+        apellidos = request.POST.get('apellidos')
+        correo = request.POST.get('correo')
+        telefono = request.POST.get('telefono')
+        contrasena = request.POST.get('contrasena')
+        rol = request.POST.get('rol')
 
-    return render(request, 'administrador/gestion_usuarios/crear_usuario.html', {'form': form})
+        nuevo_usuario = RegistroUsuario(
+            id_user=id_user,
+            nombres=nombres,
+            apellidos=apellidos,
+            correo=correo,
+            telefono=telefono,
+            contrasena=contrasena,
+            rol=rol,
+        )
+        # Guardar la instancia en la base de datos
+        nuevo_usuario.save()
+    return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
 
 # Vista Administrador Gestion Usuarios -ver usuario
 def ver_usuarios_admin(request):
@@ -424,16 +436,28 @@ def ver_usuarios_admin(request):
 
 
 # Vista Administrador Gestion Usuarios modificar usuario
-def modificar_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
+def modificar_usuario_admin(request, id_user):
     if request.method == 'POST':
-        form = RegistroUsuarioAdminForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            return redirect('ver_usuarios_admin')
-    else:
-        form = RegistroUsuarioAdminForm(instance=usuario)
-    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
+        id_user = request.POST.get('id_user')
+        nombres = request.POST.get('nombres')
+        apellidos = request.POST.get('apellidos')
+        correo = request.POST.get('correo')
+        telefono = request.POST.get('telefono')
+
+        usuario = RegistroUsuario.objects.get(id_user=id_user)
+
+        # Actualizar los campos del usuario
+        usuario.nombres = nombres
+        usuario.apellidos = apellidos
+        usuario.correo = correo
+        usuario.telefono = telefono
+
+        usuario.save()
+        return redirect('ver_usuarios_admin')
+
+    else:  # Si la solicitud es GET
+        usuario = RegistroUsuario.objects.get(id_user=id_user)
+        return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -eliminar usuario
 def eliminar_usuario_admin(request, id_usuario):

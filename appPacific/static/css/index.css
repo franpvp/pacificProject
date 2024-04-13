@@ -114,6 +114,9 @@ a{
     font-size: 14px;
     background-color: #4495E0 !important;
 }
+.box-rec:before {
+    content: attr(data-room);
+}
 
 /* .box-rec::after {
     content: attr(data-room);

@@ -20,7 +20,8 @@
                             <div class="input-group">
                                 <input id="fecha_llegada" name="fecha_llegada" type="text"
                                     class="form-control date-range text-center"
-                                    placeholder="{% trans 'Ingrese fecha de llegada' %}" style="cursor: pointer;" required>
+                                    placeholder="{% trans 'Ingrese fecha de llegada' %}" style="cursor: pointer;"
+                                    required>
                                 <input type="hidden" id="fecha_llegada_hidden" name="fecha_llegada_hidden">
                                 <div class="input-group-append ml-auto">
                                     <span class="input-group-text">
@@ -34,7 +35,8 @@
                             <div class="input-group">
                                 <input id="fecha_salida" name="fecha_salida" type="text"
                                     class="form-control date-range text-center"
-                                    placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
+                                    placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;"
+                                    required>
                                 <input type="hidden" id="fecha_salida_hidden" name="fecha_salida_hidden">
                                 <div class="input-group-append ml-auto">
                                     <span class="input-group-text">
@@ -52,7 +54,8 @@
                             </div>
                             <div class="box-btn-adultos">
                                 <div class="contenido-sec">
-                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
+                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle'
+                                        style="margin-right: 10px;"></i>
                                     <div id="contador-adultos" class="contador-adultos">0</div>
                                     <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
                                     <!-- Campo contador_adultos oculto -->
@@ -164,25 +167,37 @@
                 </div>
                 <div class="card-body text-center">
                     {% if idioma_seleccionado == 'en' %}
-                        <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
-                        <p class="card-text"> {{ habitacion.descripcion_en }}</p>
+                    <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
+                    <p class="card-text"> {{ habitacion.descripcion_en }}</p>
                     {% else %}
-                        <h5 class="card-title"> {{ habitacion.titulo }}</h5>
-                        <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    <h5 class="card-title"> {{ habitacion.titulo }}</h5>
+                    <p class="card-text"> {{ habitacion.descripcion }}</p>
                     {% endif %}
-                    <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio | stringformat:"d" }}</p>
+                    <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio |
+                        stringformat:"d" }}</p>
                     <!-- <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p> -->
                 </div>
                 {% if user.is_authenticated %}
                 <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
-                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
                 </div>
                 {% else %}
-                    <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">Reservar</button>
+                <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
                 {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
+    <script>
+        var idioma = "{{ request.LANGUAGE_CODE }}";
+        // Verifica el idioma actual y cambia el contenido según corresponda
+        if (idioma === "es") {
+            document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
+        } else if (idioma === "en") {
+            document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+        }
+    </script>
 </div>
+
+
 {% endblock %}

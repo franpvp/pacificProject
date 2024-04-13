@@ -17,7 +17,7 @@ class RegistroUsuario(models.Model):
     correo = models.EmailField(max_length=50, verbose_name="Correo del usuario")
     telefono = models.CharField(max_length=25, verbose_name="Teléfono del usuario", default='')
     contrasena = models.CharField(max_length=25, verbose_name="Contraseña del usuario", default='')
-    rol = models.CharField(max_length=20, verbose_name="Rol del usuario", default='Cliente')
+    rol = models.CharField(max_length=20, verbose_name="Rol del usuario", blank=True, null=True, default='Cliente')
 
     def __str__(self):
         return self.nombres
