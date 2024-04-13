@@ -163,9 +163,15 @@
                     <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
                 </div>
                 <div class="card-body text-center">
-                    <h5 class="card-title"> {{ habitacion.titulo }}</h5>
-                    <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    {% if idioma_seleccionado == 'en' %}
+                        <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
+                        <p class="card-text"> {{ habitacion.descripcion_en }}</p>
+                    {% else %}
+                        <h5 class="card-title"> {{ habitacion.titulo }}</h5>
+                        <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    {% endif %}
                     <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio | stringformat:"d" }}</p>
+                    <!-- <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p> -->
                 </div>
                 {% if user.is_authenticated %}
                 <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">

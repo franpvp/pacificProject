@@ -17,6 +17,10 @@ import base64
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils.translation import activate
+from django.db.models import F
+
+from appPacific import models
 
 
 # Create your views here.
@@ -44,8 +48,17 @@ def index(request):
         
         # Redirigir a la vista 'habitaciones'
         return redirect('habitaciones')
-        
+    
+    idioma = request.LANGUAGE_CODE
+    # Obtener todas las habitaciones
     habitaciones = Habitacion.objects.all()
+    print(habitaciones)
+
+    for habitacion in habitaciones:
+        if idioma == 'en':
+            habitacion.titulo = habitacion.titulo_en
+            habitacion.descripcion = habitacion.descripcion_en
+    
     return render(request, 'app/index.html', {'habitaciones': habitaciones})
 
 def registro(request):
@@ -156,18 +169,11 @@ def contacto(request):
 
 # Vista Habitaciones
 def habitaciones(request):
-    habitaciones = Habitacion.objects.all()
     # Obtener los parámetros de la URL
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
-
-
-    print("Fecha llegada: ", fecha_llegada)
-    print("Fecha salida: ",fecha_salida)
-    print("Cantidad adultos: ",contador_adultos)
-    print("Cantidad niños: ",contador_ninos)
 
     if request.method == 'POST' and fecha_llegada and fecha_salida and contador_adultos > 0:
         # Obtener los id de la habitacion cuando se haga clic en botón Reserva
@@ -175,16 +181,21 @@ def habitaciones(request):
         id_tipo_hab = request.POST.get('id_tipo_hab')
 
         row_hab = Habitacion.objects.get(id_hab=id_hab)
-        print("ROOW HAB ID: ", row_hab.id_hab)
         row_tipo_hab = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab)
 
-        # Guardar los id de ambas habitaciones en la sesión
+        # Guardar los id de ambas habitaciones en sesiones
         request.session['id_hab'] = row_hab.id_hab
         request.session['tipo_hab'] = row_tipo_hab.tipo_hab
         request.session['precio'] = row_hab.precio
 
         return redirect('metodo_pago')
 
+    idioma = request.LANGUAGE_CODE
+    habitaciones = Habitacion.objects.all()
+    for habitacion in habitaciones:
+        if idioma == 'en':
+            habitacion.titulo = habitacion.titulo_en
+            habitacion.descripcion = habitacion.descripcion_en
     return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
 # Vista Método Pago
@@ -192,16 +203,12 @@ def metodo_pago(request):
     # Obtener los parámetros para mostrar en vista de método de pago
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
-    
     contador_adultos = request.session.get('contador_adultos')
-    print("Contador en metodo_pago: ", contador_adultos)
     contador_ninos = request.session.get('contador_ninos')
 
     # Obtener valores de id_hab y id_tipo_hab
     id_hab = request.session.get('id_hab')
     tipo_hab = request.session.get('tipo_hab')
-    print("Id Habitacion en metodo de pago: ", id_hab)
-    print("Id Tipo Habitacion en metodo de pago: ", tipo_hab)
 
     # Obtener precio de habitacion
     row_hab = Habitacion.objects.get(pk=id_hab)
@@ -275,6 +282,8 @@ def crear_habitacion(request):
         id_tipo_hab = request.POST.get('id_tipo_hab')
         titulo = request.POST.get('titulo')
         descripcion = request.POST.get('descripcion')
+        titulo_en = request.POST.get('titulo_en')
+        descripcion_en = request.POST.get('descripcion_en')
         cantidad = request.POST.get('cantidad')
         precio = request.POST.get('precio')
         imagen_bytes = request.FILES.get('cargarImagen').read()
@@ -288,12 +297,14 @@ def crear_habitacion(request):
 
         # Crear la instancia de Habitacion con la imagen codificada en base64
         habitacion = Habitacion(
-            id_tipo_hab = id_tipo_hab,
-            titulo = titulo,
-            descripcion = descripcion,
-            cantidad = cantidad,
-            precio = precio,
-            imagen = imagen_base64_str  # Almacenar la imagen codificada en base64
+            id_tipo_hab=id_tipo_hab,
+            titulo=titulo,
+            descripcion=descripcion,
+            titulo_en=titulo_en,
+            descripcion_en=descripcion_en,
+            cantidad=cantidad,
+            precio=precio,
+            imagen=imagen_base64_str  # Almacenar la imagen codificada en base64
         )
 
         # Guardar la instancia en la base de datos
