@@ -94,9 +94,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pacific_db',
         'USER': 'root',
-        'PASSWORD': 'pacificDUOC',
+        'PASSWORD': '123',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3305',
     }
 }
 
