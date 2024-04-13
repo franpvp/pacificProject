@@ -1,13 +1,14 @@
 {% extends 'administrador/base_administrador.html' %}
 {% load static %}
+{% load i18n %}
 {% block css %}
 {% endblock %}
 
 {% block contenido %}
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 160px;">
     <div class="row mt-4">
         <div class="col-lg-6 reg-box">
-            <h1 class="titulo-general text-center">Registro de Usuario</h1>
+            <h1 class="titulo-general text-center">{% trans "Registro de Usuario"%}</h1>
             <!-- Formulario de registro -->
             <form id="registroForm" action="{% url 'crear_usuario_admin' %}" method="post">
                 {% csrf_token %}
@@ -15,33 +16,33 @@
                     <div class="col-12 col-lg-8 pb-4">
                         <!-- Input Nombre -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nombre" name="nombres" placeholder="nombre" required>
-                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombres"placeholder="{% trans 'nombre' %}"                            required>
+                            <label for="nombre">{% trans "Nombre"%}</label>
                         </div>
                         <!-- Input Apellidos -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" required>
-                            <label for="apellidos">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="{% trans 'apellidos' %}"  required>
+                            <label for="apellidos">{% trans "Apellidos"%}</label>
                         </div>
                         <!-- Input Correo Electrónico -->
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" required>
-                            <label for="correo">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="correo" name="correo" placeholder="{% trans 'correo' %}" required>
+                            <label for="correo">{% trans "Correo Electrónico"%}</label>
                         </div>
                         <!-- Input Teléfono -->
                         <div class="form-floating mb-3">
-                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="telefono" required>
-                            <label for="telefono">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="{% trans 'celular' %}" required>
+                            <label for="telefono">{% trans "Celular"%}</label>
                         </div>
                         <!-- Input Contraseña -->
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="contrasena" required>
-                            <label for="contrasena">Contraseña</label>
+                            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder= "{% trans 'contraseña' %}" required>
+                            <label for="contrasena">{% trans "Contraseña"%}</label>
                         </div>
                         <!-- Botón Registrar -->
                         <div class="row">
                             <div class="col d-flex justify-content-center pt-4">
-                                <button type="submit" class="btn btn-primary btn-reg">Registrar</button>
+                                <button type="submit" class="btn btn-primary btn-reg">{% trans "Registrar"%}</button>
                             </div>
                         </div>
                     </div>

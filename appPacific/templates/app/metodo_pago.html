@@ -2,15 +2,68 @@
 
 {% block css %}   
 {% endblock %}
+
 {% load static %}  
+{% load i18n %}
 
 
 {% block contenido %}
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 160px;">
     <div class="row">
-        <div class="col">
-            <div class="titulo-general text-center">Metodo de Pago</div>
+        <div class="col d-flex align-item-center justify-content-center">
+            <div class="contenedor-reserva">
+                <h1 class="titulo-general text-center">Detalle Reserva</h1>
+                <p> Tipo habitación: <strong>{{hab_seleccionada.tipo_hab}}</strong></p>
+                <p> Fecha Llegada: <strong>{{hab_seleccionada.fecha_llegada}}</strong></p>
+                <p> Fecha Salida:  <strong>{{hab_seleccionada.fecha_salida}}</strong></p>
+                <p> Total Reserva: <strong>$ {{hab_seleccionada.total}} CLP</strong></p>
+                <p> Pago Inicial: <strong>$ {{hab_seleccionada.pago_inicial}} CLP</strong></p>
+                <p> Pago Pendiente: <strong>$ {{hab_seleccionada.pago_pendiente}} CLP</strong></p>
+                {% if hab_seleccionada.contador_adultos >= 1 and hab_seleccionada.contador_ninos > 0 %}
+                    <p> Adultos: <strong>{{hab_seleccionada.contador_adultos}}</strong></p>
+                    <p> Niños: <strong>{{hab_seleccionada.contador_ninos}}</strong></p>
+                {% else %}
+                    <p> Adultos: <strong>{{hab_seleccionada.contador_adultos}}</strong></p>
+                {% endif %}
+                <!-- Botón para modificar reserva (Redirigir al index)-->
+                <div class="row">
+                    <div class="col">
+                        <a href="{% url 'index' %}">
+                            <button id="btn-reservar-btn" class="btn btn-warning" type="button" style="color: #fff;">
+                                <i class='bx bxs-edit-alt mr-3'></i>Modificar</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
+    <form method="post" action="{% url 'metodo_pago' %}">
+        <div class="row justify-content-center mt-4">
+            <div class="col"></div>
+            <div class="col-md-6 col-lg-6">
+                <p>Seleccione método de pago:</p>
+                <!-- Container for PayPal buttons -->
+                <div id="paypal-button-container" class="mt-4" style="display: flex; justify-content: center !important;"></div>
+                <!-- Container for result message -->
+                <div id="result-message"></div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col"></div>
+            <div class="col text-center">
+                <p>Pago por transferencia bancaria: </p>
+                <a href="{% url 'transferencias' %}">
+                    <div class="pago-transferencia">
+                        <!-- Imagen Transferencia -->
+                        <img src="{% static 'img/logo-transf.png' %}" alt="imagen-trans" style="max-width: 25%; height: auto;">
+                    </div>
+                </a>
+                
+            </div>
+            <div class="col"></div>
+        </div>
+    </form>
 </div>
 {% endblock %}

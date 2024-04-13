@@ -4,104 +4,142 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
-<div class="container-fluid">
-    <div class="row mt-5">
+<div class="container-fluid" style="padding-top: 180px;">
+    <div class="row">
         <div class="col"></div>
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
             <!-- Barra Custom Buscador -->
             <div class="search-bar mb-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-4 d-flex align-items-center mt-3 mb-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control date-range" placeholder="Selecciona un rango de fechas" style="cursor: pointer;" readonly>
-                            <div class="input-group-append ml-auto">
-                                <span class="input-group-text">
-                                    <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
-                                </span>
+                <form id="form-busqueda" method="post" action="{% url 'index' %}">
+                    {% csrf_token %}
+                    <div class="row justify-content-center">
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                            <div class="input-group">
+                                <input id="fecha_llegada" name="fecha_llegada" type="text"
+                                    class="form-control date-range text-center"
+                                    placeholder="{% trans 'Ingrese fecha de llegada' %}" style="cursor: pointer;" required>
+                                <input type="hidden" id="fecha_llegada_hidden" name="fecha_llegada_hidden">
+                                <div class="input-group-append ml-auto">
+                                    <span class="input-group-text">
+                                        <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario"
+                                            style="width: 30px; height: 30px;">
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mt-3 mb-3">
-                        <!-- Selector Cantidad Adultos -->
-                        <div class="btn-adultos">
-                            Cantidad Adultos
-                        </div>
-                        <div class="box-btn-adultos">
-                            <div class="contenido-sec">
-                                <i id="btn-minus-adultos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                <div class="contador-adultos">0</div>
-                                <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                            <div class="input-group">
+                                <input id="fecha_salida" name="fecha_salida" type="text"
+                                    class="form-control date-range text-center"
+                                    placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
+                                <input type="hidden" id="fecha_salida_hidden" name="fecha_salida_hidden">
+                                <div class="input-group-append ml-auto">
+                                    <span class="input-group-text">
+                                        <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario"
+                                            style="width: 30px; height: 30px;">
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mt-3 mb-3">
-                        <!-- Selector Cantidad Niños -->
-                        <div class="btn-ninos">
-                            Cantidad Niños
-                        </div>
-                        <div class="box-btn-ninos">
-                            <div class="contenido-sec">
-                                <i id="btn-minus-ninos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                <div class="contador-ninos">0</div>
-                                <i id="btn-plus-ninos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
+                        <div
+                            class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3 ml-3 mr-3">
+                            <!-- Selector Cantidad Adultos -->
+                            <div class="btn-adultos">
+                                {% trans "Adultos" %}
+                            </div>
+                            <div class="box-btn-adultos">
+                                <div class="contenido-sec">
+                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
+                                    <div id="contador-adultos" class="contador-adultos">0</div>
+                                    <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
+                                    <!-- Campo contador_adultos oculto -->
+                                    <input type="hidden" id="contador_adultos_input" name="contador_adultos">
+                                </div>
                             </div>
                         </div>
+                        <div class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3">
+                            <!-- Selector Cantidad Niños -->
+                            <div class="btn-ninos">
+                                {% trans "Niños" %}
+                            </div>
+                            <div class="box-btn-ninos">
+                                <div class="contenido-sec">
+                                    <i id="btn-minus-ninos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
+                                    <div id="contador-ninos" class="contador-ninos">0</div>
+                                    <i id="btn-plus-ninos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
+                                    <!-- Campo contador_ninos oculto -->
+                                    <input type="hidden" id="contador_ninos_input" name="contador_ninos">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Botón Buscador -->
+                        <div id="btn-buscar"
+                            class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3 "
+                            style="cursor: pointer;">
+                            <button type="submit" style="border: none; background: none;">
+                                <img src="{% static 'img/buscador.png' %}" alt="img-user"
+                                    style="width: 50px; height: 50px; margin-right: 15px;">
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-lg-1 d-flex justify-content-end align-item-center ml-3 mt-3 mb-3">
-                        <a href="{% url 'habitaciones' %}">
-                            <img src="{% static 'img/buscador.png' %}" alt="img-user" style="width: 50px; height: 50px; margin-right: 15px;">
-                        </a>
-                    </div>
-                </div>
+                </form>
+
             </div>
         </div>
         <div class="col"></div>
     </div>
-    
+
     <!-- Botones Selección Tipo Habitación -->
     <div class="row justify-content-center">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="1">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="1" style="cursor: pointer;">
                 <div class="btn-hab">
-                    <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                    Suite
+                    <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user"
+                        style="width: 30px; height: 30px; margin-right: 15px;">
+                    {% trans "Suite" %}
                 </div>
             </a>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="2">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="2" style="cursor: pointer;">
                 <div class="btn-hab">
-                    <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                    Premium
+                    <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user"
+                        style="width: 30px; height: 30px; margin-right: 15px;">
+                    {% trans "Premium" %}
                 </div>
             </a>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-            <a href="#" class="btn-filtrar" data-id-tipo-hab="3">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+            <a class="btn-filtrar" data-id-tipo-hab="3" style="cursor: pointer;">
                 <div class="btn-hab">
-                    <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                    Twin
+                    <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user"
+                        style="width: 30px; height: 30px; margin-right: 15px;">
+                    {% trans "Twin" %}
                 </div>
             </a>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
-            <div class="btn-hab" id="filtro">
-                <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
-                Filtros
+        <div class="col-xs-6 col-sm-4 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
+            <div class="btn-hab filtro" style="cursor: pointer;">
+                <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros"
+                    style="width: 20px; height: 20px; margin-right: 15px;">
+                {% trans "Filtros" %}
+                <i class='bx bxs-chevron-down-circle pl-3' id="icono-filtro"></i>
             </div>
             <!-- Contenido Filtros -->
             <div class="filtro-opciones">
                 <ul>
-                    <div class="recomendados">
+                    <!-- <div class="recomendados">
+                        <i class='bx bxs-star mr-1' ></i>
                         Recomendados
-                    </div>
+                    </div> -->
                     <div class="mas-economicos">
-                        Más Económicos
+                        {% trans "Menor A Mayor" %}
                     </div>
                     <div class="mas-caros">
-                        Más Caros
+                        {% trans "Mayor a Menor" %}
                     </div>
                 </ul>
             </div>
@@ -111,32 +149,40 @@
     <div class="row justify-content-center mt-4">
         <div class="col d-flex align-item-center justify-content-center">
             <div class="titulo-rec">
-                Nuestras Habitaciones
+                {% trans "Nuestras Habitaciones" %}
             </div>
         </div>
     </div>
 
     <!-- Contenedores Habitaciones -->
-    {% for habitacion in habitaciones %}
-    <div class="row mt-2 habitacion tipo-{{ habitacion.id_tipo_hab }}">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 d-flex align-item-center justify-content-center contenedor-img">
+    <div class="row mt-2 justify-content-center">
+        {% for habitacion in habitaciones %}
+        <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img">
             <div class="card no-border">
-                <a href="#">
-                    <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                        <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
-                    </div>
-                </a>
-                <div class="card-body">
-                    <h5 class="card-title">{{ habitacion.titulo }}</h5>
-                    <p class="card-text">{{ habitacion.descripcion }}</p>
-                    <p class="card-text">${{ habitacion.precio }} CLP</p>
-                    <a href="#" class="btn btn-primary d-flex justify-content-center">Más Información</a>
+                <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                    <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
                 </div>
+                <div class="card-body text-center">
+                    {% if idioma_seleccionado == 'en' %}
+                        <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
+                        <p class="card-text"> {{ habitacion.descripcion_en }}</p>
+                    {% else %}
+                        <h5 class="card-title"> {{ habitacion.titulo }}</h5>
+                        <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    {% endif %}
+                    <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio | stringformat:"d" }}</p>
+                    <!-- <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p> -->
+                </div>
+                {% if user.is_authenticated %}
+                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
+                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                </div>
+                {% else %}
+                    <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">Reservar</button>
+                {% endif %}
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
-
-

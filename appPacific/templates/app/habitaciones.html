@@ -3,81 +3,137 @@
 {% block css %}   
 {% endblock %}
 {% load static %}  
+{% load i18n%}
 
 
 {% block contenido %}
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 160px;">
     <div class="row">
-        <div class="titulo-general text-center mt-4">Habitaciones</div>
         <div class="col">
             <!-- Botones Selección Tipo Habitación -->
             <div class="row justify-content-center mt-3">
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="1">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                    <a class="btn-filtrar" data-id-tipo-hab="1" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-suite.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Suite
+                            {% trans "Suite" %}
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="2">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                    <a class="btn-filtrar" data-id-tipo-hab="2" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-premium.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Premium
+                            {% trans "Premium" %}
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
-                    <a href="#" class="btn-filtrar" data-id-tipo-hab="3">
+                <div class="col-xs-3 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
+                    <a class="btn-filtrar" data-id-tipo-hab="3" style="cursor: pointer;">
                         <div class="btn-hab">
                             <img class="img-fluid" src="{% static 'img/logo-twin.png' %}" alt="img-user" style="width: 30px; height: 30px; margin-right: 15px;">
-                            Twin
+                            {% trans "Twin" %}
                         </div>
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
-                    <div class="btn-hab" id="filtro">
+                    <div class="btn-hab filtro-hab">
                         <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros" style="width: 20px; height: 20px; margin-right: 15px;">
-                        Filtros
+                        {% trans "Filtros" %}
                     </div>
                     <!-- Contenido Filtros -->
                     <div class="filtro-op">
                         <ul>
-                            <div class="recomendados">
+                            <!-- <div class="recomendados">
+                                <i class='bx bxs-star mr-1' ></i>
                                 Recomendados
-                            </div>
+                            </div> -->
                             <div class="mas-economicos">
-                                Más Económicos
+                                {% trans "Más Económicos" %}
                             </div>
                             <div class="mas-caros">
-                                Más Caros
+                                {% trans "Más Caros" %}
                             </div>
                         </ul>
-                        
                     </div>
                 </div>
             </div>
+            
             <!-- Contenedores Habitaciones -->
-            {% for habitacion in habitaciones %}
-            <div class="row mt-2 habitacion tipo-{{ habitacion.id_tipo_hab }}">
-                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 d-flex align-item-center justify-content-center contenedor-img">
+            <div class="row mt-2 justify-content-center">
+                {% for habitacion in habitaciones %}
+                <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
                     <div class="card no-border">
-                        <a href="#">
-                            <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
-                            </div>
-                        </a>
-                        <div class="card-body">
+                        <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                        </div>
+                        <div class="card-body text-center">
                             <h5 class="card-title">{{ habitacion.titulo }}</h5>
                             <p class="card-text">{{ habitacion.descripcion }}</p>
-                            <p class="card-text">$ {{ habitacion.precio }} CLP</p>
-                            <a href="#" class="btn btn-primary d-flex justify-content-center">Más Información</a>
+                            <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
+                            <form method="post" action="{% url 'habitaciones' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
+                                <input type="hidden" name="id_tipo_hab" value="{{ habitacion.id_tipo_hab }}">
+                                <div id="btn-mostrar-info" class="btn-mostrar-info">
+                                    <i class='bx bxs-info-circle pr-2'></i>
+                                    Más Información
+                                </div>
+                                <div class="fondo-opaco"></div>
+                                {% if user.is_authenticated %}
+                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                                </div>
+                                {% else %}
+                                <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">Reservar</button>
+                                {% endif %}
+                                <div class="fondo-opaco"></div>
+                                <!-- Mostrar ventana con información mas detallada de la habitación -->
+                                <div class="mas-informacion text-center m-auto">
+                                    <div class="btn-close"></div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                            <div class="contenido-imagenes">
+                                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}" class="img-fluid" style="border-radius: 40px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 mt-3 d-flex justify-content-center">
+                                            <div class="contenido-habitacion">
+                                                <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                                                <p>
+                                                    Esta habitación ofrece:
+                                                    {{ habitacion.capacidad_huespedes }} huéspedes,
+                                                    {{ habitacion.cantidad_habitaciones }} habitación,
+                                                    {{ habitacion.camas }} cama,
+                                                    {{ habitacion.banos }} baño
+                                                </p>
+                                                <p>Sevicios Incluidos:
+                                                    <!-- Campo True o False en BBDD -->
+                                                    {{ habitacion.desayuno }}
+                                                    {{ habitacion.piscina }}
+                                                    {{ habitacion.gimnasio }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            {% if user.is_authenticated %}
+                                            <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
+                                                <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
+                                            </div>
+                                            {% else %}
+                                                <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">Reservar</button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>

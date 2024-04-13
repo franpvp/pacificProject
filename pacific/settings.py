@@ -42,12 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'appPacific',
-    'appUserAuth',
 ]
+# Define las variables de entorno para las credenciales de PayPal
+PAYPAL_CLIENT_ID = "AWgG5g7s-D_KZzah1gTofJ9r7Y8b-KUQvwLkDM74OmlMKJ39xVky-sWR0w6hNXHAQ3e1wxrgL1JCMzMJ"
+PAYPAL_CLIENT_SECRET = "ECFVjjOYYabzRA7X0hm6Jh3o9QqFy6Do40w5ZQt5UR7wGJumIKLuadaAxSYAFIMH2WfuJarHa3TgYo8F"
+
+# Define la URL base de PayPal
+PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"  # URL de sandbox para pruebas
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Santiago'
 
@@ -125,6 +131,14 @@ USE_I18N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+    ('es', 'Español'),
+    ('en', 'English'),
+]
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -138,3 +152,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
