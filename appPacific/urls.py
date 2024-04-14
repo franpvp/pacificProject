@@ -37,4 +37,5 @@ urlpatterns = [
     path('gestion_usuarios/tipo_usuario_admin/<int:id_usuario>/', tipo_usuario_admin, name='tipo_usuario_admin'),
     path('api/orders', views.create_order, name='create_order'),
     path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
+    path('cerrarsesionadmin/', views.cerrarsesionadmin, name='cerrarsesionadmin'),
 ]
