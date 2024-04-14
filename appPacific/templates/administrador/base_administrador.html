@@ -63,12 +63,15 @@
                     <p class="nav-item">{% trans "Configuración" %}</p>
                 </a>
             </li>
-            <li class="item">
-                <a href="{% url 'index' %}">
+            {% if user.is_authenticated%}
+            <li class="item"> 
+                <!--Es importante la url cerrarsesionadmin para cerrar la sesion del usuario-->
+                <a href="{% url 'cerrarsesionadmin' %}">
                     <i class='bx bx-log-out ml-3'></i>
                     <p class="nav-item">{% trans "Cerrar Sesión" %}</p>
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 
