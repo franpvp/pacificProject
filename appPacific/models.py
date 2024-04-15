@@ -37,12 +37,13 @@ class Reserva(models.Model):
     fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
     cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
     cant_ninos = models.IntegerField(verbose_name="Cantidad Niños", null=True)
+    tipo_hab = models.CharField(max_length=20, verbose_name="Tipo Habitación")
     tipo_metodo_pago = models.CharField(max_length=20, verbose_name="Metodo Pago cliente")
     total = models.IntegerField(verbose_name="Total Reserva")
     pago_inicial = models.IntegerField(verbose_name="Pago Inicial Reserva")
     pago_pendiente = models.IntegerField(verbose_name="Pago Pendiente")
     estado_pago = models.CharField(max_length=20, verbose_name="Estado Pago", default="Pendiente")
-    fecha_creacion = models.DateField(auto_now_add=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
             return self.id_user

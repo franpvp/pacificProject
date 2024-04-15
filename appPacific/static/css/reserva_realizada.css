@@ -1,5 +1,5 @@
 .datos-cliente{
-    height: 220px;
+    height: auto;
     border: 1px solid #d9d9d9;
     border-radius: 30px;
     background: #fff;
@@ -9,6 +9,7 @@
 .datos-cliente p {
     text-align: center;
     display: block;
+    width: auto;
 }
 
 hr {
@@ -19,7 +20,7 @@ hr {
 }
 
 .datos-reserva{
-    height: 220px;
+    height: auto;
     border: 1px solid #d9d9d9;
     border-radius: 30px;
     background: #fff;
@@ -27,7 +28,8 @@ hr {
 }
 
 .contenedor-info{
-    height: 150px;
+    height: auto;
+    width: auto;
     border: 1px solid #FFD952;
     border-radius: 30px;
     background: #fff;
