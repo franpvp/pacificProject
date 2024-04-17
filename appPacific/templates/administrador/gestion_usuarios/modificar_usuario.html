@@ -6,6 +6,7 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
+<<<<<<< HEAD
     <div class="row justify-content-center">
         <div class="col">
             <h2 class="titulo-general mt-5 mb-3 text-center">{% trans "Modificar Usuario"%}</h2>
@@ -43,6 +44,46 @@
                     </table>
                 </form>
             </div>
+=======
+    <div class="row justify-content-center mt-4">
+        <h1 class="titulo-general text-center">{% trans "Modificar Usuario"%}</h1>
+        <div class="col-lg-6 reg-box d-flex align-item-center justify-content-center">
+            <!-- Formulario de edición de usuario -->
+            <form method="post" class="form-group col-md-6">
+                {% csrf_token %}
+                <!-- Input Nombre -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nombres" name="nombres" placeholder="nombre" required>
+                    <label for="nombres">Nombre</label>
+                </div>
+                <!-- Input Apellidos -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" required>
+                    <label for="apellidos">Apellidos</label>
+                </div>
+                <!-- Input Username -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nombreusuario" placeholder="Nombre usuario" name="nombreusuario">
+                    <label for="nombreusuario">Nombre usuario</label>
+                </div>
+                <!-- Input Correo Electrónico -->
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" required>
+                    <label for="correo">Correo Electrónico</label>
+                </div>
+                <!-- Checkbox Super Usuario -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="superusuario" name="superusuario">
+                    <label class="form-check-label" for="superusuario">
+                        ¿Quieres que sea Super Usuario?
+                    </label>
+                </div>
+                    <div class="col d-flex justify-content-center pt-4">
+                        <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
+                    </div>
+                </div>
+            </form>
+>>>>>>> c723bc6aedbecf07bdc98c7c8775f603b0d5ef4e
         </div>
     </div>
 </div>

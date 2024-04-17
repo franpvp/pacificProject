@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
@@ -18,14 +18,9 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.translation import activate
-import random
-import string
-from django.contrib.sessions.models import Session
+from django.db.models import F
+
 from appPacific import models
-from django.shortcuts import render
-from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
-from django.views.generic import View
 
 
 # Create your views here.
@@ -85,11 +80,11 @@ def registro(request):
                 messages.error(request, "Por favor, complete todos los campos.")
                 return redirect('registro')
 
-            if not (nombre.isalpha()):
+            if not re.match(r'^[a-zA-Z\s-]+$', nombre):
                 messages.error(request, "El nombre deben ser sólo letras")
                 return redirect('registro')
             
-            if not (apellidos.isalpha()):
+            if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
                 messages.error(request, "Los apellidos deben ser sólo letras")
                 return redirect('registro')
 
@@ -111,15 +106,14 @@ def registro(request):
             user.email = correo
             user.save()
             login(request,user)
-            request.session['id_user'] = user.id
-            # messages.success(request, "Registro Exitoso, por favor inicie sesion")
+
+            messages.success(request, "Registro Exitoso, por favor inicie sesion")
             return redirect('index')
         
         except IntegrityError:  
             messages.error(request, "Error al registrar usuario. Por favor, inténtelo de nuevo.")
             return redirect('registro')
     
-    # return render(request, 'registration/registro.html')
     return render(request, 'registration/registro.html')
 
 def iniciosesion(request):
@@ -136,7 +130,7 @@ def iniciosesion(request):
 
             if user is not None:
                 login(request,user)
-                # messages.success(request,"Inicio de sesión correcta")
+                messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
                 request.session['id_user'] = user.id
                 # Obtener habitaciones
@@ -155,7 +149,7 @@ def iniciosesion(request):
 @login_required
 def cerrarsesion(request):
     logout(request)
-    return redirect('index')
+    return redirect('home')
 
 # Vistas Relacionadas con el usuario registrado:
 @login_required
@@ -322,15 +316,20 @@ def reserva_realizada(request):
 def nosotros(request):
     return render(request, 'app/nosotros.html')
 
+# VISTAS DEL ADMINISTRADOR
+
 # Vista Administrador Home
+@admin_required
 def administrador_home(request):
     return render(request, 'administrador/administrador_home.html')
 
 # Vista Administrador Gestion Habitaciones
+@admin_required
 def gestion_habitaciones(request):
     return render(request, 'administrador/gestion_habitaciones.html')
 
 # Vista Administrador Gestion Habitaciones -crear
+@admin_required
 def crear_habitacion(request):
     if request.method == 'POST':
         id_tipo_hab = request.POST.get('id_tipo_hab')
@@ -370,6 +369,7 @@ def crear_habitacion(request):
 
 
 # Vista Administrador Gestion Habitaciones-eliminar
+@admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -381,6 +381,7 @@ def eliminar_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/eliminar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-modificar
+@admin_required
 def modificar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -404,6 +405,7 @@ def modificar_habitacion(request):
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-ver
+@admin_required
 def ver_habitacion(request):
     habitaciones = Habitacion.objects.all()
     paginator = Paginator(habitaciones, 2)  # Número de habitaciones por página
@@ -413,10 +415,12 @@ def ver_habitacion(request):
 
 
 # Vista Administrador Gestion Reservas
+@admin_required
 def gestion_reservas(request):
     return render(request, 'administrador/gestion_reservas.html')
 
 # Vista Administrador Gestion Reservas -crear
+@admin_required
 def crear_reserva_pacific(request):
     if request.method == 'POST':
         id_reserva = request.POST.get('id_reserva')
@@ -431,13 +435,16 @@ def crear_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -eliminar
+@admin_required
 def eliminar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
 
 # Vista Administrador Gestion Reservas -modificar
+@admin_required
 def modificar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
 
+@admin_required
 def modificar_reporte_reserva(request):
     # Ingresar en buscador el id_reserva para filtrar los reportes
     id_reserva = requests.POST.get('id_reserva')
@@ -448,77 +455,76 @@ def modificar_reporte_reserva(request):
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
 # Vista Administrador Gestion Reservas -ver calendario
+@admin_required
 def ver_calendario_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html')
 
 # Vista Administrador Gestion Reservas -ver reserva
+@admin_required
 def ver_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html')
 
 # Vista Administrador Gestion Usuarios
+@admin_required
 def gestion_usuarios(request):
     return render(request, 'administrador/gestion_usuarios.html')
 
 # Vista Administrador Gestion Usuarios -crear usuario
-def  crear_usuario_admin(request):
+def crear_usuario_admin(request):
     if request.method == 'POST':
-        id_user = request.POST.get('id_user')
-        nombres = request.POST.get('nombres')
-        apellidos = request.POST.get('apellidos')
-        correo = request.POST.get('correo')
-        telefono = request.POST.get('telefono')
-        contrasena = request.POST.get('contrasena')
-        rol = request.POST.get('rol')
+        form = RegistroUsuarioAdminForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_usuarios_admin')
+    else:
+        form = RegistroUsuarioAdminForm()
 
-        nuevo_usuario = RegistroUsuario(
-            id_user=id_user,
-            nombres=nombres,
-            apellidos=apellidos,
-            correo=correo,
-            telefono=telefono,
-            contrasena=contrasena,
-            rol=rol,
-        )
-        # Guardar la instancia en la base de datos
-        nuevo_usuario.save()
-    return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
+    return render(request, 'administrador/gestion_usuarios/crear_usuario.html', {'form': form})
 
 # Vista Administrador Gestion Usuarios -ver usuario
+@admin_required
 def ver_usuarios_admin(request):
-    usuarios = RegistroUsuario.objects.all()
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
+    # Llamo al procedimiento creado en mysql (el cuál está en la línea 432)
+    with connection.cursor() as c:
+        c.callproc('obtener_todos_usuarios')
+        resultado = c.fetchall()
+        #creo una lista vacia para almacenar "resultado":
+        usuarios = []
+        for row in resultado:
+            user_result = {}
+            for i, column in enumerate(c.description):
+                column_name = column[0]
+                #Utilizar índice entero para acceder a elementos de una tupla
+                column_value = row[i] 
+                user_result[column_name] = column_value
+            usuarios.append(user_result)
+
+    success_message = request.GET.get('success_message')
+    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', 
+                  {'usuarios': usuarios, 'success_message': success_message})
 
 
 # Vista Administrador Gestion Usuarios modificar usuario
-def modificar_usuario_admin(request, id_user):
+def modificar_usuario_admin(request, id_usuario):
+    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario) 
     if request.method == 'POST':
-        id_user = request.POST.get('id_user')
-        nombres = request.POST.get('nombres')
-        apellidos = request.POST.get('apellidos')
-        correo = request.POST.get('correo')
-        telefono = request.POST.get('telefono')
-
-        usuario = RegistroUsuario.objects.get(id_user=id_user)
-
-        # Actualizar los campos del usuario
-        usuario.nombres = nombres
-        usuario.apellidos = apellidos
-        usuario.correo = correo
-        usuario.telefono = telefono
-
-        usuario.save()
-        return redirect('ver_usuarios_admin')
-
-    else:  # Si la solicitud es GET
-        usuario = RegistroUsuario.objects.get(id_user=id_user)
-        return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
+        form = RegistroUsuarioAdminForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_usuarios_admin')
+    else:
+        form = RegistroUsuarioAdminForm(instance=usuario)
+    return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'form': form})
 
 # Vista Administrador Gestion Usuarios -eliminar usuario
+@admin_required
 def eliminar_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+    usuario = get_object_or_404(User, id=id_usuario)
     if request.method == 'POST':
         usuario.delete()
-        return redirect('ver_usuarios_admin')
+        success_message = _("Usuario eliminado con éxito")
+        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{success_message}')
+
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
@@ -678,42 +684,3 @@ def handle_response(response):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-    
-
-# Vista Vendedor Home
-def vendedor_home(request):
-    return render(request, 'vendedor/vendedor_home.html')
-
-# Vista Vendedor Gestion Reservas
-def gestion_reservas_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor.html')
-
-# Vista Vendedor Gestion Reservas -crear
-def crear_reserva_pacific_vendedor(request):
-    if request.method == 'POST':
-        id_reserva = request.POST.get('id_reserva')
-        nombre_cli = request.POST.get('nombre_cli')
-        apellidos_cli = request.POST.get('apellidos_cli')
-        rut_cli = request.POST.get('rut_cli')
-        metodo_pago = request.POST.get('metodo_pago')
-        pago_reserva = request.POST.get('pago_reserva')
-        total_restante = request.POST.get('total_restante')
-        estado_pago = request.POST.get('estado_pago')
-
-    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
-
-# Vista Vendedor Gestion Reservas -eliminar
-def eliminar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
-
-# Vista Vendedor Gestion Reservas -modificar
-def modificar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
-
-# Vista Vendedor Gestion Reservas -ver calendario
-def ver_calendario_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
-
-# Vista Vendedor Gestion Reservas -ver reserva
-def ver_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')

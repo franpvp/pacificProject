@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .views import crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin
+from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', index, name="index"),
@@ -44,4 +46,9 @@ urlpatterns = [
     path('modificar_reserva_pacific_vendedor/', modificar_reserva_pacific_vendedor, name="modificar_reserva_pacific_vendedor"),
     path('ver_calendario_pacific_vendedor/', ver_calendario_pacific_vendedor, name="ver_calendario_pacific_vendedor"),
     path('ver_reserva_pacific_vendedor/', ver_reserva_pacific_vendedor, name="ver_reserva_pacific_vendedor"),
+    path('cerrarsesionadmin/', views.cerrarsesionadmin, name='cerrarsesionadmin'),
+    path('reset_password/', auth_views.PasswordResetView.as_view(template_name="recuperacion/reset_password.html"), name="reset_password"),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="recuperacion/reset_password_sent.html"), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="recuperacion/reset_password_form.html"), name="password_reset_confirm"),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name="recuperacion/reset_password_complete.html"), name="password_reset_complete"),
 ]
