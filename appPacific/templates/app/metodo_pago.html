@@ -13,17 +13,17 @@
         <div class="col d-flex align-item-center justify-content-center">
             <div class="contenedor-reserva">
                 <h1 class="titulo-general text-center">Detalle Reserva</h1>
-                <p> Tipo habitación: <strong>{{hab_seleccionada.tipo_hab}}</strong></p>
-                <p> Fecha Llegada: <strong>{{hab_seleccionada.fecha_llegada}}</strong></p>
-                <p> Fecha Salida:  <strong>{{hab_seleccionada.fecha_salida}}</strong></p>
+                <p> Tipo habitación: <strong> {{hab_seleccionada.tipo_hab}} </strong></p>
+                <p> Fecha Llegada: <strong> {{hab_seleccionada.fecha_llegada}} </strong></p>
+                <p> Fecha Salida:  <strong> {{hab_seleccionada.fecha_salida}} </strong></p>
                 <p> Total Reserva: <strong>$ {{hab_seleccionada.total}} CLP</strong></p>
                 <p> Pago Inicial: <strong>$ {{hab_seleccionada.pago_inicial}} CLP</strong></p>
                 <p> Pago Pendiente: <strong>$ {{hab_seleccionada.pago_pendiente}} CLP</strong></p>
                 {% if hab_seleccionada.contador_adultos >= 1 and hab_seleccionada.contador_ninos > 0 %}
-                    <p> Adultos: <strong>{{hab_seleccionada.contador_adultos}}</strong></p>
-                    <p> Niños: <strong>{{hab_seleccionada.contador_ninos}}</strong></p>
+                    <p> Adultos: <strong> {{hab_seleccionada.contador_adultos}} </strong></p>
+                    <p> Niños: <strong> {{hab_seleccionada.contador_ninos}} </strong></p>
                 {% else %}
-                    <p> Adultos: <strong>{{hab_seleccionada.contador_adultos}}</strong></p>
+                    <p> Adultos: <strong> {{hab_seleccionada.contador_adultos}} </strong></p>
                 {% endif %}
                 <!-- Botón para modificar reserva (Redirigir al index)-->
                 <div class="row">
@@ -38,13 +38,13 @@
             
         </div>
     </div>
-    <form method="post" action="{% url 'metodo_pago' %}">
+    <form id="paypal-form" method="post" action="{% url 'metodo_pago' %}">
         <div class="row justify-content-center mt-4">
             <div class="col"></div>
             <div class="col-md-6 col-lg-6">
                 <p>Seleccione método de pago:</p>
                 <!-- Container for PayPal buttons -->
-                <div id="paypal-button-container" class="mt-4" style="display: flex; justify-content: center !important;"></div>
+                <div id="paypal-button-container" name="paypal" class="mt-4" style="display: flex; justify-content: center !important;"></div>
                 <!-- Container for result message -->
                 <div id="result-message"></div>
             </div>
@@ -66,4 +66,22 @@
         </div>
     </form>
 </div>
+
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: document.getElementById('amount').value // Monto de la transacción, debes ajustarlo según tus necesidades
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            // Realiza el submit del formulario al endpoint de tu vista
+            document.getElementById('paypal-form').submit();
+        }
+    }).render('#paypal-button-container');
+</script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from .views import crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin
 
 urlpatterns = [
     path('', index, name="index"),
@@ -37,4 +37,11 @@ urlpatterns = [
     path('gestion_usuarios/tipo_usuario_admin/<int:id_usuario>/', tipo_usuario_admin, name='tipo_usuario_admin'),
     path('api/orders', views.create_order, name='create_order'),
     path('api/orders/<str:order_id>/capture', views.capture_order, name='capture_order'),
+    path('vendedor_home/', vendedor_home, name="vendedor_home"),
+    path('gestion_reservas_vendedor/', gestion_reservas_vendedor, name="gestion_reservas_vendedor"),
+    path('crear_reserva_pacific_vendedor/', crear_reserva_pacific_vendedor, name="crear_reserva_pacific_vendedor"),
+    path('eliminar_reserva_pacific_vendedor/', eliminar_reserva_pacific_vendedor, name="eliminar_reserva_pacific_vendedor"),
+    path('modificar_reserva_pacific_vendedor/', modificar_reserva_pacific_vendedor, name="modificar_reserva_pacific_vendedor"),
+    path('ver_calendario_pacific_vendedor/', ver_calendario_pacific_vendedor, name="ver_calendario_pacific_vendedor"),
+    path('ver_reserva_pacific_vendedor/', ver_reserva_pacific_vendedor, name="ver_reserva_pacific_vendedor"),
 ]
