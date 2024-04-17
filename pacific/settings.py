@@ -97,18 +97,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'BBDD',
         'USER': 'root',
-<<<<<<< HEAD
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'unix_socket': '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
         },
-=======
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '3305',
->>>>>>> c723bc6aedbecf07bdc98c7c8775f603b0d5ef4e
     }
 }
 
@@ -164,8 +158,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< HEAD
-=======
+
 
 # Ajustes del correo:
 
@@ -178,5 +171,3 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER')
 EMAIL_SUBJECT_PREFIX = "Password recovery"
 
-
->>>>>>> c723bc6aedbecf07bdc98c7c8775f603b0d5ef4e

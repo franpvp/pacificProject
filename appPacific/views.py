@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+
+from appPacific.decorators import admin_required
 from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
 from django.http import HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
@@ -19,7 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.translation import activate
 from django.db.models import F
-
+import re
 from appPacific import models
 
 
@@ -684,3 +686,57 @@ def handle_response(response):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+@admin_required
+def cerrarsesionadmin(request):
+    logout(request)
+    return redirect('home')
+    
+
+# DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
+# DELIMITER $
+# CREATE PROCEDURE obtener_todos_usuarios()
+# BEGIN
+# 	SELECT * FROM auth_user;
+# END $
+# DELIMITER ;
+# CALL obtener_todos_usuarios();   
+    
+
+# Vista Vendedor Home
+def vendedor_home(request):
+    return render(request, 'vendedor/vendedor_home.html')
+
+# Vista Vendedor Gestion Reservas
+def gestion_reservas_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -crear
+def crear_reserva_pacific_vendedor(request):
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        nombre_cli = request.POST.get('nombre_cli')
+        apellidos_cli = request.POST.get('apellidos_cli')
+        rut_cli = request.POST.get('rut_cli')
+        metodo_pago = request.POST.get('metodo_pago')
+        pago_reserva = request.POST.get('pago_reserva')
+        total_restante = request.POST.get('total_restante')
+        estado_pago = request.POST.get('estado_pago')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -eliminar
+def eliminar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -modificar
+def modificar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver calendario
+def ver_calendario_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver reserva
+def ver_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
