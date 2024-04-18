@@ -5,8 +5,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+
+from appPacific.decorators import admin_required
 from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
@@ -19,12 +21,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.translation import activate
 from django.db.models import F
+import random
+import string
+from django.contrib.sessions.models import Session
+import re
 from appPacific import models
 import re
-from .decorators import admin_required
 from django.utils.translation import gettext as _
-from django.db import connection
+from .decorators import admin_required
 from urllib.parse import urlencode
+from django.db import connection
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.views.generic import View
 
 
 # Create your views here.
@@ -41,6 +50,11 @@ def index(request):
         contador_ninos_str = request.POST.get('contador_ninos')
         contador_ninos = int(contador_ninos_str) if contador_ninos_str else 0
 
+        # Validar que los campos de fechas no estén vacíos
+        if not fecha_llegada or not fecha_salida:
+            messages.error(request, "Por favor, completa las fechas de llegada y salida")
+            return redirect('index')
+
         # Guardar datos de búsqueda en la sesión
         request.session['fecha_llegada'] = fecha_llegada
         request.session['fecha_salida'] = fecha_salida
@@ -56,7 +70,6 @@ def index(request):
     idioma = request.LANGUAGE_CODE
     # Obtener todas las habitaciones
     habitaciones = Habitacion.objects.all()
-    print(habitaciones)
 
     for habitacion in habitaciones:
         if idioma == 'en':
@@ -77,27 +90,31 @@ def registro(request):
             password2 = request.POST['password2']
 
             if not (nombre and apellidos and correo and celular and password1 and password2):
-                messages.error(request, "Por favor, complete todos los campos.")
+                messages.error(request, _("Por favor, complete todos los campos."))
                 return redirect('registro')
 
+            if not re.match(r'^[a-zA-Z\s-]+$', nombre):
+                messages.error(request, _("El nombre deben ser sólo letras"))
             if not re.match(r'^[a-zA-Z\s-]+$', nombre):
                 messages.error(request, "El nombre deben ser sólo letras")
                 return redirect('registro')
             
             if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
+                messages.error(request, _("Los apellidos deben ser sólo letras"))
+            if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
                 messages.error(request, "Los apellidos deben ser sólo letras")
                 return redirect('registro')
 
             if password1 != password2:
-                messages.error(request, "Las contraseñas no coinciden")
+                messages.error(request, _("Las contraseñas no coinciden"))
                 return redirect('registro')
             
             if User.objects.filter(username=usuario).exists():
-                messages.error(request, "Nombre de usuario ya existe")
+                messages.error(request, _("Nombre de usuario ya existe"))
                 return redirect('registro')
             
             if User.objects.filter(email=correo).exists():
-                messages.error(request, "Ya existe una cuenta con ese correo")
+                messages.error(request, _("Ya existe una cuenta con ese correo"))
                 return redirect('registro')
 
             user = User.objects.create_user(username=usuario,password=password1)
@@ -108,10 +125,10 @@ def registro(request):
             login(request,user)
 
             messages.success(request, "Registro Exitoso, por favor inicie sesion")
-            return redirect('iniciosesion')
+            return redirect('index')
         
         except IntegrityError:  
-            messages.error(request, "Error al registrar usuario. Por favor, inténtelo de nuevo.")
+            messages.error(request, _("Error al registrar usuario. Por favor, inténtelo de nuevo."))
             return redirect('registro')
     
     return render(request, 'registration/registro.html')
@@ -123,7 +140,7 @@ def iniciosesion(request):
             password1 = request.POST.get('password')
 
             if not (usuario and password1):
-                messages.error(request,"Debe llenar los campos indicados")
+                messages.error(request, _("Debe llenar los campos indicados"))
                 return render(request,'app/login.html')
 
             user = authenticate(request,username=usuario,password=password1)
@@ -131,26 +148,24 @@ def iniciosesion(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,"Inicio de sesión correcta")
-                # name = request.user.first_name
-                # request.session['id_user'] = user.id
-                # # Obtener habitaciones
-                # habitaciones = Habitacion.objects.all()
-                # return render(request,'app/index.html',{'name':name, 'habitaciones': habitaciones})
-            
+                name = request.user.first_name
+                request.session['id_user'] = user.id
+
+                # messages.success(request, _("Inicio de sesión correcta"))
+                
                 #Valida si el user es superusuario:
                 if user.is_superuser:
                     name = request.user.first_name
                     return render(request, 'administrador/administrador_home.html', {'nameadmin':name})
                 else:
                     name = request.user.first_name
-                    return render(request,'app/home.html', {'name':name})
-
+                    return render(request,'app/index.html', {'name':name})
             else:
-                messages.error(request,"Usuario o contraseña no es correcta")
+                messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
             
         except Exception as e:
-            messages.error(request, "Error al iniciar sesión. Por favor, inténtelo de nuevo.")
+            messages.error(request, _("Error al iniciar sesión. Por favor, inténtelo de nuevo."))
             return render(request, 'app/login.html')
 
     return render(request, 'app/login.html')
@@ -253,6 +268,24 @@ def metodo_pago(request):
 
     return render(request, 'app/metodo_pago.html', {'hab_seleccionada':hab_seleccionada})
 
+
+def generar_codigo(length=8):
+    caracteres = string.ascii_letters + string.digits
+    codigo = ''.join(random.choice(caracteres) for _ in range(length))
+    return codigo
+
+def obtener_o_generar_codigo(request):
+    if 'codigo_referencia' in request.session:
+        # Si ya hay un código almacenado en la sesión, lo devuelve
+        codigo_referencia = request.session['codigo_referencia']
+    else:
+        # Si no hay un código almacenado en la sesión, genera uno nuevo
+        codigo_referencia = generar_codigo()
+        # Almacena el código en la sesión para futuras solicitudes
+        request.session['codigo_referencia'] = codigo_referencia
+    return codigo_referencia
+
+
 # Vista Transferencia Bancaria
 def transferencias(request):
     datos_bancarios = DatosBancarios.objects.get(pk=1)
@@ -261,21 +294,53 @@ def transferencias(request):
     nro_cuenta = datos_bancarios.nro_cuenta
     correo_banco = datos_bancarios.correo_banco
     pago_inicial = request.session.get('pago_inicial')
+    id_reserva = request.session.get('id_reserva')
+
+    codigo_referencia = obtener_o_generar_codigo(request)
 
     datos = {
         'beneficiario': beneficiario,
         'cuenta': cuenta, 
         'nro_cuenta': nro_cuenta,
         'correo_banco': correo_banco,
-        'pago_inicial': pago_inicial
+        'pago_inicial': pago_inicial,
+        'codigo_referencia': codigo_referencia
     }
-    
+
+    id_user = request.session.get('id_user')
+    # Obtener fecha_llegada
+    fecha_llegada = request.session.get('fecha_llegada')
+    # Obtener fecha_salida
+    fecha_salida = request.session.get('fecha_salida')
+    # Obtener cant_adultos
+    cant_adultos = request.session.get('contador_adultos')
+    # Obtener cant_ninos
+    cant_ninos = request.session.get('contador_ninos')
+    # Tipo de pago por transferencia bancaria
+    tipo_metodo_pago = 'Transferencia Bancaria'
+    # Obtener total de la reserva
+    total = request.session.get('total')
+    # Obtener mediante session el pago_pendiente de la reserva
+    pago_pendiente = request.session.get('pago_pendiente')
+
+    # Fechas formateadas
+    fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
+    fecha_salida_formateada = request.session.get('fecha_salida_hidden')
 
     return render(request, 'app/transferencias.html', {'datos': datos})
 
 # Vista Reserva Realizada
 def reserva_realizada(request):
-    return render(request, 'app/reserva_realizada.html')
+    id_user = request.session.get('id_user')
+    datos_usuario = User.objects.get(pk = id_user)
+
+    # Obtener el Order ID de PayPal
+    order_id = request.session.get('order_id')
+
+    datos_reserva = Reserva.objects.get(id_user = id_user, order_id = order_id)
+    return render(request, 'app/reserva_realizada.html', {'datos_reserva': datos_reserva, 'datos_usuario': datos_usuario})
+
+
 
 # Vista Nosotros
 def nosotros(request):
@@ -329,11 +394,12 @@ def crear_habitacion(request):
         habitacion.save()
 
         # Mostrar un mensaje de éxito
-        messages.success(request, '¡La habitación se creó exitosamente!')
+        messages.success(request, _('¡La habitación se creó exitosamente!'))
     return render(request, 'administrador/gestion_habitaciones/crear_habitacion.html')
 
 
 # Vista Administrador Gestion Habitaciones-eliminar
+@admin_required
 @admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
@@ -366,7 +432,7 @@ def modificar_habitacion(request):
         habitacion.precio = precio
 
         habitacion.save()
-    habitaciones = Habitacion.objects.all();
+    habitaciones = Habitacion.objects.all()
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
 
 # Vista Administrador Gestion Habitaciones-ver
@@ -427,7 +493,8 @@ def ver_calendario_pacific(request):
 # Vista Administrador Gestion Reservas -ver reserva
 @admin_required
 def ver_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html')
+    reservas = Reserva.objects.all()
+    return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html', {'reservas': reservas})
 
 # Vista Administrador Gestion Usuarios
 @admin_required
@@ -564,8 +631,6 @@ def tipo_usuario_admin(request, id_usuario):
     else:
         return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario})
     
-
-
 # Vistas PAYPAL
 @csrf_exempt
 @require_POST
@@ -618,73 +683,70 @@ def capture_order(request, order_id):
                 "Authorization": f"Bearer {access_token}"
             }
         )
-        
-
-        # Capturando el tipo de tarjeta desde la respuesta de PayPal
         response_data = response.json()
-        capture_id = response_data.get("id")
-        response_two = requests.get(
-            f"{settings.PAYPAL_BASE_URL}/v2/payments/captures/{capture_id}",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}"
-            }
-        )
-        response_data_two = response_two.json()
-        print(response_data)
-        print(response_data_two)
-        tipo_metodo_pago = response_data.get("card_type")
+        # Guardar el Order Id de Paypal
+        request.session['order_id'] = order_id
 
-        # Obtener Id de la Habitacion
-        id_hab = request.session.get('id_hab')
-        # Obtener Id Usuario
-        id_user = request.session.get('id_user')
-        print("ID usuario ", id_user)
-        # Obtener fecha_llegada
-        fecha_llegada = request.session.get('fecha_llegada')
-        # Obtener fecha_salida
-        fecha_salida = request.session.get('fecha_salida')
-        # Obtener cant_adultos
-        cant_adultos = request.session.get('contador_adultos')
-        # Obtener cant_ninos
-        cant_ninos = request.session.get('contador_ninos')
-        # Obtener total
-        total = request.session.get('total')
+        # Verificar si la captura fue exitosa
+        if response.status_code == 201 and response_data.get('status') == 'COMPLETED':
+            # Obtener Id de la Habitacion
+            id_hab = request.session.get('id_hab')
+            # Obtener Id Usuario
+            id_user = request.session.get('id_user')
+            print("ID usuario logeado: ", id_user)
 
-        # Con el Id de la habitacion obtener el registro de datos
-        row_hab = Habitacion.objects.get(pk=id_hab)
-        # Mediante session obtener el pago_inicial de la reserva
-        pago_inicial = request.session.get('pago_inicial')
-        # Obtener mediante session el pago_pendiente de la reserva
-        pago_pendiente = request.session.get('pago_pendiente')
+            # Obtener Order ID de Paypal
+            order_id = request.session.get('order_id')
+            print("Order ID: ", order_id)
 
-        # Fechas formateadas
-        fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
-        fecha_salida_formateada = request.session.get('fecha_salida_hidden')
+            # Obtener fecha_llegada
+            fecha_llegada = request.session.get('fecha_llegada')
+            # Obtener fecha_salida
+            fecha_salida = request.session.get('fecha_salida')
+            # Obtener cant_adultos
+            cant_adultos = request.session.get('contador_adultos')
+            # Obtener cant_ninos
+            cant_ninos = request.session.get('contador_ninos')
+            tipo_hab = request.session.get('tipo_hab')
+            tipo_metodo_pago = 'PayPal'
+            # Obtener total
+            total = request.session.get('total')
+            # Con el Id de la habitacion obtener el registro de datos
+            row_hab = Habitacion.objects.get(pk=id_hab)
+            # Mediante session obtener el pago_inicial de la reserva
+            pago_inicial = request.session.get('pago_inicial')
+            # Obtener mediante session el pago_pendiente de la reserva
+            pago_pendiente = request.session.get('pago_pendiente')
 
-        # Crear objeto Reserva
-        reserva = Reserva(
-            id_user = id_user,
-            fecha_llegada = fecha_llegada_formateada,
-            fecha_salida = fecha_salida_formateada,
-            cant_adultos = cant_adultos,
-            cant_ninos = cant_ninos,
-            tipo_metodo_pago = tipo_metodo_pago,
-            total = total,
-            pago_inicial = pago_inicial,
-            pago_pendiente = pago_pendiente,
-        )
+            # Fechas formateadas
+            fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
+            fecha_salida_formateada = request.session.get('fecha_salida_hidden')
 
-        # Guardar objeto Reserva en la base de datos
-        reserva.save()
+            # Crear objeto Reserva
+            reserva = Reserva(
+                id_user = id_user,
+                order_id = order_id,
+                fecha_llegada = fecha_llegada_formateada,
+                fecha_salida = fecha_salida_formateada,
+                cant_adultos = cant_adultos,
+                cant_ninos = cant_ninos,
+                tipo_hab = tipo_hab,
+                tipo_metodo_pago = tipo_metodo_pago,
+                total = total,
+                pago_inicial = pago_inicial,
+                pago_pendiente = pago_pendiente,
+            )
+            # Crear Reporte Reserva
+            reporte_reserva = ReporteReserva(
+                dia_ingreso = fecha_llegada_formateada,
+                dia_salida = fecha_salida_formateada
+            )
+            # Guardar objeto Reserva y Reporte Reserva en la base de datos
+            reserva.save()
+            reporte_reserva.save()
 
-        # Crear Reporte Reserva
-        reporte_reserva = ReporteReserva(
-            dia_ingreso = fecha_llegada,
-            hora_ingreso = hora_ingreso, #Puede ser None
-            dia_salida = fecha_salida, 
-            hora_salida = hora_salida #Puede ser None
-        )
+        else:
+            return JsonResponse(response_data, status=response.status_code)
 
         return handle_response(response)
 
@@ -720,12 +782,11 @@ def handle_response(response):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-    
+
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
-    return redirect('home')
-    
+    return redirect('index')
 
 # DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
 # DELIMITER $
@@ -735,3 +796,42 @@ def cerrarsesionadmin(request):
 # END $
 # DELIMITER ;
 # CALL obtener_todos_usuarios();   
+    
+
+# Vista Vendedor Home
+def vendedor_home(request):
+    return render(request, 'vendedor/vendedor_home.html')
+
+# Vista Vendedor Gestion Reservas
+def gestion_reservas_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -crear
+def crear_reserva_pacific_vendedor(request):
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        nombre_cli = request.POST.get('nombre_cli')
+        apellidos_cli = request.POST.get('apellidos_cli')
+        rut_cli = request.POST.get('rut_cli')
+        metodo_pago = request.POST.get('metodo_pago')
+        pago_reserva = request.POST.get('pago_reserva')
+        total_restante = request.POST.get('total_restante')
+        estado_pago = request.POST.get('estado_pago')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -eliminar
+def eliminar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -modificar
+def modificar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver calendario
+def ver_calendario_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver reserva
+def ver_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')

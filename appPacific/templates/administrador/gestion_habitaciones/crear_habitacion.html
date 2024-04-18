@@ -13,9 +13,9 @@
             <nav aria-label="breadcrumb">
                 <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'gestion_habitaciones' %}">Gestión Habitaciones</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Crear Habitación</li>
+                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">{% trans "Inicio"%}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'gestion_habitaciones' %}">{% trans "Gestión Habitaciones"%}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Crear Habitación"%}</li>
                 </ol>
             </nav>
         </div>
@@ -52,7 +52,7 @@
                 <!-- Input Descripción Inglés -->
                 <div class="form-floating mb-3">
                     <textarea class="form-control" placeholder="{% trans 'Descripción en inglés' %}" id="descripcion_en" name="descripcion_en" style="height: 100px"></textarea>
-                    <label for="descripcion_en">{% trans "Descripción en inglés" %}</label>
+                    <label for="descripcion_en">{% trans "Descripción en inglés"%}</label>
                 </div>
                 <!-- Input Cantidad Disponibles -->
                 <div class="form-floating mb-3">

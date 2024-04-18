@@ -1,0 +1,66 @@
+{% extends 'vendedor/base_vendedor.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% load static %}
+{% load i18n %}
+
+{% block contenido %}
+<div class="container-fluid" style="padding-top: 160px;">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Cancelar Reserva"%}</h2>
+        </div>
+    </div>
+    <form id="formulario-cancelar" method="post" onsubmit="handleSubmit(event)">
+        {% csrf_token %}
+        <div class="row justify-content-center mt-3 mb-3">
+            <div class="row justify-content-center mt-3 mb-3">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{% trans "ID Reserva"%}</th>
+                                    <th scope="col">{% trans "Tipo Habitación"%}</th>
+                                    <th scope="col">{% trans "Cantidad"%}</th>
+                                    <th scope="col">{% trans "Pago Reserva"%}</th>
+                                    <th scope="col">{% trans "Total Restante"%}</th>
+                                    <th scope="col">{% trans "Estado Pago"%}</th>
+                                    <th scope="col">{% trans "Acciones"%}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reserva in reservas %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td>{{ reserva.id_reserva }}</td>
+                                        <td>{{ reserva.tipo_hab }}</td>
+                                        <td>{{ reserva.cantidad }}</td>
+                                        <td>{{ reserva.pago_reserva }}</td>
+                                        <td>$ {{ reserva.total_restante }} CLP</td>
+                                        <td>$ {{ reserva.estado_pago }} CLP</td>
+                                        <td>
+                                            <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
+                                            <button type="submit" name="cancelar_reserva" class="btn btn-danger">{% trans "Eliminar"%}</button>
+                                        </td>
+                                    </tr>
+                                </form>  
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
