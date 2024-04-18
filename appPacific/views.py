@@ -34,6 +34,9 @@ from django.db import connection
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.views.generic import View
+from rest_framework import generics
+from .models import MetodoPago, Reserva, ReporteReserva, TipoHabitacion, Habitacion, DatosBancarios
+from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
 
 
 # Create your views here.
@@ -835,3 +838,29 @@ def ver_calendario_pacific_vendedor(request):
 # Vista Vendedor Gestion Reservas -ver reserva
 def ver_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+
+# Serializadores API REST
+
+class MetodoPagoListCreate(generics.ListCreateAPIView):
+    queryset = MetodoPago.objects.all()
+    serializer_class = MetodoPagoSerializer
+
+class ReservaListCreate(generics.ListCreateAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReporteReservaListCreate(generics.ListCreateAPIView):
+    queryset = ReporteReserva.objects.all()
+    serializer_class = ReporteReservaSerializer
+
+class TipoHabitacionListCreate(generics.ListCreateAPIView):
+    queryset = TipoHabitacion.objects.all()
+    serializer_class = TipoHabitacionSerializer
+
+class HabitacionListCreate(generics.ListCreateAPIView):
+    queryset = Habitacion.objects.all()
+    serializer_class = HabitacionSerializer
+
+class DatosBancariosListCreate(generics.ListCreateAPIView):
+    queryset = DatosBancarios.objects.all()
+    serializer_class = DatosBancariosSerializer
