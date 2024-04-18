@@ -33,6 +33,7 @@ class MetodoPago(models.Model):
 class Reserva(models.Model):
     id_reserva = models.AutoField(primary_key=True, unique=True, verbose_name="Id reserva")
     id_user = models.CharField(max_length=20, verbose_name="Id Usuario")
+    order_id = models.CharField(max_length=100, verbose_name="Id Orden PayPal")
     fecha_llegada = models.DateField(null=False, verbose_name="Fecha Llegada")
     fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
     cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
