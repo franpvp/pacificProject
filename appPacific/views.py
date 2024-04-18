@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+
+from appPacific.decorators import admin_required
 from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
@@ -22,6 +24,7 @@ from django.db.models import F
 import random
 import string
 from django.contrib.sessions.models import Session
+import re
 from appPacific import models
 import re
 from django.utils.translation import gettext as _
@@ -92,10 +95,14 @@ def registro(request):
 
             if not re.match(r'^[a-zA-Z\s-]+$', nombre):
                 messages.error(request, _("El nombre deben ser sólo letras"))
+            if not re.match(r'^[a-zA-Z\s-]+$', nombre):
+                messages.error(request, "El nombre deben ser sólo letras")
                 return redirect('registro')
             
             if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
                 messages.error(request, _("Los apellidos deben ser sólo letras"))
+            if not re.match(r'^[a-zA-Z\s-]+$', apellidos):
+                messages.error(request, "Los apellidos deben ser sólo letras")
                 return redirect('registro')
 
             if password1 != password2:
@@ -116,8 +123,8 @@ def registro(request):
             user.email = correo
             user.save()
             login(request,user)
-            request.session['id_user'] = user.id
-            # messages.success(request, "Registro Exitoso, por favor inicie sesion")
+
+            messages.success(request, "Registro Exitoso, por favor inicie sesion")
             return redirect('index')
         
         except IntegrityError:  
@@ -140,7 +147,7 @@ def iniciosesion(request):
 
             if user is not None:
                 login(request,user)
-                # messages.success(request,"Inicio de sesión correcta")
+                messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
                 request.session['id_user'] = user.id
 
@@ -166,7 +173,7 @@ def iniciosesion(request):
 @login_required
 def cerrarsesion(request):
     logout(request)
-    return redirect('index')
+    return redirect('home')
 
 # Vistas Relacionadas con el usuario registrado:
 @login_required
@@ -391,6 +398,7 @@ def crear_habitacion(request):
 
 # Vista Administrador Gestion Habitaciones-eliminar
 @admin_required
+@admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -465,6 +473,7 @@ def eliminar_reserva_pacific(request):
 def modificar_reserva_pacific(request):
     return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
 
+@admin_required
 def modificar_reporte_reserva(request):
     # Ingresar en buscador el id_reserva para filtrar los reportes
     id_reserva = requests.POST.get('id_reserva')
@@ -542,24 +551,9 @@ def crear_usuario_admin(request):
 # Vista Administrador Gestion Usuarios -ver usuario
 @admin_required
 def ver_usuarios_admin(request):
-    # Llamo al procedimiento creado en mysql (el cuál está en la línea 432)
-    with connection.cursor() as c:
-        c.callproc('obtener_todos_usuarios')
-        resultado = c.fetchall()
-        #creo una lista vacia para almacenar "resultado":
-        usuarios = []
-        for row in resultado:
-            user_result = {}
-            for i, column in enumerate(c.description):
-                column_name = column[0]
-                #Utilizar índice entero para acceder a elementos de una tupla
-                column_value = row[i] 
-                user_result[column_name] = column_value
-            usuarios.append(user_result)
-            
-    success_message = request.GET.get('success_message')
-    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', 
-                {'usuarios': usuarios, 'success_message': success_message})
+    usuarios = RegistroUsuario.objects.all()
+    return render(request, 'administrador/gestion_usuarios/ver_usuario.html', {'usuarios': usuarios})
+
 
 # Vista Administrador Gestion Usuarios modificar usuario
 @admin_required
@@ -598,14 +592,12 @@ def modificar_usuario_admin(request, id_usuario):
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -eliminar usuario
+@admin_required
 def eliminar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(User, id=id_usuario)
     if request.method == 'POST':
         usuario.delete()
-        success_message = _("Usuario eliminado con éxito")
-        #encoded_success_message = urlencode({'success_message': success_message})
-        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{success_message}')
-
+        return redirect('ver_usuarios_admin')
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
@@ -777,3 +769,50 @@ def cerrarsesionadmin(request):
     logout(request)
     return redirect('index')
 
+# DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
+# DELIMITER $
+# CREATE PROCEDURE obtener_todos_usuarios()
+# BEGIN
+# 	SELECT * FROM auth_user;
+# END $
+# DELIMITER ;
+# CALL obtener_todos_usuarios();   
+    
+
+# Vista Vendedor Home
+def vendedor_home(request):
+    return render(request, 'vendedor/vendedor_home.html')
+
+# Vista Vendedor Gestion Reservas
+def gestion_reservas_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -crear
+def crear_reserva_pacific_vendedor(request):
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        nombre_cli = request.POST.get('nombre_cli')
+        apellidos_cli = request.POST.get('apellidos_cli')
+        rut_cli = request.POST.get('rut_cli')
+        metodo_pago = request.POST.get('metodo_pago')
+        pago_reserva = request.POST.get('pago_reserva')
+        total_restante = request.POST.get('total_restante')
+        estado_pago = request.POST.get('estado_pago')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -eliminar
+def eliminar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -modificar
+def modificar_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver calendario
+def ver_calendario_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+
+# Vista Vendedor Gestion Reservas -ver reserva
+def ver_reserva_pacific_vendedor(request):
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')

@@ -20,11 +20,13 @@
                     <thead>
                         <tr class="text-center">
                             <th scope="col">{% trans "ID Usuario"%}</th>
-                            <th scope="col">{% trans "ID Nombre"%}</th>
-                            <th scope="col">{% trans "ID Apellidos"%}</th>
-                            <th scope="col">{% trans "ID Correo Electrónico"%}</th>
-                            <th scope="col">{% trans "ID Super Usuario"%}</th>
-                            <th scope="col">{% trans "ID Acciones"%}</th>
+                            <th scope="col">{% trans "Nombre"%}</th>
+                            <th scope="col">{% trans "Apellidos"%}</th>
+                            <th scope="col">{% trans "Correo Electrónico"%}</th>
+                            <th scope="col">{% trans "Rol"%}</th>
+                            <th scope="col">{% trans "Super Usuario"%}
+                            <th scope="col">{% trans "Acciones"%}</th>
+                            {% comment %} <th scope="col">{% trans "Celular"%}</th> {% endcomment %}
                         </tr>
                     </thead>
                     <tbody>
@@ -34,18 +36,28 @@
                             <td>{{ usuario.first_name }}</td>
                             <td>{{ usuario.last_name }}</td>
                             <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.rol }}</td>
                             <td>{{ usuario.is_superuser }}</td>
                             <td>
                                 <!-- Botón para editar -->
-                                <a href="{% url 'modificar_usuario_admin' usuario.id %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i></i>{% trans "Editar"%}</a>
+                                <a href="{% url 'modificar_usuario_admin' usuario.id %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i>{% trans "Editar"%}</a>
                                 <!-- Botón para eliminar -->
-                                <a href="{% url 'eliminar_usuario_admin' usuario.id %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i></i>{% trans "Eliminar"%}</a>
+                                <a href="{% url 'eliminar_usuario_admin' usuario.id %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i>{% trans "Eliminar"%}</a>
+                                <!-- Botón para tipo de usuario -->
+                                <a href="{% url 'tipo_usuario_admin' usuario.id %}" class="btn btn-secondary btn-sm"><i class='bx bx-cog'></i>{% trans "Privilegios"%}</a>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+            {% if success_message %}
+            <div class="alert alert-success" role="alert">
+                {% for message in success_message %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
             {% if success_message %}
             <div class="alert alert-success" role="alert">
                 {% for message in success_message %}

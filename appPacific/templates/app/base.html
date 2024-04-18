@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'css/metodo_pago.css' %}">
     <link rel="stylesheet" href="{% static 'css/transferencias.css' %}">
     <link rel="stylesheet" href="{% static 'css/switch.css' %}">
+    <link rel="stylesheet" href="{% static 'css/switch.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'css/crear_usuario.css' %}"> -->
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -100,7 +101,7 @@
                             <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">{% trans "Contacto" %}</a>
                         </li>
                     </ul>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex justify-content-center align-item-center">
                         <!-- Logo Cambio de Idioma -->
                         <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
                             <input name="next" type="hidden" value="{{ redirect_to }}">
@@ -118,26 +119,30 @@
                         </form>
                         <!--INICIO DE SESION Y REGISTRO-->
                         {% if not user.is_authenticated %}
-                        <!-- Botón Login -->
-                        <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                style="width: 30px; height: 30px; margin-right: 15px;">
-                            {% trans "Iniciar Sesión"%}
-                        </a>
-                        <!-- Botón Registro -->
-                        <a href="{% url 'registro' %}" class="btn-reg ms-2">
-                            {% trans "Regístrate"%}
-                        </a>
+                            <!-- Botón Login -->
+                            <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
+                                <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
+                                    style="width: 30px; height: 30px; margin-right: 15px;">
+                                {% trans "Iniciar Sesión"%}
+                            </a>
+                            <!-- Botón Registro -->
+                            <a href="{% url 'registro' %}" class="btn-reg ms-2">
+                                {% trans "Regístrate"%}
+                            </a>
                         {% else %}
-                        <a href="{% url 'misreservas' %}" class="btn-reg ms-2">
-                            {% trans "Mis Reservas"%}
-                        </a>
-                        <a href="{% url 'misdatos' %}" class="btn-login me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                style="width: 30px; height: 30px; margin-right: 15px;">
-                            {% trans "Datos Personales"%}
-                        </a>
+                            <a href="{% url 'misreservas' %}" class="btn-reg ms-2">
+                                {% trans "Mis Reservas"%}
+                            </a>
+                            <a href="{% url 'misdatos' %}" class="btn-login me-2">
+                                <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
+                                    style="width: 30px; height: 30px; margin-right: 15px;">
+                                {% trans "Datos Personales"%}
+                            </a>
                         {% endif %}
+                        <li class="switch">
+                            <i class="bx bxs-sun"></i>
+                            <i class="bx bxs-moon"></i>
+                        </li>
                     </div>
                 </div>
             </div>
@@ -175,6 +180,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AWgG5g7s-D_KZzah1gTofJ9r7Y8b-KUQvwLkDM74OmlMKJ39xVky-sWR0w6hNXHAQ3e1wxrgL1JCMzMJ&currency=USD"></script>
     <script src="{% static 'js/checkout.js' %}"></script>
     <script src="{% static 'js/darktheme.js' %}"></script>
+
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
