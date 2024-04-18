@@ -22,15 +22,15 @@
             </div>
         </div>
         <div class="col d-flex flex-column align-items-center">
-            <h1 class="mt-4" style="font-size: 22px;">Detalle Reserva</h1>
+            <h1 class="mt-4" style="font-size: 22px;">{% trans "Detalle Reserva" %}</h1>
             <div class="datos-reserva mt-3">
                 <table class="table">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Id Reserva</th>
-                            <th scope="col">Tipo Habitación</th>
-                            <th scope="col">Pago Reserva</th>
-                            <th scope="col">Total Restante</th>
+                            <th scope="col">{% trans "Id Reserva" %}</th>
+                            <th scope="col">{% trans "Tipo Habitación" %}</th>
+                            <th scope="col">{% trans "Pago Reserva" %}</th>
+                            <th scope="col">{% trans "Total Restante" %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,7 +66,7 @@
         <div class="col">
             <div class="d-flex justify-content-center">
                 <a href="{% url 'index' %}">
-                    <button class="btn btn-primary" type="button">Volver al inicio</button>
+                    <button class="btn btn-primary" type="button">{% trans "Volver al inicio" %}</button>
                 </a>
             </div>
         </div>

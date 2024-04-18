@@ -1,11 +1,48 @@
 {% extends 'administrador/base_administrador.html' %}
-{% load static %}
 {% load i18n %}
 {% block css %}
+<!-- Puedes agregar estilos personalizados aquí si es necesario -->
 {% endblock %}
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-5 mb-3 text-center">{% trans "Modificar Usuario"%}</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="table-responsive table-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">{% trans "ID Usuario"%}</th>
+                                <th scope="col">{% trans "Nombre"%}</th>
+                                <th scope="col">{% trans "Apellidos"%}</th>
+                                <th scope="col">{% trans "Correo Electrónico"%}</th>
+                                <th scope="col">{% trans "Celular"%}</th>
+                                <th scope="col">{% trans "Acciones"%}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ usuario.id_user }}</td>
+                                <td><input class="editable-input form-control" type="text" name="nombres" id="nombres" value="{{ usuario.nombres }}"></td>
+                                <td><input class="editable-input form-control" type="text" name="apellidos" id="apellidos" value="{{ usuario.apellidos }}"></td>
+                                <td><input class="editable-input form-control" type="text" name="correo" id="correo" value="{{ usuario.correo }}"></td>
+                                <td><input class="editable-input form-control" type="text" name="telefono" id="telefono" value="{{ usuario.telefono }}"></td>
+                                <td>
+                                    <input type="hidden" name="id_user" value="{{ usuario.id_user }}">
+                                    <button type="submit" class="btn btn-warning">{% trans "Guardar Cambios"%}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
     <div class="row justify-content-center mt-4">
         <h1 class="titulo-general text-center">{% trans "Modificar Usuario"%}</h1>
         <div class="col-lg-6 reg-box d-flex align-item-center justify-content-center">
@@ -15,22 +52,22 @@
                 <!-- Input Nombre -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="nombres" name="nombres" placeholder="nombre" required>
-                    <label for="nombres">{% trans "Nombre"%}</label>
+                    <label for="nombres">Nombre</label>
                 </div>
                 <!-- Input Apellidos -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" required>
-                    <label for="apellidos">{% trans "Apellidos"%}</label>
+                    <label for="apellidos">Apellidos</label>
                 </div>
                 <!-- Input Username -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="nombreusuario" placeholder="Nombre usuario" name="nombreusuario">
-                    <label for="nombreusuario">{% trans "Nombre usuario"%}</label>
+                    <label for="nombreusuario">Nombre usuario</label>
                 </div>
                 <!-- Input Correo Electrónico -->
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" required>
-                    <label for="correo">{% trans "Correo Electrónico"%}</label>
+                    <label for="correo">Correo Electrónico</label>
                 </div>
                 <!-- Checkbox Super Usuario -->
                 <div class="form-check mb-3">
@@ -50,7 +87,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    // No se requiere ningún script adicional
-</script>
+<!-- Puedes agregar scripts personalizados aquí si es necesario -->
 {% endblock %}

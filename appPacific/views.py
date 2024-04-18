@@ -28,6 +28,10 @@ from django.utils.translation import gettext as _
 from .decorators import admin_required
 from urllib.parse import urlencode
 from django.db import connection
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.views.generic import View
+
 
 # Create your views here.
 
