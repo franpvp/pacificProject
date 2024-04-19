@@ -233,6 +233,9 @@ document.addEventListener('click', function(event) {
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener todos los elementos de precio
     const precios = document.querySelectorAll('.precio');
+    
+    // Definir la traducción de "noche" según el idioma actual
+    const traduccionNoche = idioma === "en" ? "night" : "noche";
 
     // Iterar sobre cada elemento de precio
     precios.forEach(function(precioElement) {
@@ -242,8 +245,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir el precio sin formato a un número y formatearlo con el formato 99.999
         const precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CL');
 
-        // Actualizar el contenido del elemento con el precio formateado
-        precioElement.innerHTML = `<strong>$${precioFormateado} CLP </strong> noche`;
+        // Actualizar el contenido del elemento con el precio formateado y la traducción de "noche"
+        precioElement.innerHTML = `<strong>$${precioFormateado} CLP </strong>${traduccionNoche}`;
     });
 });
 

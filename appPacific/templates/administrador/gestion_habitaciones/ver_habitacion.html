@@ -11,12 +11,13 @@
         <div class="col d-flex m-auto justify-content-center">
             <nav aria-label="breadcrumb">
                 <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'gestion_habitaciones' %}">Gestión Habitaciones</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Historial Habitaciones</li>
-                </ol>
-            </nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">{% trans "Inicio"%}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{% url 'gestion_habitaciones' %}">{% trans "Gestión Habitaciones"%}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{% trans "Historial Habitaciones"%}</li>
+                    </ol>
+                </nav>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -27,8 +28,9 @@
     <div class="row justify-content-center">
         <div class="col">
             {% if habitaciones|length == 0 %}
-                <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}<p>
-            {% else %}
+            <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}
+            <p>
+                {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -52,7 +54,8 @@
                             <td>{{ habitacion.cantidad }}</td>
                             <td>{{ habitacion.precio }}</td>
                             <td>
-                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}" class="img-fluid" style="width: 50px; height: 50px;">
+                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}"
+                                    class="img-fluid" style="width: 50px; height: 50px;">
                             </td>
                         </tr>
                         {% endfor %}
@@ -71,9 +74,9 @@
                     </a>
                 </li>
                 {% for page_num in page_range %}
-                    <li class="page-item">
-                        <a class="page-link" href="#" onclick="goToPage(event, {page_num} )">{{ page_num }}</a>
-                    </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="goToPage(event, {page_num} )">{{ page_num }}</a>
+                </li>
                 {% endfor %}
                 <li class="page-item" id="next-page">
                     <a class="page-link" href="#" aria-label="Next">
@@ -83,9 +86,9 @@
             </ul>
         </nav>
     </div>
-    
-    
-    
+
+
+
     <div class="container">
         <div class="row m-auto">
             <a href="{% url 'habitaciones' %}">
@@ -93,62 +96,62 @@
                     <button type="button" class="btn btn-primary mb-5">{% trans "Ver Sitio Web"%}</button>
                 </div>
             </a>
-            
+
         </div>
     </div>
-    
+
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const rowsPerPage = 5; // Número de registros por página
-    let currentPage = 0; // Página actual (0-indexed)
+    document.addEventListener('DOMContentLoaded', function () {
+        const rowsPerPage = 5; // Número de registros por página
+        let currentPage = 0; // Página actual (0-indexed)
 
-    const habitacionesRows = document.querySelectorAll('.habitaciones-table tr');
-    const numPages = Math.ceil(habitacionesRows.length / rowsPerPage);
+        const habitacionesRows = document.querySelectorAll('.habitaciones-table tr');
+        const numPages = Math.ceil(habitacionesRows.length / rowsPerPage);
 
-    function showPage(page) {
-        const start = page * rowsPerPage;
-        const end = start + rowsPerPage;
+        function showPage(page) {
+            const start = page * rowsPerPage;
+            const end = start + rowsPerPage;
 
-        habitacionesRows.forEach((row, index) => {
-            if (index >= start && index < end) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    function goToPage(page) {
-        if (page >= 0 && page < numPages) { // Asegurarse de que la página esté dentro del rango
-            currentPage = page;
-            showPage(currentPage);
+            habitacionesRows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
         }
-    }
 
-    function goToPreviousPage() {
-        goToPage(currentPage - 1);
-    }
+        function goToPage(page) {
+            if (page >= 0 && page < numPages) { // Asegurarse de que la página esté dentro del rango
+                currentPage = page;
+                showPage(currentPage);
+            }
+        }
 
-    function goToNextPage() {
-        goToPage(currentPage + 1);
-    }
+        function goToPreviousPage() {
+            goToPage(currentPage - 1);
+        }
 
-    showPage(currentPage);
+        function goToNextPage() {
+            goToPage(currentPage + 1);
+        }
 
-    document.getElementById('previous-page').addEventListener('click', goToPreviousPage);
-    document.getElementById('next-page').addEventListener('click', goToNextPage);
+        showPage(currentPage);
 
-    // Agregar eventos a los enlaces numéricos de las páginas
-    const pageLinks = document.querySelectorAll('.page-link');
-    pageLinks.forEach((link, index) => {
-        link.addEventListener('click', function() {
-            const pageNumber = parseInt(this.textContent) - 1; // Obtener el número de página desde el texto del enlace
-            goToPage(pageNumber);
+        document.getElementById('previous-page').addEventListener('click', goToPreviousPage);
+        document.getElementById('next-page').addEventListener('click', goToNextPage);
+
+        // Agregar eventos a los enlaces numéricos de las páginas
+        const pageLinks = document.querySelectorAll('.page-link');
+        pageLinks.forEach((link, index) => {
+            link.addEventListener('click', function () {
+                const pageNumber = parseInt(this.textContent) - 1; // Obtener el número de página desde el texto del enlace
+                goToPage(pageNumber);
+            });
         });
     });
-});
 
 </script>
 
@@ -158,4 +161,3 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block scripts %}
 
 {% endblock %}
-

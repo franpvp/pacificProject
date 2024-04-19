@@ -20,7 +20,9 @@
                             <div class="input-group">
                                 <input id="fecha_llegada" name="fecha_llegada" type="text"
                                     class="form-control date-range text-center"
-                                    placeholder="{% trans 'Ingrese fecha de llegada' %}" style="cursor: pointer;" required>
+                                    placeholder="{% trans 'Ingrese fecha de llegada' %}" style="cursor: pointer;"
+                                    required>
+                                <!-- Guardar Fecha Llegada en Formato YYYY-MM-DD -->
                                 <input type="hidden" id="fecha_llegada_hidden" name="fecha_llegada_hidden">
                                 <div class="input-group-append ml-auto">
                                     <span class="input-group-text">
@@ -34,7 +36,9 @@
                             <div class="input-group">
                                 <input id="fecha_salida" name="fecha_salida" type="text"
                                     class="form-control date-range text-center"
-                                    placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
+                                    placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;"
+                                    required>
+                                <!-- Guardar Fecha Salida en Formato YYYY-MM-DD -->
                                 <input type="hidden" id="fecha_salida_hidden" name="fecha_salida_hidden">
                                 <div class="input-group-append ml-auto">
                                     <span class="input-group-text">
@@ -52,7 +56,8 @@
                             </div>
                             <div class="box-btn-adultos">
                                 <div class="contenido-sec">
-                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
+                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle'
+                                        style="margin-right: 10px;"></i>
                                     <div id="contador-adultos" class="contador-adultos">0</div>
                                     <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
                                     <!-- Campo contador_adultos oculto -->
@@ -77,7 +82,7 @@
                         </div>
                         <!-- Botón Buscador -->
                         <div id="btn-buscar"
-                            class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3 "
+                            class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3"
                             style="cursor: pointer;">
                             <button type="submit" style="border: none; background: none;">
                                 <img src="{% static 'img/buscador.png' %}" alt="img-user"
@@ -86,12 +91,20 @@
                         </div>
                     </div>
                 </form>
-
             </div>
+            <!-- Muestra los mensajes de error -->
+            {% if messages %}
+            <div class="alert alert-danger text-center mt-3" role="alert">
+                <div class="m-0">
+                    {% for message in messages %}
+                    <p class="m-0">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="col"></div>
     </div>
-
     <!-- Botones Selección Tipo Habitación -->
     <div class="row justify-content-center">
         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3 d-flex align-item-center justify-content-center">
@@ -164,25 +177,90 @@
                 </div>
                 <div class="card-body text-center">
                     {% if idioma_seleccionado == 'en' %}
-                        <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
-                        <p class="card-text"> {{ habitacion.descripcion_en }}</p>
+                    <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
+                    <p class="card-text"> {{ habitacion.descripcion_en }}</p>
                     {% else %}
-                        <h5 class="card-title"> {{ habitacion.titulo }}</h5>
-                        <p class="card-text"> {{ habitacion.descripcion }}</p>
+                    <h5 class="card-title"> {{ habitacion.titulo }}</h5>
+                    <p class="card-text"> {{ habitacion.descripcion }}</p>
                     {% endif %}
-                    <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio | stringformat:"d" }}</p>
-                    <!-- <p class="card-text" data-precio="${{ habitacion.precio }}">{{ habitacion.precio }} CLP</p> -->
+                    <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio |
+                        stringformat:"d" }}</p>
+                    <form method="post" action="{% url 'index' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
+                        <input type="hidden" name="id_tipo_hab" value="{{ habitacion.id_tipo_hab }}">
+                        <div id="btn-mostrar-info" class="btn-mostrar-info">
+                            <i class='bx bxs-info-circle pr-2'></i>
+                            {% trans "Más Información" %}
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                            <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
+                        </div>
+                        {% else %}
+                        <button id="btn-reservar-btn" class="btn btn-primary" type="button"
+                            onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
+                        {% endif %}
+                        <div class="fondo-opaco"></div>
+                        <!-- Mostrar ventana con información mas detallada de la habitación -->
+                        <div class="mas-informacion text-center m-auto">
+                            <div class="btn-close"></div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="contenido-imagenes">
+                                        <img src="data:image/jpeg;base64,{{ habitacion.imagen }}"
+                                            alt="{{ habitacion.titulo }}" class="img-fluid"
+                                            style="border-radius: 40px;">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 mt-3 d-flex justify-content-center">
+                                    <div class="contenido-habitacion">
+                                        <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                                        <p>
+                                            {% trans "Esta habitación ofrece:" %}
+                                            {{ habitacion.capacidad_huespedes }} {% trans "huéspedes" %},
+                                            {{ habitacion.cantidad_habitaciones }} {% trans "habitación" %},
+                                            {{ habitacion.camas }} {% trans "cama" %},
+                                            {{ habitacion.banos }} {% trans "baño" %}
+                                        </p>
+                                        <p>{% trans "Sevicios Incluidos:" %}
+                                            <!-- Campo True o False en BBDD -->
+                                            {{ habitacion.desayuno }}
+                                            {{ habitacion.piscina }}
+                                            {{ habitacion.gimnasio }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    {% if user.is_authenticated %}
+                                    <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
+                                        <button id="btn-reservar-btn" class="btn btn-primary"
+                                            type="submit">{% trans "Reservar" %}</button>
+                                    </div>
+                                    {% else %}
+                                    <button id="btn-reservar-btn" class="btn btn-primary" type="button"
+                                        onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                {% if user.is_authenticated %}
-                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
-                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">Reservar</button>
-                </div>
-                {% else %}
-                    <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">Reservar</button>
-                {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
+    <script>
+        var idioma = "{{ request.LANGUAGE_CODE }}";
+        // Verifica el idioma actual y cambia el contenido según corresponda
+        if (idioma === "es") {
+            document.querySelector('.box-rec').setAttribute('data-room', 'Disponibles');
+        } else if (idioma === "en") {
+            document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+        }
+    </script>
+
 </div>
 {% endblock %}
