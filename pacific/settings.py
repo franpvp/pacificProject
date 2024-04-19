@@ -96,14 +96,14 @@ WSGI_APPLICATION = 'pacific.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BBDD',
+        'NAME': 'pacific_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '123',
         'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'unix_socket': '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
-        },
+        'PORT': '3305',
+        # 'OPTIONS': {
+        #     'unix_socket': '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
+        # },
     }
 }
 
