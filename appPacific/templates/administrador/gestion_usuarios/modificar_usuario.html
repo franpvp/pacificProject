@@ -39,9 +39,15 @@
                         {% trans "¿Quieres que sea Super Usuario?"%}
                     </label>
                 </div>
-                    <div class="col d-flex justify-content-center pt-4">
-                        <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
-                    </div>
+                <!-- Checkbox Vendedor -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="staff" name="staff">
+                    <label class="form-check-label" for="staff">
+                        {% trans "¿Quieres que sea Vendedor?"%}
+                    </label>
+                </div>
+                <div class="col d-flex justify-content-center pt-4">
+                    <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
                 </div>
             </form>
         </div>

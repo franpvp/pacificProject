@@ -20,28 +20,26 @@
                     {% csrf_token %}
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">{% trans "ID Usuario"%}</th>
                                 <th scope="col">{% trans "Nombre"%}</th>
                                 <th scope="col">{% trans "Apellidos"%}</th>
                                 <th scope="col">{% trans "Correo Electrónico"%}</th>
-                                <th scope="col">{% trans "Celular"%}</th>
-                                <th scope="col">{% trans "Acciones"%}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ usuario.id_user }}</td>
-                                <td>{{ usuario.nombres }}</td>
-                                <td>{{ usuario.apellidos }}</td>
-                                <td>{{ usuario.correo }}</td>
-                                <td>{{ usuario.telefono }}</td>
-                                <td>
-                                    <button type="submit" class="btn btn-danger">{% trans "Eliminar Usuario"%}</button>
-                                </td>
+                            <tr class="text-center">
+                                <td>{{ usuario.id }}</td>
+                                <td>{{ usuario.first_name }}</td>
+                                <td>{{ usuario.last_name }}</td>
+                                <td>{{ usuario.email }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-danger">{% trans "Eliminar"%}</button>
+                    </div>
+
                 </form>
             </div>
         </div>

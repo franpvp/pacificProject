@@ -5,9 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-
 from appPacific.decorators import admin_required
-from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
+from .models import Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
@@ -37,7 +36,6 @@ from django.views.generic import View
 from rest_framework import generics
 from .models import MetodoPago, Reserva, ReporteReserva, TipoHabitacion, Habitacion, DatosBancarios
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
-
 
 # Create your views here.
 
@@ -516,6 +514,7 @@ def crear_usuario_admin(request):
         password1 = request.POST['contrasena1']
         password2 = request.POST['contrasena2']
         is_superuser = request.POST.get('superusuario', False)
+        is_vendedor = request.POST.get('vendedor', False)
 
         if not (nombre and apellido and usuario and correo and telefono and password1 and password2):
             messages.error(request, _("Debes llenar todos los campos"))
@@ -546,6 +545,7 @@ def crear_usuario_admin(request):
         user.last_name = apellido
         user.email = correo
         user.is_superuser = bool(is_superuser)
+        user.is_vendedor = bool(is_vendedor)
         user.save()
 
         messages.success(request, _("Usuario creado con exito"))
@@ -580,35 +580,29 @@ def ver_usuarios_admin(request):
 @admin_required
 def modificar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(User, id=id_usuario)
+    
     if request.method == 'POST':
-        nombre = request.POST['nombres']
-        apellido = request.POST['apellidos']
-        username = request.POST['nombreusuario']
-        email = request.POST['correo']
-        is_superuser = request.POST.get('superusuario',False)
+        nombre = request.POST.get('nombres')
+        apellido = request.POST.get('apellidos')
+        username = request.POST.get('nombreusuario')
+        email = request.POST.get('correo')
+        is_superuser = request.POST.get('superusuario', False)
+        is_staff = request.POST.get('staff', False)
 
         if not (nombre and apellido and username and email):
             messages.error(request, _("Debes llenar todos los campos"))
             return redirect('modificar_usuario_admin', id_usuario=id_usuario)
         
-        if not re.match(r'^[a-zA-Z\s-]+$', nombre):
-            messages.error(request, _("El nombre deben ser sólo letras"))
-            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
-            
-        if not re.match(r'^[a-zA-Z\s-]+$', apellido):
-            messages.error(request, _("Los apellidos deben ser sólo letras"))
-            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
-
         usuario.first_name = nombre
         usuario.last_name = apellido
         usuario.username = username
         usuario.email = email
         usuario.is_superuser = bool(is_superuser)
+        usuario.is_staff = bool(is_staff)
         usuario.save()
 
         success_message = _("Usuario modificado con éxito")
-        encoded = urlencode({'success_message': success_message}) # Sin esta linea no se ve los mensajes
-        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{encoded}')
+        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?success_message={success_message}')
     
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
 
@@ -624,16 +618,29 @@ def eliminar_usuario_admin(request, id_usuario):
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
+
+
+@login_required
 def tipo_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+    usuario = get_object_or_404(User, id=id_usuario) 
     if request.method == 'POST':
-        nuevo_rol = request.POST.get('rol')  
-        usuario.rol = nuevo_rol
-        usuario.save()
-        return redirect('ver_usuarios_admin')
-    else:
-        return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario})
+        # Obtener el rol existente del usuario
+        rol_existente = usuario.rol
+        
+        # Obtener el nuevo rol del formulario
+        nuevo_rol = request.POST.get('rol')
+        
+        # Verificar si se seleccionó un rol válido
+        if nuevo_rol in ['cliente', 'vendedor']:
+            # Actualizar el rol del usuario en la base de datos
+            usuario.rol = nuevo_rol
+            usuario.save()
+            # Redirigir a la página de ver usuarios después de guardar los cambios
+            return HttpResponseRedirect(reverse('ver_usuarios_admin'))
     
+    # Si la solicitud no es POST o si no se pudo procesar correctamente, mostrar el formulario con el rol actual
+    return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario, 'rol_existente': usuario.rol})
+
 # Vistas PAYPAL
 @csrf_exempt
 @require_POST

@@ -23,8 +23,8 @@
                             <th scope="col">{% trans "Nombre"%}</th>
                             <th scope="col">{% trans "Apellidos"%}</th>
                             <th scope="col">{% trans "Correo Electrónico"%}</th>
-                            <th scope="col">{% trans "Rol"%}</th>
-                            <th scope="col">{% trans "Super Usuario"%}
+                            <th scope="col">{% trans "Vendedor 1= Sí / 0= No"%}</th>
+                            <th scope="col">{% trans "Administrador 1= Sí / 0= No"%}
                             <th scope="col">{% trans "Acciones"%}</th>
                             {% comment %} <th scope="col">{% trans "Celular"%}</th> {% endcomment %}
                         </tr>
@@ -36,15 +36,13 @@
                             <td>{{ usuario.first_name }}</td>
                             <td>{{ usuario.last_name }}</td>
                             <td>{{ usuario.email }}</td>
-                            <td>{{ usuario.rol }}</td>
+                            <td>{{ usuario.is_staff }}</td>
                             <td>{{ usuario.is_superuser }}</td>
                             <td>
                                 <!-- Botón para editar -->
                                 <a href="{% url 'modificar_usuario_admin' usuario.id %}" class="btn btn-primary btn-sm"><i class='bx bx-pencil'></i></i>{% trans "Editar"%}</a>
                                 <!-- Botón para eliminar -->
                                 <a href="{% url 'eliminar_usuario_admin' usuario.id %}" class="btn btn-danger btn-sm"><i class='bx bx-trash'></i>{% trans "Eliminar"%}</a>
-                                <!-- Botón para tipo de usuario -->
-                                <a href="{% url 'tipo_usuario_admin' usuario.id %}" class="btn btn-secondary btn-sm"><i class='bx bx-cog'></i>{% trans "Privilegios"%}</a>
                             </td>
                         </tr>
                         {% endfor %}
