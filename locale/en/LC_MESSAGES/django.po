@@ -8,7 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2024-04-13 12:33-0400\n"
+=======
+"POT-Creation-Date: 2024-04-18 12:22-0400\n"
+>>>>>>> main
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +23,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: appPacific/templates/administrador/administrador_home.html:13
-#: appPacific/templates/administrador/gestion_habitaciones.html:14
-#: appPacific/templates/administrador/gestion_reservas.html:14
-#: appPacific/templates/administrador/gestion_usuarios.html:13
-msgid "Bienvenido (a) Nombre del Administrador"
-msgstr "Welcome (to) Administrator's Name"
+msgid "Bienvenido (a) "
+msgstr "Welcome"
 
 #: appPacific/templates/administrador/administrador_home.html:14
 #: appPacific/templates/administrador/gestion_habitaciones.html:15
@@ -33,36 +34,66 @@ msgid "Cargo: Administrador del Hotel Pacific"
 msgstr "Position: Administrator of Hotel Pacific"
 
 #: appPacific/templates/administrador/administrador_home.html:24
+<<<<<<< HEAD
+=======
+#: appPacific/templates/vendedor/vendedor_home.html:24
+>>>>>>> main
 msgid "Bienvenido (a) a tu segundo hogar, "
 msgstr "Welcome to your second home"
 
 #: appPacific/templates/administrador/base_administrador.html:9
+#: appPacific/templates/vendedor/base_vendedor.html:9
 msgid "Hotel Pacific"
 msgstr "Hotel Pacific"
 
 #: appPacific/templates/administrador/base_administrador.html:38
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:88
 #: appPacific/templates/app/base.html:42 appPacific/templates/app/base.html:90
+=======
+#: appPacific/templates/administrador/base_administrador.html:91
+#: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:16
+#: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:16
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:15
+#: appPacific/templates/app/base.html:43 appPacific/templates/app/base.html:91
+>>>>>>> main
 #: appPacific/templates/app/home.html:13
+#: appPacific/templates/vendedor/base_vendedor.html:38
+#: appPacific/templates/vendedor/base_vendedor.html:76
 msgid "Inicio"
 msgstr "Home"
 
 #: appPacific/templates/administrador/base_administrador.html:45
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:92
+=======
+#: appPacific/templates/administrador/base_administrador.html:95
+#: appPacific/templates/vendedor/base_vendedor.html:45
+#: appPacific/templates/vendedor/base_vendedor.html:80
+>>>>>>> main
 msgid "Reservas"
 msgstr "Reservations"
 
 #: appPacific/templates/administrador/base_administrador.html:51
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:96
+=======
+#: appPacific/templates/administrador/base_administrador.html:99
+>>>>>>> main
 msgid "Habitaciones"
 msgstr "Rooms"
 
 #: appPacific/templates/administrador/base_administrador.html:57
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:100
+=======
+#: appPacific/templates/administrador/base_administrador.html:103
+>>>>>>> main
 msgid "Usuarios"
 msgstr "Users"
 
 #: appPacific/templates/administrador/base_administrador.html:63
+<<<<<<< HEAD
 #: appPacific/templates/app/base.html:67
 msgid "Configuración"
 msgstr "Settings"
@@ -79,18 +110,47 @@ msgstr "Translate"
 
 #: appPacific/templates/administrador/base_administrador.html:123
 #: appPacific/templates/app/base.html:125
+=======
+#: appPacific/templates/app/base.html:68
+#: appPacific/templates/vendedor/base_vendedor.html:51
+msgid "Configuración"
+msgstr "Settings"
+
+#: appPacific/templates/administrador/base_administrador.html:71
+#: appPacific/templates/app/base.html:75
+#: appPacific/templates/vendedor/base_vendedor.html:57
+msgid "Cerrar Sesión"
+msgstr "Log Out"
+
+#: appPacific/templates/administrador/base_administrador.html:120
+#: appPacific/templates/app/base.html:118
+#: appPacific/templates/vendedor/base_vendedor.html:97
+msgid "Traducir"
+msgstr "Translate"
+
+#: appPacific/templates/administrador/base_administrador.html:126
+#: appPacific/templates/app/base.html:126
+>>>>>>> main
 #: appPacific/templates/app/login.html:12
 #: appPacific/templates/app/login.html:31
+#: appPacific/templates/vendedor/base_vendedor.html:103
 msgid "Iniciar Sesión"
 msgstr "Log in"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:127
 #: appPacific/templates/app/base.html:129
+=======
+#: appPacific/templates/administrador/base_administrador.html:130
+#: appPacific/templates/app/base.html:130
+>>>>>>> main
 #: appPacific/templates/app/login.html:54
 #: appPacific/templates/registration/registro.html:64
+#: appPacific/templates/vendedor/base_vendedor.html:107
 msgid "Regístrate"
 msgstr "Sign up"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/base_administrador.html:140
 #: appPacific/templates/app/base.html:152
 msgid "Hotel Pacific - Todos los derechos reservados"
@@ -107,16 +167,52 @@ msgid "Contáctanos por WhatsApp"
 msgstr "Contact us via WhatsApp"
 
 #: appPacific/templates/administrador/gestion_habitaciones.html:21
+=======
+#: appPacific/templates/administrador/base_administrador.html:143
+#: appPacific/templates/app/base.html:157
+#: appPacific/templates/vendedor/base_vendedor.html:120
+msgid "Hotel Pacific - Todos los derechos reservados"
+msgstr "Hotel Pacific - All rights reserved"
+
+#: appPacific/templates/administrador/base_administrador.html:144
+#: appPacific/templates/app/base.html:158
+#: appPacific/templates/vendedor/base_vendedor.html:121
+msgid "Santiago de Chile, Moneda #85"
+msgstr "Santiago, Chile, Moneda #85"
+
+#: appPacific/templates/administrador/base_administrador.html:152
+#: appPacific/templates/app/base.html:167
+#: appPacific/templates/vendedor/base_vendedor.html:129
+msgid "Contáctanos por WhatsApp"
+msgstr "Contact us via WhatsApp"
+
+#: appPacific/templates/administrador/gestion_habitaciones.html:14
+#: appPacific/templates/administrador/gestion_reservas.html:14
+#: appPacific/templates/administrador/gestion_usuarios.html:13
+msgid "Bienvenido (a) Nombre del Administrador"
+msgstr "Welcome (to) Administrator's Name"
+
+#: appPacific/templates/administrador/gestion_habitaciones.html:21
+#: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:18
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:25
 msgid "Crear Habitación"
 msgstr "Create Room"
 
 #: appPacific/templates/administrador/gestion_habitaciones.html:27
+<<<<<<< HEAD
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:18
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:25
 msgid "Modificar Habitación"
 msgstr "Modify Room"
 
 #: appPacific/templates/administrador/gestion_habitaciones.html:33
+<<<<<<< HEAD
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:18
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:25
 msgid "Eliminar Habitación"
 msgstr "Delete Room"
@@ -125,8 +221,20 @@ msgstr "Delete Room"
 msgid "Ver Habitación"
 msgstr "View Room"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:35
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:37
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:17
+#: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:17
+#: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:17
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:17
+msgid "Gestión Habitaciones"
+msgstr "Room Management"
+
+#: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:35
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:39
+>>>>>>> main
 msgid "ID Tipo Habitación"
 msgstr "Room Type ID"
 
@@ -134,7 +242,11 @@ msgstr "Room Type ID"
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:40
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:35
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:39
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:38
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:40
+>>>>>>> main
 msgid "Título"
 msgstr "Title"
 
@@ -142,7 +254,11 @@ msgstr "Title"
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:45
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:36
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:40
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:39
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:41
+>>>>>>> main
 msgid "Descripción"
 msgstr "Description"
 
@@ -157,15 +273,24 @@ msgid "Descripción en inglés"
 msgstr "Description in english"
 
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:60
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:40
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:42
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:27
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:27
 msgid "Cantidad"
 msgstr "Quantity"
 
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:65
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:38
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:42
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:41
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:43
+>>>>>>> main
 msgid "Precio"
 msgstr "Price"
 
@@ -178,6 +303,7 @@ msgid "ID Tipo Habitación:"
 msgstr "Room Type ID"
 
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:104
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:73
 msgid "+ Agregar"
 msgstr "+ Add"
@@ -185,6 +311,18 @@ msgstr "+ Add"
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:34
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:37
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:36
+=======
+msgid "+ Agregar"
+msgstr "+ Add"
+
+#: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:16
+msgid " Inicio"
+msgstr "Home"
+
+#: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:34
+#: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:37
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:38
+>>>>>>> main
 msgid "ID Habitación"
 msgstr "Room ID"
 
@@ -195,7 +333,11 @@ msgstr "Available Quantity"
 
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:39
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:43
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:42
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:44
+>>>>>>> main
 msgid "Imagen"
 msgstr "Image"
 
@@ -205,12 +347,14 @@ msgstr "Image"
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:29
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:27
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:28
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:31
 msgid "Acciones"
 msgstr "Actions"
 
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:58
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:47
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:44
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:46
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:47
 msgid "Eliminar"
 msgstr "Delete"
 
@@ -219,7 +363,11 @@ msgid "ID Tipo habitación"
 msgstr "Room Type ID"
 
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:72
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:42
+=======
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:44
+>>>>>>> main
 msgid "Editar"
 msgstr "Edit"
 
@@ -228,6 +376,7 @@ msgstr "Edit"
 msgid "Guardar"
 msgstr "Save"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:24
 msgid "Historial de Habitaciones"
 msgstr "Room History"
@@ -237,100 +386,158 @@ msgid "No hay habitaciones disponibles en este momento."
 msgstr "There are no available rooms at the moment."
 
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:93
+=======
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:18
+msgid "Historial Habitaciones"
+msgstr "Room History"
+
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:25
+msgid "Historial de Habitaciones"
+msgstr "Room History"
+
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:31
+msgid "No hay habitaciones disponibles en este momento."
+msgstr "There are no available rooms at the moment."
+
+#: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:96
+>>>>>>> main
 msgid "Ver Sitio Web"
 msgstr "View Website"
 
 #: appPacific/templates/administrador/gestion_reservas.html:21
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:14
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:21
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:14
 msgid "Crear Reserva"
 msgstr "Create Reservation"
 
 #: appPacific/templates/administrador/gestion_reservas.html:26
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:26
 msgid "Modificar Reserva"
 msgstr "Modify Reservation"
 
 #: appPacific/templates/administrador/gestion_reservas.html:31
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:13
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:31
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:13
 msgid "Cancelar Reserva"
 msgstr "Cancel Reservation"
 
 #: appPacific/templates/administrador/gestion_reservas.html:37
+<<<<<<< HEAD
+=======
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:37
+>>>>>>> main
 msgid "Ver Reservas"
 msgstr "View Reservations"
 
 #: appPacific/templates/administrador/gestion_reservas.html:42
+<<<<<<< HEAD
+=======
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:42
+>>>>>>> main
 msgid "Ver Calendario"
 msgstr "View Calendar"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:23
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:23
 msgid "Nombres Cliente"
 msgstr "First Name Client"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:29
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:29
 msgid "Apellidos Cliente"
 msgstr "Last Name Client"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:35
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:35
 msgid "Rut Cliente"
 msgstr "Client ID number"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:41
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:41
 msgid "Cantidad Adultos"
 msgstr "Number of Adults"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:47
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:47
 msgid "Cantidad Niños"
 msgstr "Number of Children"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:52
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:52
 msgid "Seleccione Método de Pago"
 msgstr "Select Payment Method"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:53
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:53
 msgid "Débito"
 msgstr "Debit"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:54
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:54
 msgid "Crédito"
 msgstr "Credit"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:55
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:55
 msgid "Transferencia"
 msgstr "Transfer"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:60
 #: appPacific/templates/app/index.html:23
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:60
 msgid "Ingrese fecha de llegada"
 msgstr "Enter arrival date"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:71
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:38
+=======
+#: appPacific/templates/app/index.html:39
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:71
+>>>>>>> main
 msgid "Ingrese fecha de salida"
 msgstr "Enter departure date"
 
 #: appPacific/templates/administrador/gestion_reservas/crear_reserva_pacific.html:84
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html:84
 msgid "Confirmar"
 msgstr "Confirm"
 
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:25
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:25
 msgid "ID Reserva"
 msgstr "Reservation ID"
 
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:26
+#: appPacific/templates/app/reserva_realizada.html:31
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:26
 msgid "Tipo Habitación"
 msgstr "Room Type"
 
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:28
+#: appPacific/templates/app/reserva_realizada.html:32
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:28
 msgid "Pago Reserva"
 msgstr "Reservation Payment"
 
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:29
+#: appPacific/templates/app/reserva_realizada.html:33
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:29
 msgid "Total Restante"
 msgstr "Remaining Total"
 
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:30
+#: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:30
 msgid "Estado Pago"
 msgstr "Payment Status"
+
+#: appPacific/templates/administrador/gestion_reservas/ver_reserva_pacific.html:13
+#, fuzzy
+#| msgid "Mis Reservas"
+msgid "Historial Reservas"
+msgstr "My Reservations"
 
 #: appPacific/templates/administrador/gestion_usuarios.html:18
 msgid "Crear Usuario"
@@ -351,7 +558,11 @@ msgstr "name"
 
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:23
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:25
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:23
+=======
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:18
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:25
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:23
 #: appPacific/templates/registration/registro.html:24
@@ -365,13 +576,18 @@ msgstr "Last Name"
 
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:28
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:26
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:24
+=======
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:23
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:26
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:24
 #: appPacific/templates/registration/registro.html:30
 msgid "Apellidos"
 msgstr "Last Name"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:32
 msgid "correo"
 msgstr "email"
@@ -379,6 +595,20 @@ msgstr "email"
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:33
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:27
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:25
+=======
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:30
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:28
+msgid "Nombre usuario"
+msgstr "Username"
+
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:34
+msgid "correo"
+msgstr "email"
+
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:35
+#: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:27
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:33
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:27
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:25
 #: appPacific/templates/app/contacto.html:22
@@ -386,30 +616,56 @@ msgstr "email"
 msgid "Correo Electrónico"
 msgstr "Email"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:37
 msgid "celular"
 msgstr "phone"
 
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:38
+=======
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:39
+msgid "celular"
+msgstr "phone"
+
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:40
+>>>>>>> main
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:28
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:26
 #: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:28
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:26
 #: appPacific/templates/registration/registro.html:48
 msgid "Celular"
 msgstr "Phone"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:42
 msgid "contraseña"
 msgstr "password"
 
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:43
+=======
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:44
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:49
+msgid "contraseña"
+msgstr "password"
+
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:45
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:50
+>>>>>>> main
 #: appPacific/templates/app/contacto.html:26
 #: appPacific/templates/app/login.html:26
 msgid "Contraseña"
 msgstr "Password"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:49
+=======
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:56
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:39
+msgid "¿Quieres que sea Super Usuario?"
+msgstr "Do you want this user to be a Super User?"
+
+#: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:62
+>>>>>>> main
 msgid "Registrar"
 msgstr "Register"
 
@@ -429,7 +685,11 @@ msgstr "User ID"
 msgid "Modificar Usuario"
 msgstr "Modify User"
 
+<<<<<<< HEAD
 #: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:39
+=======
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:43
+>>>>>>> main
 msgid "Guardar Cambios"
 msgstr "Save Changes"
 
@@ -438,7 +698,7 @@ msgid "Otorgar Privilegio de Vendedor"
 msgstr "Grant Seller Privilege"
 
 #: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:29
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:27
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:26
 msgid "Rol"
 msgstr "Role"
 
@@ -454,10 +714,15 @@ msgstr "Client"
 msgid "Usuarios Registrados"
 msgstr "Registered Users"
 
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:46
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:27
+msgid "Super Usuario"
+msgstr "Super user"
+
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:48
 msgid "Privilegios"
 msgstr "Privileges"
 
+<<<<<<< HEAD
 #: appPacific/templates/app/base.html:49 appPacific/templates/app/base.html:94
 msgid "Explorar"
 msgstr "Explore"
@@ -467,15 +732,34 @@ msgid "Sobre Nosotros"
 msgstr "About Us"
 
 #: appPacific/templates/app/base.html:61 appPacific/templates/app/base.html:100
+=======
+#: appPacific/templates/app/base.html:50 appPacific/templates/app/base.html:95
+msgid "Explorar"
+msgstr "Explore"
+
+#: appPacific/templates/app/base.html:56 appPacific/templates/app/base.html:98
+msgid "Sobre Nosotros"
+msgstr "About Us"
+
+#: appPacific/templates/app/base.html:62 appPacific/templates/app/base.html:101
+>>>>>>> main
 #: appPacific/templates/app/contacto.html:12
 msgid "Contacto"
 msgstr "Contact"
 
+<<<<<<< HEAD
 #: appPacific/templates/app/base.html:133
 msgid "Mis Reservas"
 msgstr "My Reservations"
 
 #: appPacific/templates/app/base.html:138
+=======
+#: appPacific/templates/app/base.html:134
+msgid "Mis Reservas"
+msgstr "My Reservations"
+
+#: appPacific/templates/app/base.html:139
+>>>>>>> main
 msgid "Datos Personales"
 msgstr "Personal Information"
 
@@ -492,22 +776,38 @@ msgid "Enviar"
 msgstr "Submit"
 
 #: appPacific/templates/app/habitaciones.html:19
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:105
+=======
+#: appPacific/templates/app/index.html:115
+>>>>>>> main
 msgid "Suite"
 msgstr "Suite"
 
 #: appPacific/templates/app/habitaciones.html:27
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:114
+=======
+#: appPacific/templates/app/index.html:124
+>>>>>>> main
 msgid "Premium"
 msgstr "Premium"
 
 #: appPacific/templates/app/habitaciones.html:35
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:123
+=======
+#: appPacific/templates/app/index.html:133
+>>>>>>> main
 msgid "Twin"
 msgstr "Twin"
 
 #: appPacific/templates/app/habitaciones.html:42
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:131
+=======
+#: appPacific/templates/app/index.html:141
+>>>>>>> main
 msgid "Filtros"
 msgstr "Filters"
 
@@ -520,6 +820,10 @@ msgid "Más Caros"
 msgstr "More Expensive"
 
 #: appPacific/templates/app/habitaciones.html:80
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/index.html:194
+>>>>>>> main
 msgid "Más Información"
 msgstr "More information"
 
@@ -527,15 +831,27 @@ msgstr "More information"
 #: appPacific/templates/app/habitaciones.html:88
 #: appPacific/templates/app/habitaciones.html:123
 #: appPacific/templates/app/habitaciones.html:126
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:182
+=======
+#: appPacific/templates/app/index.html:198
+#: appPacific/templates/app/index.html:202
+#: appPacific/templates/app/index.html:240
+#: appPacific/templates/app/index.html:244
+>>>>>>> main
 msgid "Reservar"
 msgstr "Reserve"
 
 #: appPacific/templates/app/habitaciones.html:104
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/index.html:220
+>>>>>>> main
 msgid "Esta habitación ofrece:"
 msgstr "This room offers:"
 
 #: appPacific/templates/app/habitaciones.html:105
+<<<<<<< HEAD
 msgid "huéspedes"
 msgstr "guests"
 
@@ -548,10 +864,29 @@ msgid "cama"
 msgstr "bed"
 
 #: appPacific/templates/app/habitaciones.html:108
+=======
+msgid "huéspedes,"
+msgstr "guests,"
+
+#: appPacific/templates/app/habitaciones.html:106
+msgid "habitación,"
+msgstr "Room ID"
+
+#: appPacific/templates/app/habitaciones.html:107
+msgid "cama,"
+msgstr "bed,"
+
+#: appPacific/templates/app/habitaciones.html:108
+#: appPacific/templates/app/index.html:224
+>>>>>>> main
 msgid "baño"
 msgstr "bathroom"
 
 #: appPacific/templates/app/habitaciones.html:110
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/index.html:226
+>>>>>>> main
 msgid "Sevicios Incluidos:"
 msgstr "Services Included:"
 
@@ -559,6 +894,7 @@ msgstr "Services Included:"
 msgid "Bienvenido"
 msgstr "Welcome"
 
+<<<<<<< HEAD
 #: appPacific/templates/app/index.html:53
 msgid "Adultos"
 msgstr "Adults"
@@ -576,8 +912,39 @@ msgid "Mayor a Menor"
 msgstr "Highest to Lowest"
 
 #: appPacific/templates/app/index.html:155
+=======
+#: appPacific/templates/app/index.html:55
+msgid "Adultos"
+msgstr "Adults"
+
+#: appPacific/templates/app/index.html:71
+msgid "Niños"
+msgstr "Children"
+
+#: appPacific/templates/app/index.html:152
+msgid "Menor A Mayor"
+msgstr "Lowest to Highest"
+
+#: appPacific/templates/app/index.html:155
+msgid "Mayor a Menor"
+msgstr "Highest to Lowest"
+
+#: appPacific/templates/app/index.html:165
+>>>>>>> main
 msgid "Nuestras Habitaciones"
 msgstr "Our Rooms"
+
+#: appPacific/templates/app/index.html:221
+msgid "huéspedes"
+msgstr "guests"
+
+#: appPacific/templates/app/index.html:222
+msgid "habitación"
+msgstr "room"
+
+#: appPacific/templates/app/index.html:223
+msgid "cama"
+msgstr "bed"
 
 #: appPacific/templates/app/login.html:21
 #: appPacific/templates/registration/registro.html:36
@@ -588,6 +955,67 @@ msgstr "User"
 msgid "¿No tienes una cuenta?"
 msgstr "Do you not have an account?"
 
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/login.html:60
+msgid "¿¿Ha olvidado la contraseña?"
+msgstr "Have you forgotten your password?"
+
+#: appPacific/templates/app/login.html:62
+msgid "Recuperar contraseña"
+msgstr "Recover password"
+
+#: appPacific/templates/app/metodo_pago.html:15
+#: appPacific/templates/app/reserva_realizada.html:25
+msgid "Detalle Reserva"
+msgstr "Reservation Detail"
+
+#: appPacific/templates/app/metodo_pago.html:16
+msgid "Tipo habitación:"
+msgstr "Room Type:"
+
+#: appPacific/templates/app/metodo_pago.html:17
+msgid "Fecha Llegada:"
+msgstr "Arrival date:"
+
+#: appPacific/templates/app/metodo_pago.html:18
+msgid "Fecha Salida:"
+msgstr "Departure date:"
+
+#: appPacific/templates/app/metodo_pago.html:19
+msgid "Total Reserva:"
+msgstr "Total Reserve:"
+
+#: appPacific/templates/app/metodo_pago.html:20
+msgid "Pago Inicial:"
+msgstr "Initial payment:"
+
+#: appPacific/templates/app/metodo_pago.html:21
+msgid "Pago Pendiente:"
+msgstr "Pending payment:"
+
+#: appPacific/templates/app/metodo_pago.html:23
+#: appPacific/templates/app/metodo_pago.html:26
+msgid "Adultos:"
+msgstr "Adults:"
+
+#: appPacific/templates/app/metodo_pago.html:24
+msgid "Niños:"
+msgstr "Children:"
+
+#: appPacific/templates/app/metodo_pago.html:33
+msgid "Modificar"
+msgstr "Modify"
+
+#: appPacific/templates/app/metodo_pago.html:45
+msgid "Seleccione método de pago:"
+msgstr "Select Payment Method"
+
+#: appPacific/templates/app/metodo_pago.html:56
+msgid "Pago por transferencia bancaria:"
+msgstr "Payment by bank transfer:"
+
+>>>>>>> main
 #: appPacific/templates/app/nosotros.html:12
 msgid "Acerca de Hotel Pacific"
 msgstr "About Hotel Pacific"
@@ -636,10 +1064,146 @@ msgstr "Reservation Successfully Made"
 msgid "Datos Cliente"
 msgstr "Client Information"
 
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/reserva_realizada.html:19
+msgid "Nombre:"
+msgstr "Name:"
+
+#: appPacific/templates/app/reserva_realizada.html:20
+msgid "Apellidos:"
+msgstr "Last Name:"
+
+#: appPacific/templates/app/reserva_realizada.html:21
+msgid "Correo:"
+msgstr "Email:"
+
+#: appPacific/templates/app/reserva_realizada.html:30
+msgid "Id Reserva"
+msgstr "Reservation ID"
+
+#: appPacific/templates/app/reserva_realizada.html:60
+msgid "Hemos enviado un código QR al correo"
+msgstr "We have sent a QR code to the email"
+
+#: appPacific/templates/app/reserva_realizada.html:60
+msgid ", debes mostrarlo el día del check-in."
+msgstr ", you must show the day of check-in."
+
+#: appPacific/templates/app/reserva_realizada.html:69
+msgid "Volver al inicio"
+msgstr "Return home"
+
+>>>>>>> main
 #: appPacific/templates/app/transferencias.html:13
 msgid "Depósito con Transferencia Bancaria"
 msgstr "Deposit with Bank Transfer"
 
+<<<<<<< HEAD
+=======
+#: appPacific/templates/app/transferencias.html:21
+msgid ""
+"Ha seleccionado el pago incial de la reserva mediante transferencia bancaria."
+msgstr ""
+"You have selected the initial payment of the reservation by bank transfer."
+
+#: appPacific/templates/app/transferencias.html:22
+msgid ""
+"Le facilitamos los datos de la cuenta bancaria en la que deberá hacer el "
+"ingreso"
+msgstr ""
+"We provide you with the bank account details in which you must make the "
+"paymentincome"
+
+#: appPacific/templates/app/transferencias.html:23
+msgid "por el pago inicial, correspondiente al 30%% del total de la reserva."
+msgstr ""
+"for the initial payment, corresponding to 30%% of the total reservation."
+
+#: appPacific/templates/app/transferencias.html:26
+msgid "Nombre del Beneficiario:"
+msgstr "Name of Beneficiary:"
+
+#: appPacific/templates/app/transferencias.html:29
+msgid "Cuenta:"
+msgstr "Account:"
+
+#: appPacific/templates/app/transferencias.html:32
+msgid "Número de cuenta:"
+msgstr "Account number:"
+
+#: appPacific/templates/app/transferencias.html:35
+msgid "Correo Electrónico:"
+msgstr "Email"
+
+#: appPacific/templates/app/transferencias.html:38
+#, python-format
+msgid "Pago Inicial (30%% del total):"
+msgstr "Initial Payment (30%% of the total):"
+
+#: appPacific/templates/app/transferencias.html:43
+msgid "Tienes 1 hora para realizar del pago inicial de la reserva"
+msgstr "You have 1 hour to make the initial payment of the reservation"
+
+#: appPacific/templates/recuperacion/reset_password.html:9
+msgid "Password Reset"
+msgstr "Password Reset"
+
+#: appPacific/templates/recuperacion/reset_password.html:14
+msgid "Restablecer Contraseña"
+msgstr "Restore password"
+
+#: appPacific/templates/recuperacion/reset_password.html:18
+msgid "Cambiar contraseña"
+msgstr "Change Password"
+
+#: appPacific/templates/recuperacion/reset_password_complete.html:10
+#: appPacific/templates/recuperacion/reset_password_complete.html:15
+msgid "Contraseña restablecida"
+msgstr "Password reset"
+
+#: appPacific/templates/recuperacion/reset_password_complete.html:16
+msgid "Su contraseña ha sido restablecida exitosamente"
+msgstr "Your password has been successfully reset"
+
+#: appPacific/templates/recuperacion/reset_password_complete.html:17
+msgid "iniciar sesion"
+msgstr "log in"
+
+#: appPacific/templates/recuperacion/reset_password_complete.html:18
+msgid "con tu nueva contraseña"
+msgstr "with your new password"
+
+#: appPacific/templates/recuperacion/reset_password_form.html:9
+msgid "Confirmar restablecimiento de contraseña"
+msgstr "Confirm password reset"
+
+#: appPacific/templates/recuperacion/reset_password_form.html:14
+msgid "Confirmar cambio de Contraseña"
+msgstr "Confirm Password Change"
+
+#: appPacific/templates/recuperacion/reset_password_form.html:18
+msgid "Guardar contraseña"
+msgstr "Save Password"
+
+#: appPacific/templates/recuperacion/reset_password_sent.html:10
+#: appPacific/templates/recuperacion/reset_password_sent.html:17
+msgid "Restablecimiento de contraseña enviado"
+msgstr "Password reset sent"
+
+#: appPacific/templates/recuperacion/reset_password_sent.html:18
+msgid ""
+"Se ha enviado un correo electrónico a su dirección de correo electrónico "
+"registrada con"
+msgstr "An email has been sent to your email address  registered with"
+
+#: appPacific/templates/recuperacion/reset_password_sent.html:19
+msgid ""
+"instrucciones para restablecer su contraseña. Por favor revise su correo "
+"electrónico."
+msgstr "instructions to reset your password. Please check your email."
+
+>>>>>>> main
 #: appPacific/templates/registration/datopersonal.html:12
 msgid "Mis datos"
 msgstr "My data"
@@ -684,6 +1248,83 @@ msgstr "Repeat the same previous password"
 msgid "Confirmar Contraseña"
 msgstr "Confirm Password"
 
+<<<<<<< HEAD
+=======
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:14
+#: appPacific/templates/vendedor/vendedor_home.html:13
+msgid "Bienvenido (a) Nombre del Vendedor"
+msgstr "Welcome Seller Name"
+
+#: appPacific/templates/vendedor/gestion_reservas_vendedor.html:15
+#: appPacific/templates/vendedor/vendedor_home.html:14
+msgid "Cargo: Vendedor del Hotel Pacific"
+msgstr "Position: Seller of the Pacific Hotel"
+
+#: appPacific/views.py:93
+msgid "Por favor, complete todos los campos."
+msgstr "Please complete all fields."
+
+#: appPacific/views.py:97 appPacific/views.py:522 appPacific/views.py:592
+msgid "El nombre deben ser sólo letras"
+msgstr "The name must be only letters"
+
+#: appPacific/views.py:103 appPacific/views.py:526 appPacific/views.py:596
+msgid "Los apellidos deben ser sólo letras"
+msgstr "Last names must be only letters"
+
+#: appPacific/views.py:109 appPacific/views.py:530
+msgid "Las contraseñas no coinciden"
+msgstr "Passwords do not match"
+
+#: appPacific/views.py:113 appPacific/views.py:534
+msgid "Nombre de usuario ya existe"
+msgstr "Username already exists"
+
+#: appPacific/views.py:117
+msgid "Ya existe una cuenta con ese correo"
+msgstr "An account already exists with that email"
+
+#: appPacific/views.py:131
+msgid "Error al registrar usuario. Por favor, inténtelo de nuevo."
+msgstr "Error registering user. Please try again."
+
+#: appPacific/views.py:143
+msgid "Debe llenar los campos indicados"
+msgstr "You must fill out the indicated fields"
+
+#: appPacific/views.py:164
+msgid "Usuario o contraseña no es correcta"
+msgstr "Username or password is not correct"
+
+#: appPacific/views.py:168
+msgid "Error al iniciar sesión. Por favor, inténtelo de nuevo."
+msgstr "Failed to login. Please try again."
+
+#: appPacific/views.py:397
+msgid "¡La habitación se creó exitosamente!"
+msgstr "The room was created successfully!"
+
+#: appPacific/views.py:518 appPacific/views.py:588
+msgid "Debes llenar todos los campos"
+msgstr "You must fill out all the fields"
+
+#: appPacific/views.py:538
+msgid "El correo ya es usado por otro usuario"
+msgstr "The email is already used by another user"
+
+#: appPacific/views.py:548
+msgid "Usuario creado con exito"
+msgstr "User created successfully"
+
+#: appPacific/views.py:606
+msgid "Usuario modificado con éxito"
+msgstr "Successfully modified user"
+
+#: appPacific/views.py:618
+msgid "Usuario eliminado con éxito"
+msgstr "Successfully deleted user"
+
+>>>>>>> main
 #~ msgid "Gestión de Reservas"
 #~ msgstr "Reservation Management"
 

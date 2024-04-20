@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'appPacific',
 ]
 # Define las variables de entorno para las credenciales de PayPal
@@ -95,7 +96,7 @@ WSGI_APPLICATION = 'pacific.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pacific_db',
+        'NAME': 'BBDD',
         'USER': 'root',
         'PASSWORD': 'pacificDUOC',
         'HOST': 'localhost',

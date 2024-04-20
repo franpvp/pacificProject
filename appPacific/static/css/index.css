@@ -100,7 +100,6 @@ a{
 }
 
 .box-rec:before {
-    content: 'Disponibles: ' attr(data-room);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,6 +309,3 @@ a{
     transform-origin: center; 
     transition: transform 0.3s ease-in-out;
 }
-
-
-

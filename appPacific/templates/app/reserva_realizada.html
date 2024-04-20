@@ -16,9 +16,9 @@
         <div class="col d-flex flex-column align-items-center justify-content-center">
             <h1 class="mt-4" style="font-size: 22px;"> {% trans "Datos Cliente" %}</h1>
             <div class="datos-cliente mt-3">
-                <p>Nombre: <strong>{{ datos_usuario.first_name }}</strong></p>
-                <p>Apellidos: <strong>{{ datos_usuario.last_name }}</strong> </p>
-                <p>Correo: {{ datos_usuario.email }}</p>
+                <p>{% trans "Nombre:" %} <strong>{{ datos_usuario.first_name }}</strong></p>
+                <p>{% trans "Apellidos:" %} <strong>{{ datos_usuario.last_name }}</strong> </p>
+                <p>{% trans "Correo:" %} {{ datos_usuario.email }}</p>
             </div>
         </div>
         <div class="col d-flex flex-column align-items-center">
@@ -57,7 +57,7 @@
         <div class="col-lg-8 d-flex flex-column align-items-center m-auto">
             <div class="contenedor-info">
                 <i class='bx bxs-info-circle'></i>
-                Hemos enviado un código QR al correo <strong>{{ datos_usuario.email }}</strong>, debes mostrarlo el día del check-in.
+                {% trans "Hemos enviado un código QR al correo" %} <strong>{{ datos_usuario.email }}</strong>{% trans ", debes mostrarlo el día del check-in." %}
             </div>
         </div>
     </div>

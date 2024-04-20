@@ -49,7 +49,7 @@
                         <div class="form-floating mb-3 mt-4"> <!-- Agregando mt-4 aquí -->
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"> {% trans "¿No tienes una cuenta?" %} </h5>
+                                    <h5 class="card-title"> {% trans "¿No tienes una cuenta?"%}</h5>
                                     <a href="{% url 'registro' %}">
                                         {% trans "Regístrate" %}
                                     </a>
@@ -57,9 +57,9 @@
                             </div>
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">¿Ha olvidado la contraseña?</h5>
+                                    <h5 class="card-title">{% trans "¿¿Ha olvidado la contraseña?"%}</h5>
                                     <a href="{% url 'reset_password' %}">
-                                        Recuperar contraseña
+                                        {% trans "Recuperar contraseña"%} 
                                     </a>
                                 </div>
                             </div>
