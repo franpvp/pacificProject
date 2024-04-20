@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-18 12:20-0400\n"
+"POT-Creation-Date: 2024-04-20 12:55-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,8 @@ msgstr "Bienvenido (a) a tu segundo hogar, "
 msgid "Hotel Pacific"
 msgstr "Hotel Pacific"
 
-#: appPacific/templates/administrador/base_administrador.html:38
-#: appPacific/templates/administrador/base_administrador.html:91
+#: appPacific/templates/administrador/base_administrador.html:39
+#: appPacific/templates/administrador/base_administrador.html:92
 #: appPacific/templates/administrador/gestion_habitaciones/crear_habitacion.html:16
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:16
 #: appPacific/templates/administrador/gestion_habitaciones/ver_habitacion.html:15
@@ -53,42 +53,42 @@ msgstr "Hotel Pacific"
 msgid "Inicio"
 msgstr "Inicio"
 
-#: appPacific/templates/administrador/base_administrador.html:45
-#: appPacific/templates/administrador/base_administrador.html:95
+#: appPacific/templates/administrador/base_administrador.html:46
+#: appPacific/templates/administrador/base_administrador.html:96
 #: appPacific/templates/vendedor/base_vendedor.html:45
 #: appPacific/templates/vendedor/base_vendedor.html:80
 msgid "Reservas"
 msgstr "Reservas"
 
-#: appPacific/templates/administrador/base_administrador.html:51
-#: appPacific/templates/administrador/base_administrador.html:99
+#: appPacific/templates/administrador/base_administrador.html:52
+#: appPacific/templates/administrador/base_administrador.html:100
 msgid "Habitaciones"
 msgstr "Habitaciones"
 
-#: appPacific/templates/administrador/base_administrador.html:57
-#: appPacific/templates/administrador/base_administrador.html:103
+#: appPacific/templates/administrador/base_administrador.html:58
+#: appPacific/templates/administrador/base_administrador.html:104
 msgid "Usuarios"
 msgstr "Usuarios"
 
-#: appPacific/templates/administrador/base_administrador.html:63
+#: appPacific/templates/administrador/base_administrador.html:64
 #: appPacific/templates/app/base.html:68
 #: appPacific/templates/vendedor/base_vendedor.html:51
 msgid "Configuración"
 msgstr "Configuración"
 
-#: appPacific/templates/administrador/base_administrador.html:71
+#: appPacific/templates/administrador/base_administrador.html:72
 #: appPacific/templates/app/base.html:75
 #: appPacific/templates/vendedor/base_vendedor.html:57
 msgid "Cerrar Sesión"
 msgstr "Cerrar Sesión"
 
-#: appPacific/templates/administrador/base_administrador.html:120
+#: appPacific/templates/administrador/base_administrador.html:121
 #: appPacific/templates/app/base.html:118
 #: appPacific/templates/vendedor/base_vendedor.html:97
 msgid "Traducir"
 msgstr "Traducir"
 
-#: appPacific/templates/administrador/base_administrador.html:126
+#: appPacific/templates/administrador/base_administrador.html:127
 #: appPacific/templates/app/base.html:126
 #: appPacific/templates/app/login.html:12
 #: appPacific/templates/app/login.html:31
@@ -96,7 +96,7 @@ msgstr "Traducir"
 msgid "Iniciar Sesión"
 msgstr "Iniciar Sesión"
 
-#: appPacific/templates/administrador/base_administrador.html:130
+#: appPacific/templates/administrador/base_administrador.html:131
 #: appPacific/templates/app/base.html:130
 #: appPacific/templates/app/login.html:54
 #: appPacific/templates/registration/registro.html:64
@@ -104,19 +104,19 @@ msgstr "Iniciar Sesión"
 msgid "Regístrate"
 msgstr "Regístrate"
 
-#: appPacific/templates/administrador/base_administrador.html:143
+#: appPacific/templates/administrador/base_administrador.html:148
 #: appPacific/templates/app/base.html:157
 #: appPacific/templates/vendedor/base_vendedor.html:120
 msgid "Hotel Pacific - Todos los derechos reservados"
 msgstr "Hotel Pacific - Todos los derechos reservados"
 
-#: appPacific/templates/administrador/base_administrador.html:144
+#: appPacific/templates/administrador/base_administrador.html:149
 #: appPacific/templates/app/base.html:158
 #: appPacific/templates/vendedor/base_vendedor.html:121
 msgid "Santiago de Chile, Moneda #85"
 msgstr "Santiago de Chile, Moneda #85"
 
-#: appPacific/templates/administrador/base_administrador.html:152
+#: appPacific/templates/administrador/base_administrador.html:157
 #: appPacific/templates/app/base.html:167
 #: appPacific/templates/vendedor/base_vendedor.html:129
 msgid "Contáctanos por WhatsApp"
@@ -238,7 +238,6 @@ msgstr "Imagen"
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:40
 #: appPacific/templates/administrador/gestion_habitaciones/modificar_habitacion.html:44
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:31
-#: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:29
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:28
 #: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:31
 msgid "Acciones"
@@ -246,6 +245,7 @@ msgstr "Acciones"
 
 #: appPacific/templates/administrador/gestion_habitaciones/eliminar_habitacion.html:58
 #: appPacific/templates/administrador/gestion_reservas/eliminar_reserva_pacific.html:47
+#: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:40
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:46
 #: appPacific/templates/vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html:47
 msgid "Eliminar"
@@ -401,10 +401,8 @@ msgid "Estado Pago"
 msgstr "Estado Pago"
 
 #: appPacific/templates/administrador/gestion_reservas/ver_reserva_pacific.html:13
-#, fuzzy
-#| msgid "Mis Reservas"
 msgid "Historial Reservas"
-msgstr "Mis Reservas"
+msgstr "Historial Reservas"
 
 #: appPacific/templates/administrador/gestion_usuarios.html:18
 msgid "Crear Usuario"
@@ -470,8 +468,6 @@ msgid "celular"
 msgstr "celular"
 
 #: appPacific/templates/administrador/gestion_usuarios/crear_usuario.html:40
-#: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:28
-#: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:28
 #: appPacific/templates/registration/registro.html:48
 msgid "Celular"
 msgstr "Celular"
@@ -498,7 +494,6 @@ msgid "Registrar"
 msgstr "Registrar"
 
 #: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:13
-#: appPacific/templates/administrador/gestion_usuarios/eliminar_usuario.html:40
 msgid "Eliminar Usuario"
 msgstr "Eliminar Usuario"
 
@@ -512,7 +507,11 @@ msgstr "ID Usuario"
 msgid "Modificar Usuario"
 msgstr "Modificar Usuario"
 
-#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:43
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:46
+msgid "¿Quieres que sea Vendedor?"
+msgstr "¿Quieres que sea Vendedor?"
+
+#: appPacific/templates/administrador/gestion_usuarios/modificar_usuario.html:50
 msgid "Guardar Cambios"
 msgstr "Guardar Cambios"
 
@@ -520,30 +519,21 @@ msgstr "Guardar Cambios"
 msgid "Otorgar Privilegio de Vendedor"
 msgstr "Otorgar Privilegio de Vendedor"
 
-#: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:29
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:26
+#: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:28
 msgid "Rol"
 msgstr "Rol"
-
-#: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:41
-msgid "Vendedor"
-msgstr "Vendedor"
-
-#: appPacific/templates/administrador/gestion_usuarios/tipo_usuario_admin.html:42
-msgid "Cliente"
-msgstr "Cliente"
 
 #: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:13
 msgid "Usuarios Registrados"
 msgstr "Usuarios Registrados"
 
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:27
-msgid "Super Usuario"
-msgstr "Super Usuario"
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:26
+msgid "Vendedor 1= Sí / 0= No"
+msgstr "Vendedor 1= Sí / 0= No"
 
-#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:48
-msgid "Privilegios"
-msgstr "Privilegios"
+#: appPacific/templates/administrador/gestion_usuarios/ver_usuario.html:27
+msgid "Administrador 1= Sí / 0= No"
+msgstr "Administrador 1= Sí / 0= No"
 
 #: appPacific/templates/app/base.html:50 appPacific/templates/app/base.html:95
 msgid "Explorar"
@@ -856,10 +846,8 @@ msgid "por el pago inicial, correspondiente al 30%% del total de la reserva."
 msgstr "por del pago inicial, correspondiente al 30%% del total de la reserva."
 
 #: appPacific/templates/app/transferencias.html:26
-#, fuzzy
-#| msgid "Depósito con Beneficiario:"
 msgid "Nombre del Beneficiario:"
-msgstr "Depósito con Beneficiario:"
+msgstr "Nombre del Beneficiario:"
 
 #: appPacific/templates/app/transferencias.html:29
 msgid "Cuenta:"
@@ -902,6 +890,10 @@ msgstr "Contraseña restablecida"
 #: appPacific/templates/recuperacion/reset_password_complete.html:16
 msgid "Su contraseña ha sido restablecida exitosamente"
 msgstr "Su contraseña ha sido restablecida exitosamente"
+
+#: appPacific/templates/recuperacion/reset_password_complete.html:17
+msgid "Ahora puedes"
+msgstr "Ahora puedes"
 
 #: appPacific/templates/recuperacion/reset_password_complete.html:17
 msgid "iniciar sesion"
@@ -998,71 +990,81 @@ msgstr "Bienvenido (a) Nombre del Vendedor"
 msgid "Cargo: Vendedor del Hotel Pacific"
 msgstr "Cargo: Vendedor del Hotel Pacific"
 
-#: appPacific/views.py:93
+#: appPacific/views.py:94
 msgid "Por favor, complete todos los campos."
 msgstr "Por favor, complete todos los campos."
 
-#: appPacific/views.py:97 appPacific/views.py:522 appPacific/views.py:592
+#: appPacific/views.py:98 appPacific/views.py:524
 msgid "El nombre deben ser sólo letras"
 msgstr "El nombre deben ser sólo letras"
 
-#: appPacific/views.py:103 appPacific/views.py:526 appPacific/views.py:596
+#: appPacific/views.py:104 appPacific/views.py:528
 msgid "Los apellidos deben ser sólo letras"
 msgstr "Los apellidos deben ser sólo letras"
 
-#: appPacific/views.py:109 appPacific/views.py:530
+#: appPacific/views.py:110 appPacific/views.py:532
 msgid "Las contraseñas no coinciden"
 msgstr "Las contraseñas no coinciden"
 
-#: appPacific/views.py:113 appPacific/views.py:534
+#: appPacific/views.py:114 appPacific/views.py:536
 msgid "Nombre de usuario ya existe"
 msgstr "Nombre de usuario ya existe"
 
-#: appPacific/views.py:117
+#: appPacific/views.py:118
 msgid "Ya existe una cuenta con ese correo"
 msgstr "Ya existe una cuenta con ese correo"
 
-#: appPacific/views.py:131
+#: appPacific/views.py:132
 msgid "Error al registrar usuario. Por favor, inténtelo de nuevo."
 msgstr "Error al registrar usuario. Por favor, inténtelo de nuevo."
 
-#: appPacific/views.py:143
+#: appPacific/views.py:144
 msgid "Debe llenar los campos indicados"
 msgstr "Debe llenar los campos indicados"
 
-#: appPacific/views.py:164
+#: appPacific/views.py:165
 msgid "Usuario o contraseña no es correcta"
 msgstr "Usuario o contraseña no es correcta"
 
-#: appPacific/views.py:168
+#: appPacific/views.py:169
 msgid "Error al iniciar sesión. Por favor, inténtelo de nuevo."
 msgstr "Error al iniciar sesión. Por favor, inténtelo de nuevo."
 
-#: appPacific/views.py:397
+#: appPacific/views.py:398
 msgid "¡La habitación se creó exitosamente!"
 msgstr "¡La habitación se creó exitosamente!"
 
-#: appPacific/views.py:518 appPacific/views.py:588
+#: appPacific/views.py:520 appPacific/views.py:593
 msgid "Debes llenar todos los campos"
 msgstr "Debes llenar todos los campos"
 
-#: appPacific/views.py:538
+#: appPacific/views.py:540
 msgid "El correo ya es usado por otro usuario"
 msgstr "El correo ya es usado por otro usuario"
 
-#: appPacific/views.py:548
+#: appPacific/views.py:551
 msgid "Usuario creado con exito"
 msgstr "Usuario creado con exito"
 
-#: appPacific/views.py:606
+#: appPacific/views.py:604
 msgid "Usuario modificado con éxito"
 msgstr "Usuario modificado con éxito"
 
-#: appPacific/views.py:618
-#, fuzzy
-#| msgid "Usuario modificado con éxito"
+#: appPacific/views.py:615
 msgid "Usuario eliminado con éxito"
-msgstr "Usuario modificado con éxito"
+msgstr "Usuario eliminado con éxito"
+
+#~ msgid "Vendedor"
+#~ msgstr "Vendedor"
+
+#~ msgid "Cliente"
+#~ msgstr "Cliente"
+
+#~ msgid "Super Usuario"
+#~ msgstr "Super Usuario"
+
+#~ msgid "Privilegios"
+#~ msgstr "Privilegios"
 
 #~ msgid "Gestión de Reservas"
 #~ msgstr "Gestión de Reservas"
