@@ -35,7 +35,6 @@ from django.shortcuts import render
 from django.core.mail import send_mail
 from django.views.generic import View
 
-
 # Create your views here.
 
 # Vista Index
@@ -73,7 +72,7 @@ def index(request):
 
     for habitacion in habitaciones:
         if idioma == 'en':
-            habitacion.titulo = habitacion.titulo_en
+            habitacion.titulo_hab = habitacion.titulo_en
             habitacion.descripcion = habitacion.descripcion_en
     
     return render(request, 'app/index.html', {'habitaciones': habitaciones})
@@ -124,7 +123,7 @@ def registro(request):
             user.save()
             login(request,user)
 
-            messages.success(request, "Registro Exitoso, por favor inicie sesion")
+            # messages.success(request, "Registro Exitoso, por favor inicie sesion")
             return redirect('index')
         
         except IntegrityError:  
@@ -134,6 +133,13 @@ def registro(request):
     return render(request, 'registration/registro.html')
 
 def iniciosesion(request):
+
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('administrador_home')
+        else:
+            return redirect('index')
+
     if request.method == 'POST':
         try:       
             usuario = request.POST.get('username')
@@ -144,22 +150,18 @@ def iniciosesion(request):
                 return render(request,'app/login.html')
 
             user = authenticate(request,username=usuario,password=password1)
-
             if user is not None:
                 login(request,user)
-                messages.success(request,"Inicio de sesión correcta")
+                # messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
                 request.session['id_user'] = user.id
-
                 # messages.success(request, _("Inicio de sesión correcta"))
                 
                 #Valida si el user es superusuario:
                 if user.is_superuser:
-                    name = request.user.first_name
-                    return render(request, 'administrador/administrador_home.html', {'nameadmin':name})
+                    return redirect('administrador_home')
                 else:
-                    name = request.user.first_name
-                    return render(request,'app/index.html', {'name':name})
+                    return redirect('index')
             else:
                 messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
@@ -170,10 +172,14 @@ def iniciosesion(request):
 
     return render(request, 'app/login.html')
 
+
 @login_required
 def cerrarsesion(request):
-    logout(request)
-    return redirect('home')
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('index')
+    else:
+        return redirect('iniciosesion')
 
 # Vistas Relacionadas con el usuario registrado:
 @login_required
@@ -182,8 +188,9 @@ def misreservas(request):
 
 @login_required
 def misdatos(request):
-    return render(request, 'registration/datopersonal.html')
-
+    id_user = request.session.get('id_user')
+    datos_usuario = User.objects.get(pk = id_user)
+    return render(request, 'registration/datopersonal.html',{'datos_usuario': datos_usuario})
 
 # Vista Home
 def home(request):
@@ -213,6 +220,7 @@ def habitaciones(request):
 
         # Guardar los id de ambas habitaciones en sesiones
         request.session['id_hab'] = row_hab.id_hab
+        request.session['titulo_hab'] = row_hab.titulo_hab
         request.session['tipo_hab'] = row_tipo_hab.tipo_hab
         request.session['precio'] = row_hab.precio
 
@@ -222,7 +230,7 @@ def habitaciones(request):
     habitaciones = Habitacion.objects.all()
     for habitacion in habitaciones:
         if idioma == 'en':
-            habitacion.titulo = habitacion.titulo_en
+            habitacion.titulo_hab = habitacion.titulo_en
             habitacion.descripcion = habitacion.descripcion_en
     return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
@@ -233,6 +241,7 @@ def metodo_pago(request):
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
+    titulo_hab = request.session.get('titulo_hab')
 
     # Obtener valores de id_hab y id_tipo_hab
     id_hab = request.session.get('id_hab')
@@ -240,34 +249,31 @@ def metodo_pago(request):
 
     # Obtener precio de habitacion
     row_hab = Habitacion.objects.get(pk=id_hab)
-    precio = row_hab.precio
-
-    precio_int = int(row_hab.precio)
-    print("El precio en vista de metodo_pago es: ", precio)
+    total = int(row_hab.precio)
 
     # Calcular 30% del total
-    pago_inicial = int(0.3*precio_int)
-    pago_pendiente = int(0.7*precio_int)
+    pago_inicial = int(0.3*total)
+    pago_pendiente = int(0.7*total)
 
     # Guardar en una session los datos de total, pago_inicial, pago_pendiente
-    request.session['total'] = precio_int
+    request.session['total'] = total
     request.session['pago_inicial'] = pago_inicial
     request.session['pago_pendiente'] = pago_pendiente
 
     # Crear obteto cuando se selecciona habitacion
     hab_seleccionada = {
         'tipo_hab': tipo_hab,
+        'titulo_hab': titulo_hab,
         'fecha_llegada': fecha_llegada,
         'fecha_salida': fecha_salida,
         'contador_adultos': contador_adultos,
         'contador_ninos': contador_ninos,
-        'total': precio_int,
+        'total': total,
         'pago_inicial': pago_inicial,
         'pago_pendiente': pago_pendiente
     }
 
     return render(request, 'app/metodo_pago.html', {'hab_seleccionada':hab_seleccionada})
-
 
 def generar_codigo(length=8):
     caracteres = string.ascii_letters + string.digits
@@ -345,11 +351,13 @@ def nosotros(request):
     return render(request, 'app/nosotros.html')
 
 # VISTAS DEL ADMINISTRADOR
-
 # Vista Administrador Home
 @admin_required
 def administrador_home(request):
-    return render(request, 'administrador/administrador_home.html')
+    id_user = request.session.get('id_user')
+    datos_usuario = User.objects.get(pk = id_user)
+    nombre_de_usuario = datos_usuario.username
+    return render(request, 'administrador/administrador_home.html', {'nameadmin': nombre_de_usuario})
 
 # Vista Administrador Gestion Habitaciones
 @admin_required
@@ -361,11 +369,12 @@ def gestion_habitaciones(request):
 def crear_habitacion(request):
     if request.method == 'POST':
         id_tipo_hab = request.POST.get('id_tipo_hab')
-        titulo = request.POST.get('titulo')
+        titulo_hab = request.POST.get('titulo_hab')
         descripcion = request.POST.get('descripcion')
         titulo_en = request.POST.get('titulo_en')
         descripcion_en = request.POST.get('descripcion_en')
         cantidad = request.POST.get('cantidad')
+        capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
         imagen_bytes = request.FILES.get('cargarImagen').read()
 
@@ -379,11 +388,12 @@ def crear_habitacion(request):
         # Crear la instancia de Habitacion con la imagen codificada en base64
         habitacion = Habitacion(
             id_tipo_hab=id_tipo_hab,
-            titulo=titulo,
+            titulo_hab=titulo_hab,
             descripcion=descripcion,
             titulo_en=titulo_en,
             descripcion_en=descripcion_en,
             cantidad=cantidad,
+            capacidad_max = capacidad_max,
             precio=precio,
             imagen=imagen_base64_str  # Almacenar la imagen codificada en base64
         )
@@ -397,7 +407,6 @@ def crear_habitacion(request):
 
 
 # Vista Administrador Gestion Habitaciones-eliminar
-@admin_required
 @admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
@@ -415,18 +424,20 @@ def modificar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
         id_tipo_hab = request.POST.get('id_tipo_hab')
-        titulo = request.POST.get('titulo')
+        titulo_hab = request.POST.get('titulo_hab')
         descripcion = request.POST.get('descripcion')
         cantidad = request.POST.get('cantidad')
+        capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
 
         habitacion = Habitacion.objects.get(id_hab=id_hab)
 
         # Actualizar los campos de la habitación
         habitacion.id_tipo_hab = id_tipo_hab
-        habitacion.titulo = titulo
+        habitacion.titulo_hab = titulo_hab
         habitacion.descripcion = descripcion
         habitacion.cantidad = cantidad
+        habitacion.capacidad_max = capacidad_max
         habitacion.precio = precio
 
         habitacion.save()
@@ -455,11 +466,31 @@ def crear_reserva_pacific(request):
         id_reserva = request.POST.get('id_reserva')
         nombre_cli = request.POST.get('nombre_cli')
         apellidos_cli = request.POST.get('apellidos_cli')
-        rut_cli = request.POST.get('rut_cli')
-        metodo_pago = request.POST.get('metodo_pago')
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        tipo_hab = request.POST.get('tipo_hab')
+        titulo_hab = request.POST.get('titulo_hab')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        total = request.POST.get('total')
         pago_reserva = request.POST.get('pago_reserva')
-        total_restante = request.POST.get('total_restante')
-        estado_pago = request.POST.get('estado_pago')
+        pago_pendiente = request.POST.get('pago_pendiente')
+
+        id_user = User.objects.get(username = nombre_cli, last_name = apellidos_cli)
+
+        reserva = Reserva(
+            id_reserva = id_reserva,
+            id_user = id_user,
+            nombre_cli = nombre_cli,
+            apellidos_cli = apellidos_cli,
+            cant_adultos = cant_adultos,
+            cant_ninos = cant_ninos,
+            tipo_hab = tipo_hab,
+            titulo_hab = titulo_hab,
+            tipo_metodo_pago = tipo_metodo_pago,
+            total = total,
+            pago_reserva = pago_reserva,
+            pago_pendiente = pago_pendiente
+        )
 
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
 
@@ -768,16 +799,6 @@ def handle_response(response):
 def cerrarsesionadmin(request):
     logout(request)
     return redirect('index')
-
-# DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
-# DELIMITER $
-# CREATE PROCEDURE obtener_todos_usuarios()
-# BEGIN
-# 	SELECT * FROM auth_user;
-# END $
-# DELIMITER ;
-# CALL obtener_todos_usuarios();   
-    
 
 # Vista Vendedor Home
 def vendedor_home(request):

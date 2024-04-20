@@ -10,6 +10,14 @@
     <div class="row">
         <div class="col">
             <div class="titulo-general text-center">{% trans "Mis datos" %}</div>
+            <ul class="text-center">
+                <li> ID usuario: {{ datos_usuario.id }}</li>
+                {% if datos_usuario.is_staff == 1 %}
+                    <li> Es Super Usuario: Si </li>
+                {% endif %}
+                <li> Nombre de Usuario: {{ datos_usuario.username }}</li>
+                <li> Correo: {{ datos_usuario.email }}</li>
+            </ul>
         </div>
     </div>
 </div>

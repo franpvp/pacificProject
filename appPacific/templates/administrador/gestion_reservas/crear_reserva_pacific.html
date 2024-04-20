@@ -31,8 +31,8 @@
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente" required>
-                    <label for="floatingInput">{% trans "Rut Cliente"%}</label>
+                    <input type="email" class="form-control" id="floatingInput" placeholder="Correo Electrónico" required>
+                    <label for="floatingInput">{% trans "Correo Electrónico"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
@@ -50,8 +50,7 @@
             <div class="col-md-5 col-lg-5">
                 <select class="form-select form-select-md mb-3" aria-label="Large select example" required>
                     <option selected>{% trans "Seleccione Método de Pago"%}</option>
-                    <option value="1">{% trans "Débito"%}</option>
-                    <option value="2">{% trans "Crédito"%}</option>
+                    <option value="1">{% trans "PayPal"%}</option>
                     <option value="3">{% trans "Transferencia"%}</option>
                 </select>
             </div>
@@ -80,8 +79,8 @@
                 <div class="col">
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
-                        <input type="hidden" name="id_venta" value="{{ venta.id_venta }}">
-                        <button class="btn btn-primary" type="submit">{% trans "Confirmar"%} </button>
+                        <input type="hidden" name="id_venta" value="{{ reserva.order_id }}">
+                        <button class="btn btn-primary" type="submit">{% trans "Enviar Confirmación"%} </button>
                     </div>
                 </div>
             </div>

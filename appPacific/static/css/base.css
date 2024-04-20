@@ -283,8 +283,9 @@ a{
 }
 
 .contenido-main{
-    width: calc(100% -80px);
+    position: relative;
     margin-left: 80px;
+    
 }
 
 .container {
@@ -301,7 +302,9 @@ li{
 }
 
 .footer-pag{
-    margin-top: 145px;
+    position: absolute;
+    width: 100%;
+    margin-top: 150px;
 }
 
 /* CSS administrador_home.html */
@@ -322,4 +325,22 @@ li{
 
 .no-border{
     border: none !important;
+}
+
+@media (max-width: 1321px) {
+    #navbarSupportedContent {
+        display: none !important;
+    }
+}
+
+/* Botón wsp */
+.btn-wsp{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2300;
 }

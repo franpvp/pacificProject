@@ -80,11 +80,12 @@ class TipoHabitacion(models.Model):
 class Habitacion(models.Model):
     id_hab = models.AutoField(primary_key=True, unique=True, verbose_name="Id habitación")
     id_tipo_hab = models.IntegerField(verbose_name="ID tipo habitación")
-    titulo = models.CharField(max_length=50, verbose_name="Titulo habitación")
+    titulo_hab = models.CharField(max_length=50, verbose_name="Titulo habitación")
     descripcion = models.CharField(max_length=200, verbose_name="Descripción")
     titulo_en = models.CharField(max_length=50, verbose_name="Titulo habitación en inglés")
     descripcion_en = models.CharField(max_length=200, verbose_name="Descripción en inglés")
     cantidad = models.CharField(max_length=50, verbose_name="Cantidad Habitaciones")
+    capacidad_max = models.IntegerField(verbose_name="Capacidad Máxima habitación")
     precio = models.CharField(max_length=50, verbose_name="Precio")
     imagen = models.TextField(null=True, blank=True, verbose_name='Datos de la imagen en base64')
 

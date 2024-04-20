@@ -65,12 +65,13 @@
                 <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
                     <div class="card no-border">
                         <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+                            <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}">
                         </div>
                         <div class="card-body text-center">
-                            <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                            <h5 class="card-title">{{ habitacion.titulo_hab }}</h5>
                             <p class="card-text">{{ habitacion.descripcion }}</p>
-                            <p class="precio-hab card-text">$ {{ habitacion.precio }} CLP</p>
+                            <p class="card-text">Capacidad: {{ habitacion.capacidad_max }} huéspedes</p>
+                            <p class="precio-hab card-text" data-precio="{{ habitacion.precio }}">$ {{ habitacion.precio }} CLP noche</p>
                             <form method="post" action="{% url 'habitaciones' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
@@ -94,12 +95,12 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="contenido-imagenes">
-                                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}" class="img-fluid" style="border-radius: 40px;">
+                                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}" class="img-fluid" style="border-radius: 40px;">
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-12 mt-3 d-flex justify-content-center">
                                             <div class="contenido-habitacion">
-                                                <h5 class="card-title">{{ habitacion.titulo }}</h5>
+                                                <h5 class="card-title">{{ habitacion.titulo_hab }}</h5>
                                                 <p>
                                                     {% trans "Esta habitación ofrece:" %}
                                                     {{ habitacion.capacidad_huespedes }} {% trans "huéspedes" %},

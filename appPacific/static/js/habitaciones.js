@@ -39,7 +39,7 @@ document.querySelectorAll('.btn-filtrar').forEach(btn => {
 
 // Filtrar por más ecónomicos o más caros
 function ordenarHabitaciones(orden) {
-    var preciosHabitaciones = document.querySelectorAll('.precio-hab'); // Seleccionamos todos los elementos con la clase 'precio-hab'
+    var preciosHabitaciones = document.querySelectorAll('.precio'); // Seleccionamos todos los elementos con la clase 'precio-hab'
 
     var habitacionesArray = Array.from(preciosHabitaciones).map(function(precioHabitacion) {
         return {
@@ -97,6 +97,7 @@ function mostrarMensaje() {
     alert("Debe iniciar sesión antes de realizar una reserva.");
     window.location.href = "/iniciosesion";
 }
+
 
 
 

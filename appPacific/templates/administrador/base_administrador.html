@@ -63,7 +63,7 @@
                     <p class="nav-item">{% trans "Configuración" %}</p>
                 </a>
             </li>
-            {% if user.is_authenticated%}
+            {% if user.is_authenticated %}
             <li class="item"> 
                 <!--Es importante la url cerrarsesionadmin para cerrar la sesion del usuario-->
                 <a href="{% url 'cerrarsesionadmin' %}">
@@ -105,30 +105,22 @@
                     </ul>
                     <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
                         <!-- Logo Cambio de Idioma -->
-                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-                            <input name="next" type="hidden" value="{{ redirect_to }}">
-                            <select name="language">
+                        <form id="language-form" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <img id="logo-chile" class="language-img" src="{% static 'img/logo-chile.png' %}" alt="es" style="width: 45px; height: auto;">
+                            <img id="logo-eng" class="language-img" src="{% static 'img/logo-eng.webp' %}" alt="en" style="width: 45px; height: auto; display: none;">
+                            <select id="language-select" name="language">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
-                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                        {{ language.name_local }} ({{ language.code }})
+                                    <option value="{{ language.code }}"
+                                        {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                        {{ language.name_local }}
                                     </option>
                                 {% endfor %}
                             </select>
-                            <button type="submit">{% trans "Traducir" %}</button>
                         </form>
-                        <!-- Botón Login -->
-                        <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                style="width: 30px; height: 30px; margin-right: 15px;">
-                            {% trans "Iniciar Sesión" %}
-                        </a>
-                        <!-- Botón Registro -->
-                        <a href="{% url 'registro' %}" class="btn-reg">
-                            {% trans "Regístrate" %}
-                        </a>
                     </div>
                 </div>
             </div>
@@ -172,8 +164,94 @@
     <!-- Otros scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <!-- Datepicker Spanish -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+
+    <script>
+        // Calendario
+        var currentDate = new Date();
+
+        $(document).ready(function () {
+            $('.date-range').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: '      D dd M    ',
+                clearBtn: true,
+                multidate: false, // Permite solo una fecha seleccionada
+                startDate: currentDate,
+                language: 'es' // Establece el idioma a español
+            }).on('changeDate', function (e) {
+                var dates = e.dates.map(date => {
+                    return date.toString().substring(0, 3) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' });
+                });
+                $(this).val(dates.join(', '));
+
+                var hiddenInput = $('#' + $(this).attr('id') + '_hidden');
+                var selectedDate = e.date;
+                if (selectedDate) {
+                    var formattedDate = selectedDate.toISOString().substring(0, 10);
+                    hiddenInput.val(formattedDate);
+                }
+
+            }).on('changeDate', function (e) {
+                var selectedDate = e.date;
+                var inputId = $(this).attr('id');
+                var otherInputId = inputId === 'fecha_llegada' ? 'fecha_salida' : 'fecha_llegada';
+                var otherInput = $('#' + otherInputId);
+                var otherDate = otherInput.datepicker('getDate');
+
+                if (otherDate !== null && selectedDate !== null) {
+                    if (inputId === 'fecha_llegada' && selectedDate > otherDate) {
+                        otherInput.datepicker('setDate', selectedDate);
+                    } else if (inputId === 'fecha_salida' && selectedDate < otherDate) {
+                        otherInput.datepicker('setDate', selectedDate);
+                    }
+                    if ($('#fecha_llegada').datepicker('getDate') !== null && $('#fecha_salida').datepicker('getDate') !== null && $('#fecha_llegada').datepicker('getDate') >= $('#fecha_salida').datepicker('getDate')) {
+                        if (inputId === 'fecha_llegada') {
+                            otherInput.datepicker('setDate', new Date(selectedDate.getTime() + 86400000)); // Agrega un día a la fecha de llegada
+                        } else {
+                            otherInput.datepicker('setDate', null);
+                        }
+                    }
+                }
+            });
+
+            // Mostrar el calendario debajo del input al hacer clic en él
+            $('.date-range').focus(function () {
+                $(this).datepicker('show');
+            });
+        });
+
+        document.getElementById("language-select").addEventListener("change", function() {
+        var selectedLanguage = this.value;
+        var logoChile = document.getElementById("logo-chile");
+        var logoEng = document.getElementById("logo-eng");
+
+        if (selectedLanguage === 'es') {
+            logoChile.style.display = "inline";
+            logoEng.style.display = "none";
+        } else {
+            logoChile.style.display = "none";
+            logoEng.style.display = "inline";
+        }
+        document.getElementById("language-form").submit();
+    });
+
+    window.onload = function() {
+        var selectedLanguage = document.getElementById("language-select").value;
+        var logoChile = document.getElementById("logo-chile");
+        var logoEng = document.getElementById("logo-eng");
+
+        if (selectedLanguage === 'es') {
+            logoChile.style.display = "inline";
+            logoEng.style.display = "none";
+        } else {
+            logoChile.style.display = "none";
+            logoEng.style.display = "inline";
+        }
+    };
+    </script>
 </body>
 
 </html>
