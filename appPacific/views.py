@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from appPacific.decorators import admin_required
 from .models import Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
@@ -27,11 +27,9 @@ import re
 from appPacific import models
 import re
 from django.utils.translation import gettext as _
-from .decorators import admin_required
-from urllib.parse import urlencode
+from .decorators import admin_required, seller_required
 from django.db import connection
 from django.shortcuts import render
-from django.core.mail import send_mail
 from django.views.generic import View
 from rest_framework import generics
 from .models import MetodoPago, Reserva, ReporteReserva, TipoHabitacion, Habitacion, DatosBancarios
@@ -158,9 +156,14 @@ def iniciosesion(request):
                 if user.is_superuser:
                     name = request.user.first_name
                     return render(request, 'administrador/administrador_home.html', {'nameadmin':name})
+                #Valida si el user es vender:
+                if user.is_staff:
+                    name = request.user.first_name
+                    return render(request, 'vendedor/vendedor_home.html', {'namevendedor':name})           
                 else:
                     name = request.user.first_name
                     return render(request,'app/index.html', {'name':name})
+                    
             else:
                 messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
@@ -513,8 +516,9 @@ def crear_usuario_admin(request):
         telefono = request.POST['telefono']
         password1 = request.POST['contrasena1']
         password2 = request.POST['contrasena2']
+        is_normal = request.POST.get('normal', False)
         is_superuser = request.POST.get('superusuario', False)
-        is_vendedor = request.POST.get('vendedor', False)
+        is_staff = request.POST.get('vendedor', False)
 
         if not (nombre and apellido and usuario and correo and telefono and password1 and password2):
             messages.error(request, _("Debes llenar todos los campos"))
@@ -544,8 +548,9 @@ def crear_usuario_admin(request):
         user.first_name = nombre
         user.last_name = apellido
         user.email = correo
+        user.is_normal = bool(is_normal)
         user.is_superuser = bool(is_superuser)
-        user.is_vendedor = bool(is_vendedor)
+        user.is_staff = bool(is_staff) # Cambiar el is_vendedor
         user.save()
 
         messages.success(request, _("Usuario creado con exito"))
@@ -556,7 +561,7 @@ def crear_usuario_admin(request):
 # Vista Administrador Gestion Usuarios -ver usuario
 @admin_required
 def ver_usuarios_admin(request):
-    # Llamo al procedimiento creado en mysql (el cuál está en la línea 432)
+    # Llamo al procedimiento creado en mysql (el cuál está en la línea 801)
     with connection.cursor() as c:
         c.callproc('obtener_todos_usuarios')
         resultado = c.fetchall()
@@ -587,7 +592,7 @@ def modificar_usuario_admin(request, id_usuario):
         username = request.POST.get('nombreusuario')
         email = request.POST.get('correo')
         is_superuser = request.POST.get('superusuario', False)
-        is_staff = request.POST.get('staff', False)
+        is_staff = request.POST.get('staff', False) # Esto es correcto
 
         if not (nombre and apellido and username and email):
             messages.error(request, _("Debes llenar todos los campos"))
@@ -598,7 +603,7 @@ def modificar_usuario_admin(request, id_usuario):
         usuario.username = username
         usuario.email = email
         usuario.is_superuser = bool(is_superuser)
-        usuario.is_staff = bool(is_staff)
+        usuario.is_staff = bool(is_staff)  # Esto es correcto
         usuario.save()
 
         success_message = _("Usuario modificado con éxito")
@@ -618,7 +623,6 @@ def eliminar_usuario_admin(request, id_usuario):
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
-
 
 @login_required
 def tipo_usuario_admin(request, id_usuario):
@@ -796,7 +800,7 @@ def handle_response(response):
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
-    return redirect('index')
+    return redirect('home')
 
 # DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
 # DELIMITER $
@@ -808,15 +812,20 @@ def cerrarsesionadmin(request):
 # CALL obtener_todos_usuarios();   
     
 
+# VISTAS DEL VENDEDOR
+
 # Vista Vendedor Home
+@seller_required
 def vendedor_home(request):
     return render(request, 'vendedor/vendedor_home.html')
 
 # Vista Vendedor Gestion Reservas
+@seller_required
 def gestion_reservas_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -crear
+@seller_required
 def crear_reserva_pacific_vendedor(request):
     if request.method == 'POST':
         id_reserva = request.POST.get('id_reserva')
@@ -831,20 +840,29 @@ def crear_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -eliminar
+@seller_required
 def eliminar_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -modificar
+@seller_required
 def modificar_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -ver calendario
+@seller_required
 def ver_calendario_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -ver reserva
+@seller_required
 def ver_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+
+@seller_required
+def cerrarsesionvendedor(request):
+    logout(request)
+    return redirect('home')
 
 # Serializadores API REST
 

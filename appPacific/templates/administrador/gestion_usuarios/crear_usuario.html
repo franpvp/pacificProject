@@ -49,11 +49,25 @@
                             <input type="password" class="form-control" id="contrasena2" name="contrasena2" placeholder= "{% trans 'contraseña' %}" required>
                             <label for="contrasena2">{% trans "Contraseña"%}</label>
                         </div>
+                        <!-- Checkbox Usuario Normal -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="1" id="normal" name="normal">
+                            <label class="form-check-label" for="normal">
+                                {% trans "¿Quieres que sea Usuario Común?"%}
+                            </label>
+                        </div>
+                        <!-- Checkbox Usuario Vendedor -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="1" id="vendedor" name="vendedor">
+                            <label class="form-check-label" for="vendedor">
+                                {% trans "¿Quieres que sea Usuario Vendedor?"%}
+                            </label>
+                        </div>
                         <!-- Checkbox Super Usuario -->
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" value="1" id="superusuario" name="superusuario">
                             <label class="form-check-label" for="superusuario">
-                                {% trans "¿Quieres que sea Super Usuario?"%}
+                                {% trans "¿Quieres que sea Usuario Administrador?"%}
                             </label>
                         </div>
                         <!-- Botón Registrar -->
@@ -87,10 +101,27 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
+
 <script>
-    // No se requiere ningún script para ocultar la alerta de éxito
+    document.addEventListener("DOMContentLoaded", function() {
+        var checkboxes = document.querySelectorAll('.form-check-input');
+    
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(function(otherCheckbox) {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.checked = false;
+                        }
+                    });
+                }
+            });
+        });
+    });
 </script>
+
 {% endblock %}
