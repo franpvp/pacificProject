@@ -84,9 +84,9 @@ class Habitacion(models.Model):
     descripcion = models.CharField(max_length=200, verbose_name="Descripción")
     titulo_en = models.CharField(max_length=50, verbose_name="Titulo habitación en inglés")
     descripcion_en = models.CharField(max_length=200, verbose_name="Descripción en inglés")
-    cantidad = models.CharField(max_length=50, verbose_name="Cantidad Habitaciones")
     capacidad_max = models.IntegerField(verbose_name="Capacidad Máxima habitación")
     precio = models.CharField(max_length=50, verbose_name="Precio")
+    estado = models.CharField(max_length=50, verbose_name="Estado", default='Disponible')
     imagen = models.TextField(null=True, blank=True, verbose_name='Datos de la imagen en base64')
 
     def __str__(self):

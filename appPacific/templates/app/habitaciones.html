@@ -90,9 +90,10 @@
                                 {% endif %}
                                 <div class="fondo-opaco"></div>
                                 <!-- Mostrar ventana con información mas detallada de la habitación -->
-                                <div class="mas-informacion text-center m-auto">
+                                <div class="mas-informacion text-center m-auto" style="max-height: 700px; overflow-y: auto;">
                                     <div class="btn-close"></div>
                                     <div class="row">
+                                        <h5 class="card-title m-0">{{ habitacion.titulo_hab }}</h5>
                                         <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="contenido-imagenes">
                                                 <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}" class="img-fluid" style="border-radius: 40px;">
@@ -100,20 +101,26 @@
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-12 mt-3 d-flex justify-content-center">
                                             <div class="contenido-habitacion">
-                                                <h5 class="card-title">{{ habitacion.titulo_hab }}</h5>
                                                 <p>
                                                     {% trans "Esta habitación ofrece:" %}
-                                                    {{ habitacion.capacidad_huespedes }} {% trans "huéspedes" %},
-                                                    {{ habitacion.cantidad_habitaciones }} {% trans "habitación" %},
                                                     {{ habitacion.camas }} {% trans "cama" %},
                                                     {{ habitacion.banos }} {% trans "baño" %}
                                                 </p>
-                                                <p>{% trans "Sevicios Incluidos:" %}
-                                                    <!-- Campo True o False en BBDD -->
-                                                    {{ habitacion.desayuno }}
-                                                    {{ habitacion.piscina }}
-                                                    {{ habitacion.gimnasio }}
-                                                </p>
+                                                <p class="mt-3">{% trans "Servicios Incluidos:" %}</p>
+                                                <ul class="list-inline">
+                                                    <li class="list-group-item">Desayuno</li>
+                                                    <li class="list-group-item">Piscina</li>
+                                                    <li class="list-group-item">Gimnasio</li>
+                                                </ul>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                                    <label class="form-check-label" for="inlineCheckbox1">Transporte Aereopuerto</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                                    <label class="form-check-label" for="inlineCheckbox2">Restaurante VIP</label>
+                                                </div>
+                                                <p class="mt-3"> * Capacidad Máxima: <strong>{{ habitacion.capacidad_max }} {% trans "huéspedes" %}</strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -134,8 +141,48 @@
                     </div>
                 </div>
                 {% endfor %}
+                <footer class="footer-pag p-2">
+                    <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;">
+                        <!-- Ajuste de margen superior -->
+                        <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                        <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
+                        <!-- Dirección ficticia -->
+                    </div>
+                </footer>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener todos los elementos de precio
+        const precios = document.querySelectorAll('.precio');
+    
+        // Definir la traducción de "noche" según el idioma actual
+        const traduccionNoche = idioma === "en" ? "night" : "noche";
+
+        // Iterar sobre cada elemento de precio
+        precios.forEach(function(precioElement) {
+            // Obtener el precio sin formato de los datos del atributo data
+            const precioSinFormato = precioElement.getAttribute('data-precio');
+
+            // Convertir el precio sin formato a un número y formatearlo con el formato 99.999
+            const precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CL');
+
+            // Actualizar el contenido del elemento con el precio formateado y la traducción de "noche"
+            precioElement.innerHTML = `<strong>$${precioFormateado} CLP </strong>${traduccionNoche}`;
+        });
+    });
+    
+    var idioma = "{{ request.LANGUAGE_CODE }}";
+    // Verifica el idioma actual y cambia el contenido según corresponda
+    if (idioma === "es") {
+        document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
+    } else if (idioma === "en") {
+        document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+    }
+
+    
+</script>
 {% endblock %}

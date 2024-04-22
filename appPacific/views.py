@@ -39,6 +39,9 @@ from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReserva
 
 # Vista Index
 def index(request):
+    habitacion_visible = request.POST.get('id_hab')
+    print(habitacion_visible)
+
     if request.method == 'POST':
         # Input Buscador
         fecha_llegada = request.POST.get('fecha_llegada')
@@ -75,7 +78,7 @@ def index(request):
             habitacion.titulo_hab = habitacion.titulo_en
             habitacion.descripcion = habitacion.descripcion_en
     
-    return render(request, 'app/index.html', {'habitaciones': habitaciones})
+    return render(request, 'app/index.html', {'habitaciones': habitaciones, 'habitacion_visible':habitacion_visible})
 
 def registro(request):
     if request.method == 'POST':
@@ -373,7 +376,6 @@ def crear_habitacion(request):
         descripcion = request.POST.get('descripcion')
         titulo_en = request.POST.get('titulo_en')
         descripcion_en = request.POST.get('descripcion_en')
-        cantidad = request.POST.get('cantidad')
         capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
         imagen_bytes = request.FILES.get('cargarImagen').read()
@@ -392,7 +394,6 @@ def crear_habitacion(request):
             descripcion=descripcion,
             titulo_en=titulo_en,
             descripcion_en=descripcion_en,
-            cantidad=cantidad,
             capacidad_max = capacidad_max,
             precio=precio,
             imagen=imagen_base64_str  # Almacenar la imagen codificada en base64
@@ -427,9 +428,9 @@ def modificar_habitacion(request):
         id_tipo_hab = request.POST.get('id_tipo_hab')
         titulo_hab = request.POST.get('titulo_hab')
         descripcion = request.POST.get('descripcion')
-        cantidad = request.POST.get('cantidad')
         capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
+        estado = request.POST.get('estado')
 
         habitacion = Habitacion.objects.get(id_hab=id_hab)
 
@@ -437,9 +438,9 @@ def modificar_habitacion(request):
         habitacion.id_tipo_hab = id_tipo_hab
         habitacion.titulo_hab = titulo_hab
         habitacion.descripcion = descripcion
-        habitacion.cantidad = cantidad
         habitacion.capacidad_max = capacidad_max
         habitacion.precio = precio
+        habitacion.estado = estado
 
         habitacion.save()
     habitaciones = Habitacion.objects.all()
@@ -463,37 +464,36 @@ def gestion_reservas(request):
 # Vista Administrador Gestion Reservas -crear
 @admin_required
 def crear_reserva_pacific(request):
+    # Obtener lista de tipos de habitaciones
+    lista_tipo_hab = TipoHabitacion.objects.all()
+
+    if request.method == 'GET' and 'id_tipo_hab' in request.GET:
+        id_tipo_hab = request.GET.get('id_tipo_hab')
+        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab', 'titulo_hab')
+        return JsonResponse({'habitaciones': list(hab_disponibles)})
+    
     if request.method == 'POST':
-        id_reserva = request.POST.get('id_reserva')
         nombre_cli = request.POST.get('nombre_cli')
         apellidos_cli = request.POST.get('apellidos_cli')
+        correo = request.POST.get('correo')
+        celular = request.POST.get('celular')
         cant_adultos = request.POST.get('cant_adultos')
         cant_ninos = request.POST.get('cant_ninos')
-        tipo_hab = request.POST.get('tipo_hab')
         titulo_hab = request.POST.get('titulo_hab')
-        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
-        total = request.POST.get('total')
-        pago_reserva = request.POST.get('pago_reserva')
-        pago_pendiente = request.POST.get('pago_pendiente')
+        paypal = request.POST.get('paypal')
+        transferencia = request.POST.get('transferencia')
 
-        id_user = User.objects.get(username = nombre_cli, last_name = apellidos_cli)
+        if 'id_tipo_hab' in request.POST:
+            id_tipo_hab = request.POST.get('id_tipo_hab')
+            print("Id tipo habitacion: ", id_tipo_hab)
 
-        reserva = Reserva(
-            id_reserva = id_reserva,
-            id_user = id_user,
-            nombre_cli = nombre_cli,
-            apellidos_cli = apellidos_cli,
-            cant_adultos = cant_adultos,
-            cant_ninos = cant_ninos,
-            tipo_hab = tipo_hab,
-            titulo_hab = titulo_hab,
-            tipo_metodo_pago = tipo_metodo_pago,
-            total = total,
-            pago_reserva = pago_reserva,
-            pago_pendiente = pago_pendiente
-        )
+        id_user = User.objects.get(username=nombre_cli, last_name=apellidos_cli)
 
-    return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
+        # Aquí puedes procesar los datos del formulario y realizar las operaciones necesarias
+        
+        return JsonResponse({'success': True})  # Devuelve una respuesta JSON de éxito
+
+    return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Administrador Gestion Reservas -eliminar
 @admin_required
@@ -863,3 +863,23 @@ class HabitacionListCreate(generics.ListCreateAPIView):
 class DatosBancariosListCreate(generics.ListCreateAPIView):
     queryset = DatosBancarios.objects.all()
     serializer_class = DatosBancariosSerializer
+
+# Enviar correo a cliente para realizar pago mediante paypal
+# @admin_required
+# def enviar_correo_paypal(request):
+#     if request.method == 'POST' and request.is_ajax():
+#         correo_electronico = request.POST.get('correo')
+
+#         # Aquí puedes enviar el correo electrónico usando la función send_mail de Django
+#         # Ejemplo:
+#         send_mail(
+#             'Asunto del correo',
+#             'Cuerpo del correo',
+#             'tu_correo@example.com',
+#             [correo_electronico],
+#             fail_silently=False,
+#         )
+
+#         return JsonResponse({'mensaje': 'Correo electrónico enviado con éxito.'})
+#     else:
+#         return JsonResponse({'error': 'La solicitud debe ser POST y AJAX.'}, status=400)

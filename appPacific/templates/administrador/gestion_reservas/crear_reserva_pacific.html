@@ -11,7 +11,7 @@
 <div class="container-fluid" style="padding-top: 160px;">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Crear Reserva"%}</h2>
+            <h2 class="titulo-general mb-3 text-center">{% trans "Crear Reserva"%}</h2>
         </div>
     </div>
     <form id="formulario-crear" method="post" onsubmit="handleSubmit(event)">
@@ -19,44 +19,31 @@
         <div class="row justify-content-center mt-3 mb-3">
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Nombre Cliente" required>
+                    <input id="nombres" type="text" class="form-control" placeholder="Nombre Cliente" required>
                     <label for="floatingInput">{% trans "Nombres Cliente"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Apellidos Cliente" required>
+                    <input id="apellidos" type="text" class="form-control" placeholder="Apellidos Cliente" required>
                     <label for="floatingInput">{% trans "Apellidos Cliente"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="Correo Electrónico" required>
+                    <input id="correo" type="email" class="form-control"  placeholder="Correo Electrónico" required>
                     <label for="floatingInput">{% trans "Correo Electrónico"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente" required>
-                    <label for="floatingInput">{% trans "Cantidad Adultos"%}</label>
+                    <input id="celular" type="text" class="form-control" placeholder="Celular" required>
+                    <label for="floatingInput">{% trans "Celular"%}</label>
                 </div>
             </div>
-            <div class="col-md-5 col-lg-5">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Rut Cliente">
-                    <label for="floatingInput">{% trans "Cantidad Niños"%}</label>
-                </div>
-            </div>
-            <div class="col-md-5 col-lg-5">
-                <select class="form-select form-select-md mb-3" aria-label="Large select example" required>
-                    <option selected>{% trans "Seleccione Método de Pago"%}</option>
-                    <option value="1">{% trans "PayPal"%}</option>
-                    <option value="3">{% trans "Transferencia"%}</option>
-                </select>
-            </div>
-            <div class="col-md-5 col-lg-5">
+            <div class="col-md-5 col-lg-5 mt-3 mb-3">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range" placeholder="{% trans 'Ingrese fecha de llegada' %}"
+                    <input type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de llegada' %}"
                     style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
@@ -65,9 +52,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5 col-lg-5">
+            <div class="col-md-5 col-lg-5 mt-3">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range" placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
+                    <input type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
                             <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
@@ -75,7 +62,60 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
+            <!-- Entrada para tipo de habitacion (Suite, Premium, Twin)--> 
+            <div class="col-md-5 col-lg-5 mt-3 mb-4">
+                <select id="tipo_hab_select" class="form-select" name="id_tipo_hab" aria-label="Default select example">
+                    <option selected>Selecciona Tipo Habitación</option>
+                    {% for tipo_hab in lista_tipo_hab %}
+                    <option value="{{ tipo_hab.id_tipo_hab }}" {% if id_tipo_hab == tipo_hab.id_tipo_hab %} selected {% endif %}>{{ tipo_hab.tipo_hab }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Seleccionar habitacion -->
+            <!-- Filtrar por id_tipo_hab y cantidad disponibles -->
+            <div class="col-md-5 col-lg-5 mt-3">
+                <select id="titulo_hab_select" class="form-select" name="titulo_hab" aria-label="Default select example">
+                    <option selected>Seleccione habitacion</option>
+                    {% for hab in hab_disponibles %}
+                        <option value="{{ hab.id_tipo_hab }}">{{ hab.titulo_hab }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input id="cant_adultos" name="cant_adultos" type="text" class="form-control"  min="1" placeholder="Cantidad Adultos" required>
+                    <label for="floatingInput">{% trans "Cantidad Adultos"%}</label>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-5">
+                <div class="form-floating mb-3">
+                    <input id="cant_ninos" name="cant_ninos" type="text" class="form-control" min="1" placeholder="Cantidad niños">
+                    <label for="floatingInput">{% trans "Cantidad Niños"%}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="text-center">Seleccione método de pago:</p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5 col-lg-5 d-flex justify-content-center">
+                    <!-- Usar este boton para enviar un correo para que cliente realice el pago de la reserva inicial -->
+                    <input type="hidden" id="input-paypal" name="paypal" value="paypal">
+                    <div id="paypal-button" type="submit" class="paypal" style="cursor: pointer;">
+                        <img src="{% static 'img/paypal.png'%}" alt="paypal" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-md-5 col-lg-5 d-flex justify-content-center">
+                    <!-- Enviar datos de transferencia a cliente por correo -->
+                    <input type="hidden" id="input-transferencia" name="transferencia" value="transferencia">
+                    <div id="transferencia-btn" class="transferencia" style="cursor: pointer;">
+                        <img src="{% static 'img/logo-transf.png'%}" alt="transferencia" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row mt-4">
                 <div class="col">
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
@@ -83,9 +123,10 @@
                         <button class="btn btn-primary" type="submit">{% trans "Enviar Confirmación"%} </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </form>
+    
 </div>
 
 {% endblock %}
