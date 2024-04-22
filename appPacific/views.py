@@ -1,14 +1,14 @@
+import datetime
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-
 from appPacific.decorators import admin_required
-from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
-from django.http import HttpResponse, HttpResponseRedirect
+from .models import Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
+from django.http import HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
@@ -28,16 +28,14 @@ import re
 from appPacific import models
 import re
 from django.utils.translation import gettext as _
-from .decorators import admin_required
-from urllib.parse import urlencode
+from .decorators import admin_required, seller_required
 from django.db import connection
 from django.shortcuts import render
-from django.core.mail import send_mail
 from django.views.generic import View
 from rest_framework import generics
 from .models import MetodoPago, Reserva, ReporteReserva, TipoHabitacion, Habitacion, DatosBancarios
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
-
+from django.contrib.auth.models import AnonymousUser
 
 # Create your views here.
 
@@ -158,11 +156,13 @@ def iniciosesion(request):
                 
                 #Valida si el user es superusuario:
                 if user.is_superuser:
-                    name = request.user.first_name
-                    return render(request, 'administrador/administrador_home.html', {'nameadmin':name})
+                    return redirect('administrador_home')
+                #Valida si el user es vender:
+                if user.is_staff:
+                    return redirect('vendedor_home')           
                 else:
-                    name = request.user.first_name
-                    return render(request,'app/index.html', {'name':name})
+                    return redirect('home')
+                    
             else:
                 messages.error(request, _("Usuario o contraseña no es correcta"))
                 return render(request, 'app/login.html')
@@ -190,7 +190,11 @@ def misdatos(request):
 
 # Vista Home
 def home(request):
-    return render(request,'app/home.html')
+    if request.user.is_authenticated:
+        name = request.user.first_name
+    else:
+        name = None
+    return render(request,'app/home.html', {'name': name})
 
 
 # Vista Contacto
@@ -354,12 +358,14 @@ def nosotros(request):
 # Vista Administrador Home
 @admin_required
 def administrador_home(request):
-    return render(request, 'administrador/administrador_home.html')
+    name = request.user.first_name
+    return render(request, 'administrador/administrador_home.html', {'nameadmin': name})
 
 # Vista Administrador Gestion Habitaciones
 @admin_required
 def gestion_habitaciones(request):
-    return render(request, 'administrador/gestion_habitaciones.html')
+    name = request.user.first_name
+    return render(request, 'administrador/gestion_habitaciones.html', {'nameadmin': name})
 
 # Vista Administrador Gestion Habitaciones -crear
 @admin_required
@@ -402,7 +408,6 @@ def crear_habitacion(request):
 
 
 # Vista Administrador Gestion Habitaciones-eliminar
-@admin_required
 @admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
@@ -451,7 +456,8 @@ def ver_habitacion(request):
 # Vista Administrador Gestion Reservas
 @admin_required
 def gestion_reservas(request):
-    return render(request, 'administrador/gestion_reservas.html')
+    name = request.user.first_name
+    return render(request, 'administrador/gestion_reservas.html', {'nameadmin': name})
 
 # Vista Administrador Gestion Reservas -crear
 @admin_required
@@ -502,7 +508,8 @@ def ver_reserva_pacific(request):
 # Vista Administrador Gestion Usuarios
 @admin_required
 def gestion_usuarios(request):
-    return render(request, 'administrador/gestion_usuarios.html')
+    name = request.user.first_name
+    return render(request, 'administrador/gestion_usuarios.html', {'nameadmin': name})
 
 # Vista Administrador Gestion Usuarios - crear usuario común o administrador
 @admin_required
@@ -515,7 +522,9 @@ def crear_usuario_admin(request):
         telefono = request.POST['telefono']
         password1 = request.POST['contrasena1']
         password2 = request.POST['contrasena2']
+        is_normal = request.POST.get('normal', False)
         is_superuser = request.POST.get('superusuario', False)
+        is_staff = request.POST.get('vendedor', False)
 
         if not (nombre and apellido and usuario and correo and telefono and password1 and password2):
             messages.error(request, _("Debes llenar todos los campos"))
@@ -545,7 +554,9 @@ def crear_usuario_admin(request):
         user.first_name = nombre
         user.last_name = apellido
         user.email = correo
+        user.is_normal = bool(is_normal)
         user.is_superuser = bool(is_superuser)
+        user.is_staff = bool(is_staff) # Cambiar el is_vendedor
         user.save()
 
         messages.success(request, _("Usuario creado con exito"))
@@ -556,7 +567,7 @@ def crear_usuario_admin(request):
 # Vista Administrador Gestion Usuarios -ver usuario
 @admin_required
 def ver_usuarios_admin(request):
-    # Llamo al procedimiento creado en mysql (el cuál está en la línea 432)
+    # Llamo al procedimiento creado en mysql (el cuál está en la línea 801)
     with connection.cursor() as c:
         c.callproc('obtener_todos_usuarios')
         resultado = c.fetchall()
@@ -580,35 +591,31 @@ def ver_usuarios_admin(request):
 @admin_required
 def modificar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(User, id=id_usuario)
+    
     if request.method == 'POST':
-        nombre = request.POST['nombres']
-        apellido = request.POST['apellidos']
-        username = request.POST['nombreusuario']
-        email = request.POST['correo']
-        is_superuser = request.POST.get('superusuario',False)
+        nombre = request.POST.get('nombres')
+        apellido = request.POST.get('apellidos')
+        username = request.POST.get('nombreusuario')
+        email = request.POST.get('correo')
+        is_normal = request.POST.get('normal')
+        is_superuser = request.POST.get('superusuario', False)
+        is_staff = request.POST.get('staff', False) # Esto es correcto
 
         if not (nombre and apellido and username and email):
             messages.error(request, _("Debes llenar todos los campos"))
             return redirect('modificar_usuario_admin', id_usuario=id_usuario)
         
-        if not re.match(r'^[a-zA-Z\s-]+$', nombre):
-            messages.error(request, _("El nombre deben ser sólo letras"))
-            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
-            
-        if not re.match(r'^[a-zA-Z\s-]+$', apellido):
-            messages.error(request, _("Los apellidos deben ser sólo letras"))
-            return redirect('modificar_usuario_admin', id_usuario=id_usuario)
-
         usuario.first_name = nombre
         usuario.last_name = apellido
         usuario.username = username
         usuario.email = email
+        usuario.is_normal = bool(is_normal)
+        usuario.is_staff = bool(is_staff)  # Esto es correcto
         usuario.is_superuser = bool(is_superuser)
         usuario.save()
 
         success_message = _("Usuario modificado con éxito")
-        encoded = urlencode({'success_message': success_message}) # Sin esta linea no se ve los mensajes
-        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{encoded}')
+        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?success_message={success_message}')
     
     return render(request, 'administrador/gestion_usuarios/modificar_usuario.html', {'usuario': usuario})
 
@@ -624,16 +631,28 @@ def eliminar_usuario_admin(request, id_usuario):
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
+
+@login_required
 def tipo_usuario_admin(request, id_usuario):
-    usuario = get_object_or_404(RegistroUsuario, id_user=id_usuario)
+    usuario = get_object_or_404(User, id=id_usuario) 
     if request.method == 'POST':
-        nuevo_rol = request.POST.get('rol')  
-        usuario.rol = nuevo_rol
-        usuario.save()
-        return redirect('ver_usuarios_admin')
-    else:
-        return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario})
+        # Obtener el rol existente del usuario
+        rol_existente = usuario.rol
+        
+        # Obtener el nuevo rol del formulario
+        nuevo_rol = request.POST.get('rol')
+        
+        # Verificar si se seleccionó un rol válido
+        if nuevo_rol in ['cliente', 'vendedor']:
+            # Actualizar el rol del usuario en la base de datos
+            usuario.rol = nuevo_rol
+            usuario.save()
+            # Redirigir a la página de ver usuarios después de guardar los cambios
+            return HttpResponseRedirect(reverse('ver_usuarios_admin'))
     
+    # Si la solicitud no es POST o si no se pudo procesar correctamente, mostrar el formulario con el rol actual
+    return render(request, 'administrador/gestion_usuarios/tipo_usuario_admin.html', {'usuario': usuario, 'rol_existente': usuario.rol})
+
 # Vistas PAYPAL
 @csrf_exempt
 @require_POST
@@ -789,7 +808,7 @@ def handle_response(response):
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
-    return redirect('index')
+    return redirect('home')
 
 # DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
 # DELIMITER $
@@ -801,15 +820,22 @@ def cerrarsesionadmin(request):
 # CALL obtener_todos_usuarios();   
     
 
+# VISTAS DEL VENDEDOR
+
 # Vista Vendedor Home
+@seller_required
 def vendedor_home(request):
-    return render(request, 'vendedor/vendedor_home.html')
+    name = request.user.first_name
+    return render(request, 'vendedor/vendedor_home.html', {'nameseller': name})
 
 # Vista Vendedor Gestion Reservas
+@seller_required
 def gestion_reservas_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor.html')
+    name = request.user.first_name
+    return render(request, 'vendedor/gestion_reservas_vendedor.html', {'nameseller': name})
 
 # Vista Vendedor Gestion Reservas -crear
+@seller_required
 def crear_reserva_pacific_vendedor(request):
     if request.method == 'POST':
         id_reserva = request.POST.get('id_reserva')
@@ -824,20 +850,29 @@ def crear_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -eliminar
+@seller_required
 def eliminar_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -modificar
+@seller_required
 def modificar_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -ver calendario
+@seller_required
 def ver_calendario_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
 
 # Vista Vendedor Gestion Reservas -ver reserva
+@seller_required
 def ver_reserva_pacific_vendedor(request):
     return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+
+@seller_required
+def cerrarsesionvendedor(request):
+    logout(request)
+    return redirect('home')
 
 # Serializadores API REST
 

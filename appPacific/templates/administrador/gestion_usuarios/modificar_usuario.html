@@ -32,6 +32,20 @@
                     <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" required>
                     <label for="correo">{% trans "Correo Electrónico"%}</label>
                 </div>
+                <!-- Checkbox Usuario Normal -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="normal" name="normal">
+                    <label class="form-check-label" for="normal">
+                        {% trans "¿Quieres que sea Usuario Normal?"%}
+                    </label>
+                </div>
+                <!-- Checkbox Vendedor -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="staff" name="staff">
+                    <label class="form-check-label" for="staff">
+                        {% trans "¿Quieres que sea Vendedor?"%}
+                    </label>
+                </div>
                 <!-- Checkbox Super Usuario -->
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" value="1" id="superusuario" name="superusuario">
@@ -39,9 +53,8 @@
                         {% trans "¿Quieres que sea Super Usuario?"%}
                     </label>
                 </div>
-                    <div class="col d-flex justify-content-center pt-4">
-                        <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
-                    </div>
+                <div class="col d-flex justify-content-center pt-4">
+                    <button type="submit" class="btn btn-primary btn-reg">{% trans "Guardar Cambios"%}</button>
                 </div>
             </form>
         </div>
@@ -52,5 +65,22 @@
 {% block scripts %}
 <script>
     // No se requiere ningún script adicional
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var checkboxes = document.querySelectorAll('.form-check-input');
+    
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(function(otherCheckbox) {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.checked = false;
+                        }
+                    });
+                }
+            });
+        });
+    });
 </script>
 {% endblock %}

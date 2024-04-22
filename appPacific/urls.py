@@ -50,6 +50,7 @@ urlpatterns = [
     path('modificar_reserva_pacific_vendedor/', modificar_reserva_pacific_vendedor, name="modificar_reserva_pacific_vendedor"),
     path('ver_calendario_pacific_vendedor/', ver_calendario_pacific_vendedor, name="ver_calendario_pacific_vendedor"),
     path('ver_reserva_pacific_vendedor/', ver_reserva_pacific_vendedor, name="ver_reserva_pacific_vendedor"),
+    path('cerrarsesionvendedor/', views.cerrarsesionvendedor, name='cerrarsesionvendedor'),
     path('cerrarsesionadmin/', views.cerrarsesionadmin, name='cerrarsesionadmin'),
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="recuperacion/reset_password.html"), name="reset_password"),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="recuperacion/reset_password_sent.html"), name="password_reset_done"),

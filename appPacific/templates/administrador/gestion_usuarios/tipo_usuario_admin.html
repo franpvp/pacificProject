@@ -16,7 +16,7 @@
     <div class="row justify-content-center">
         <div class="col">
             <div class="table-responsive">
-                <form method="post">
+                <form method="post" action="{% url 'tipo_usuario_admin' usuario.id %}">
                     {% csrf_token %}
                     <table class="table table-bordered">
                         <thead>
@@ -25,22 +25,22 @@
                                 <th scope="col">{% trans "Nombre"%}</th>
                                 <th scope="col">{% trans "Apellidos"%}</th>
                                 <th scope="col">{% trans "Correo Electrónico"%}</th>
-                                <th scope="col">{% trans "Celular"%}</th>
                                 <th scope="col">{% trans "Rol"%}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="text-center">
-                                <td>{{ usuario.id_user }}</td>
-                                <td>{{ usuario.nombres }}</td>
-                                <td>{{ usuario.apellidos }}</td>
-                                <td>{{ usuario.correo }}</td>
-                                <td>{{ usuario.telefono }}</td>
+                                <td>{{ usuario.id }}</td>
+                                <td>{{ usuario.first_name }}</td>
+                                <td>{{ usuario.last_name }}</td>
+                                <td>{{ usuario.email }}</td>
                                 <td>
-                                    <select name="rol" class="form-select">
-                                        <option value="Vendedor">{% trans "Vendedor"%}</option>
-                                        <option value="Cliente">{% trans "Cliente"%}</option>
+                                    <label for="rol">Selecciona el nuevo rol:</label>
+                                    <select name="rol" id="rol">
+                                        <option value="cliente" {% if rol_existente == 'cliente' %} selected {% endif %}>Cliente</option>
+                                        <option value="vendedor" {% if rol_existente == 'vendedor' %} selected {% endif %}>Vendedor</option>
                                     </select>
+                                    
                                 </td>
                             </tr>
                         </tbody>
@@ -48,7 +48,6 @@
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-secondary">{% trans "Guardar"%}</button>
                     </div>
-                    
                 </form>
             </div>
         </div>

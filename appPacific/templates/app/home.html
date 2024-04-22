@@ -11,7 +11,11 @@
     <div class="row">
         <div class="col">
             <div class="titulo-general text-center">{% trans "Inicio" %}</div>
-            <div class="titulo-general text-center">{% trans "Bienvenido" %} {{ name }}</div>
+            {% if name %}
+                <div class="titulo-general text-center">{% trans "Bienvenido" %} {{ name }}</div>
+            {% else %}
+                <div class="titulo-general text-center">{% trans "Home" %}</div>
+            {% endif %}
         </div>
     </div>
 </div>
