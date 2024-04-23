@@ -53,7 +53,7 @@ def index(request):
         contador_ninos = int(contador_ninos_str) if contador_ninos_str else 0
 
         # Validar que los campos de fechas no estén vacíos
-        if not fecha_llegada or not fecha_salida:
+        if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
             messages.error(request, "Por favor, completa las fechas de llegada y salida")
             return redirect('index')
 
@@ -213,6 +213,10 @@ def habitaciones(request):
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
 
+    # Validar si los campos son nulos y redirigir si es necesario
+    if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
+        return redirect('index')
+
     if request.method == 'POST' and fecha_llegada and fecha_salida and contador_adultos > 0:
         # Obtener los id de la habitacion cuando se haga clic en botón Reserva
         id_hab = int(request.POST.get('id_hab'))
@@ -239,16 +243,15 @@ def habitaciones(request):
 
 # Vista Método Pago
 def metodo_pago(request):
+    # Obtener valores de id_hab y id_tipo_hab
+    id_hab = request.session.get('id_hab')
+    tipo_hab = request.session.get('tipo_hab')
     # Obtener los parámetros para mostrar en vista de método de pago
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
     titulo_hab = request.session.get('titulo_hab')
-
-    # Obtener valores de id_hab y id_tipo_hab
-    id_hab = request.session.get('id_hab')
-    tipo_hab = request.session.get('tipo_hab')
 
     # Obtener precio de habitacion
     row_hab = Habitacion.objects.get(pk=id_hab)
@@ -342,11 +345,12 @@ def transferencias(request):
 def reserva_realizada(request):
     id_user = request.session.get('id_user')
     datos_usuario = User.objects.get(pk = id_user)
-
     # Obtener el Order ID de PayPal
     order_id = request.session.get('order_id')
 
     datos_reserva = Reserva.objects.get(id_user = id_user, order_id = order_id)
+    # Borrar los datos de la sesión
+    request.session.flush()
     return render(request, 'app/reserva_realizada.html', {'datos_reserva': datos_reserva, 'datos_usuario': datos_usuario})
 
 # Vista Nosotros
@@ -409,7 +413,6 @@ def crear_habitacion(request):
 
 # Vista Administrador Gestion Habitaciones-eliminar
 @admin_required
-@admin_required
 def eliminar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
@@ -469,27 +472,54 @@ def crear_reserva_pacific(request):
 
     if request.method == 'GET' and 'id_tipo_hab' in request.GET:
         id_tipo_hab = request.GET.get('id_tipo_hab')
-        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab', 'titulo_hab')
+        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab', 'titulo_hab', 'capacidad_max','precio')
+        for habitacion in hab_disponibles:
+            id_tipo_hab = habitacion['id_tipo_hab']
+            titulo_hab = habitacion['titulo_hab']
+            capacidad_max = habitacion['capacidad_max']
+            precio = int(habitacion['precio'])
+            pago_inicial = int(precio*0.3)
+            pago_pendiente = int(precio*0.7)
+            request.session['titulo_hab'] = titulo_hab
+            request.session['precio'] = precio
+            request.session['pago_inicial'] = pago_inicial
+            request.session['pago_pendiente'] = pago_pendiente
+            print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
         return JsonResponse({'habitaciones': list(hab_disponibles)})
     
     if request.method == 'POST':
         nombre_cli = request.POST.get('nombre_cli')
         apellidos_cli = request.POST.get('apellidos_cli')
+        id_user = User.objects.filter(username=nombre_cli, last_name=apellidos_cli)
         correo = request.POST.get('correo')
         celular = request.POST.get('celular')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
         cant_adultos = request.POST.get('cant_adultos')
         cant_ninos = request.POST.get('cant_ninos')
-        titulo_hab = request.POST.get('titulo_hab')
+
         paypal = request.POST.get('paypal')
-        transferencia = request.POST.get('transferencia')
+        get_titulo_hab = request.POST.get('titulo_hab')
+        get_precio = request.POST.get('precio')
+        get_pago_inicial = request.POST.get('pago_inicial')
+        get_pago_pendiente = request.POST.get('pago_pendiente')
 
-        if 'id_tipo_hab' in request.POST:
-            id_tipo_hab = request.POST.get('id_tipo_hab')
-            print("Id tipo habitacion: ", id_tipo_hab)
-
-        id_user = User.objects.get(username=nombre_cli, last_name=apellidos_cli)
-
-        # Aquí puedes procesar los datos del formulario y realizar las operaciones necesarias
+        if paypal:
+            reserva = Reserva(
+                id_user = id_user,
+                fecha_llegada = fecha_llegada,
+                fecha_salida = fecha_salida,
+                cant_adultos =  cant_adultos,
+                cant_ninos =  cant_ninos,
+                habitacion = get_titulo_hab,
+                tipo_metodo_pago = paypal,
+                total = get_precio,
+                pago_inicial = get_pago_inicial,
+                pago_pendiente = get_pago_pendiente,
+                estado_pago = 'Pendiente'
+            )
+            # Guardar reserva
+            reserva.save()
         
         return JsonResponse({'success': True})  # Devuelve una respuesta JSON de éxito
 
@@ -719,7 +749,7 @@ def capture_order(request, order_id):
             cant_adultos = request.session.get('contador_adultos')
             # Obtener cant_ninos
             cant_ninos = request.session.get('contador_ninos')
-            tipo_hab = request.session.get('tipo_hab')
+            titulo_hab = request.session.get('titulo_hab')
             tipo_metodo_pago = 'PayPal'
             # Obtener total
             total = request.session.get('total')
@@ -729,7 +759,6 @@ def capture_order(request, order_id):
             pago_inicial = request.session.get('pago_inicial')
             # Obtener mediante session el pago_pendiente de la reserva
             pago_pendiente = request.session.get('pago_pendiente')
-
             # Fechas formateadas
             fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
             fecha_salida_formateada = request.session.get('fecha_salida_hidden')
@@ -742,7 +771,7 @@ def capture_order(request, order_id):
                 fecha_salida = fecha_salida_formateada,
                 cant_adultos = cant_adultos,
                 cant_ninos = cant_ninos,
-                tipo_hab = tipo_hab,
+                habitacion = titulo_hab,
                 tipo_metodo_pago = tipo_metodo_pago,
                 total = total,
                 pago_inicial = pago_inicial,

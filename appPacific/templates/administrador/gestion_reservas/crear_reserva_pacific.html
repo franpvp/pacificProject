@@ -19,31 +19,31 @@
         <div class="row justify-content-center mt-3 mb-3">
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input id="nombres" type="text" class="form-control" placeholder="Nombre Cliente" required>
+                    <input id="nombres" name="nombre_cli" type="text" class="form-control" placeholder="Nombre Cliente" required>
                     <label for="floatingInput">{% trans "Nombres Cliente"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input id="apellidos" type="text" class="form-control" placeholder="Apellidos Cliente" required>
+                    <input id="apellidos" name="apellidos_cli" type="text" class="form-control" placeholder="Apellidos Cliente" required>
                     <label for="floatingInput">{% trans "Apellidos Cliente"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input id="correo" type="email" class="form-control"  placeholder="Correo Electrónico" required>
+                    <input id="correo" name="correo" type="email" class="form-control"  placeholder="Correo Electrónico" required>
                     <label for="floatingInput">{% trans "Correo Electrónico"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
-                    <input id="celular" type="text" class="form-control" placeholder="Celular" required>
+                    <input id="celular" name="celular" type="text" class="form-control" placeholder="Celular" required>
                     <label for="floatingInput">{% trans "Celular"%}</label>
                 </div>
             </div>
             <div class="col-md-5 col-lg-5 mt-3 mb-3">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de llegada' %}"
+                    <input name="fecha_llegada" type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de llegada' %}"
                     style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
@@ -54,7 +54,8 @@
             </div>
             <div class="col-md-5 col-lg-5 mt-3">
                 <div class="input-group">
-                    <input type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de salida' %}" style="cursor: pointer;" required>
+                    <input name="fecha_salida" type="text" class="form-control date-range text-center" placeholder="{% trans 'Ingrese fecha de salida' %}" 
+                    style="cursor: pointer;" required>
                     <div class="input-group-append ml-auto">
                         <span class="input-group-text">
                             <img class="img-fluid" src="{% static 'img/calendar.png' %}" alt="Calendario" style="width: 30px; height: 30px;">
@@ -67,20 +68,26 @@
                 <select id="tipo_hab_select" class="form-select" name="id_tipo_hab" aria-label="Default select example">
                     <option selected>Selecciona Tipo Habitación</option>
                     {% for tipo_hab in lista_tipo_hab %}
-                    <option value="{{ tipo_hab.id_tipo_hab }}" {% if id_tipo_hab == tipo_hab.id_tipo_hab %} selected {% endif %}>{{ tipo_hab.tipo_hab }}</option>
+                        <option value="{{ tipo_hab.id_tipo_hab }}" {% if id_tipo_hab == tipo_hab.id_tipo_hab %} selected {% endif %}>{{ tipo_hab.tipo_hab }}</option>
                     {% endfor %}
                 </select>
             </div>
             <!-- Seleccionar habitacion -->
-            <!-- Filtrar por id_tipo_hab y cantidad disponibles -->
+            <!-- Filtrar por id_tipo_hab y estado 'disponible' -->
             <div class="col-md-5 col-lg-5 mt-3">
-                <select id="titulo_hab_select" class="form-select" name="titulo_hab" aria-label="Default select example">
+                <select id="titulo_hab_select" class="form-select" name="id_hab" aria-label="Default select example">
                     <option selected>Seleccione habitacion</option>
                     {% for hab in hab_disponibles %}
-                        <option value="{{ hab.id_tipo_hab }}">{{ hab.titulo_hab }}</option>
+                        {% if hab.capacidad_max %}
+                            <option value="{{ hab.id_hab }}" data-capacidad="{{ hab.capacidad_max }}">{{ hab.titulo_hab }} Precio: ${{ hab.precio }}</option>
+                        {% else %}
+                            <option value="{{ hab.id_hab }}" data-capacidad="">{{ hab.titulo_hab }} Precio: ${{ hab.precio }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
+                <p id="capacidad_maxima" style="text-align: right;" class="mt-2"></p>
             </div>
+            <!-- Mostrar Precio al seleccionar Habitación -->
             
             <div class="col-md-5 col-lg-5">
                 <div class="form-floating mb-3">
@@ -99,20 +106,20 @@
                     <p class="text-center">Seleccione método de pago:</p>
                 </div>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-5 mb-5">
                 <div class="col-md-5 col-lg-5 d-flex justify-content-center">
                     <!-- Usar este boton para enviar un correo para que cliente realice el pago de la reserva inicial -->
                     <input type="hidden" id="input-paypal" name="paypal" value="paypal">
-                    <div id="paypal-button" type="submit" class="paypal" style="cursor: pointer;">
+                    <button id="paypal-button" type="submit" class="paypal" style="cursor: pointer; border: 1px solid #D9D9D9; background: none; padding: 1px;">
                         <img src="{% static 'img/paypal.png'%}" alt="paypal" class="img-fluid">
-                    </div>
+                    </button>
                 </div>
                 <div class="col-md-5 col-lg-5 d-flex justify-content-center">
                     <!-- Enviar datos de transferencia a cliente por correo -->
                     <input type="hidden" id="input-transferencia" name="transferencia" value="transferencia">
-                    <div id="transferencia-btn" class="transferencia" style="cursor: pointer;">
+                    <button id="transferencia-btn" class="transferencia" style="cursor: pointer; border: 1px solid #D9D9D9; background: none; padding: 10px;">
                         <img src="{% static 'img/logo-transf.png'%}" alt="transferencia" class="img-fluid">
-                    </div>
+                    </button>
                 </div>
             </div>
             <!-- <div class="row mt-4">
@@ -126,7 +133,16 @@
             </div> -->
         </div>
     </form>
-    
+    <div class="row">
+        <footer class="footer-pag p-2">
+            <div class="col-md-6 text-md-left text-center" style="margin-top: 5px;">
+                <!-- Ajuste de margen superior -->
+                <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
+                <!-- Dirección ficticia -->
+            </div>
+        </footer>
+    </div>
 </div>
 
 {% endblock %}

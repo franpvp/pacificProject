@@ -79,7 +79,7 @@
     <!-- Contenido Principal -->
     <div class="contenido-main">
         <!-- Contenido principal de la página -->
-        <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #fff;">
+        <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #0277e6;">
             <div class="container-fluid">
                 <!-- Logo Hotel Pacific -->
                 <a class="navbar-brand" href="{% url 'administrador_home' %}">
@@ -87,21 +87,21 @@
                 </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav justify-content-center flex-grow-1">
-                        <li class="nav-item m-3">
+                        <li class="nav-item m-3" >
                             <a href="{% url 'administrador_home' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Inicio" %}</a>
+                                aria-current="page" style="color: #fff;">{% trans "Inicio" %}</a>
                         </li>
                         <li class="nav-item m-3">
                             <a href="{% url 'gestion_reservas' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Reservas" %}</a>
+                                aria-current="page" style="color: #fff;">{% trans "Reservas" %}</a>
                         </li>
                         <li class="nav-item m-3">
                             <a href="{% url 'gestion_habitaciones' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Habitaciones" %}</a>
+                                aria-current="page" style="color: #fff;">{% trans "Habitaciones" %}</a>
                         </li>
                         <li class="nav-item m-3">
                             <a href="{% url 'gestion_usuarios' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Usuarios" %}</a>
+                                aria-current="page" style="color: #fff;">{% trans "Usuarios" %}</a>
                         </li>
                     </ul>
                     <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
@@ -159,11 +159,11 @@
             $('.date-range').datepicker({
                 autoclose: true,
                 todayHighlight: true,
-                format: '      D dd M    ',
+                format: 'yyyy-mm-dd',
                 clearBtn: true,
-                multidate: false, // Permite solo una fecha seleccionada
+                multidate: false,
                 startDate: currentDate,
-                language: 'es' // Establece el idioma a español
+                language: 'es'
             }).on('changeDate', function (e) {
                 var dates = e.dates.map(date => {
                     return date.toString().substring(0, 3) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' });
@@ -176,7 +176,6 @@
                     var formattedDate = selectedDate.toISOString().substring(0, 10);
                     hiddenInput.val(formattedDate);
                 }
-
             }).on('changeDate', function (e) {
                 var selectedDate = e.date;
                 var inputId = $(this).attr('id');
@@ -192,7 +191,7 @@
                     }
                     if ($('#fecha_llegada').datepicker('getDate') !== null && $('#fecha_salida').datepicker('getDate') !== null && $('#fecha_llegada').datepicker('getDate') >= $('#fecha_salida').datepicker('getDate')) {
                         if (inputId === 'fecha_llegada') {
-                            otherInput.datepicker('setDate', new Date(selectedDate.getTime() + 86400000)); // Agrega un día a la fecha de llegada
+                            otherInput.datepicker('setDate', new Date(selectedDate.getTime() + 86400000));
                         } else {
                             otherInput.datepicker('setDate', null);
                         }
@@ -200,7 +199,6 @@
                 }
             });
 
-            // Mostrar el calendario debajo del input al hacer clic en él
             $('.date-range').focus(function () {
                 $(this).datepicker('show');
             });

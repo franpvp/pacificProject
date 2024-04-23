@@ -11,7 +11,6 @@ a{
 .search-bar {
     width: 100%;
     height: auto;
-    background-color: white;
     border: 1px solid #D9D9D9;
     padding: 20px;
     border-radius: 50px;
@@ -79,7 +78,6 @@ a{
 
 .box-rec{
     position: relative;
-    border: 1px solid #D9D9D9;
     display: flex;
     text-align: center;
     align-items: center;
@@ -97,10 +95,14 @@ a{
     max-width: 100%;
     height: 100%;
     border-radius: 30px;
-    
+}
+
+.box-rec[data-room="No Disponible"] img {
+    opacity: 0.5;
 }
 
 .box-rec:before {
+    content: attr(data-room);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,10 +114,14 @@ a{
     border-radius: 30px;
     color: white;
     font-size: 14px;
-    background-color: #4495E0 !important;
 }
-.box-rec:before {
-    content: attr(data-room);
+.box-rec[data-room="Disponible"]::before {
+    background-color: #4495E0; /* Fondo azul para Disponible */
+}
+
+.box-rec[data-room="No Disponible"]::before {
+    color: white;
+    background-color: gray /* Fondo gris para No Disponible */
 }
 
 .contenedor-img{
@@ -225,7 +231,7 @@ a{
 
 .filtro-opciones{
     position: absolute;
-    top: 70px;
+    top: 60px;
     display: none;
     margin-top: 10px !important;
     align-items: center;
@@ -262,7 +268,8 @@ a{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding-left: 22px !important;
+    padding-right: 22px !important;
     border-radius: 30px;
     cursor: pointer;
 }

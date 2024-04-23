@@ -72,10 +72,15 @@ const fondosOpacos = document.querySelectorAll('.fondo-opaco');
 const divsMasInformacion = document.querySelectorAll('.mas-informacion');
 const divsBtnClose = document.querySelectorAll('.btn-close');
 
+
+
 // Iterar sobre cada botón de "Más Información"
 enlacesMostrarInfo.forEach((enlaceMostrarInfo, index) => {
     // Agregar evento de clic al botón de "Más Información"
-    enlaceMostrarInfo.addEventListener('click', function() {
+    enlaceMostrarInfo.addEventListener('click', function(event) {
+        // Detener la propagación del evento para evitar que se cierre la ventana de mas-información al hacer clic en el botón
+        event.stopPropagation();
+
         // Mostrar la ventana de información correspondiente al botón clicado
         const divMasInformacion = divsMasInformacion[index];
         const fondoOpaco = fondosOpacos[index];
@@ -110,6 +115,31 @@ function mostrarMensaje() {
     alert("Debe iniciar sesión antes de realizar una reserva.");
     window.location.href = "/iniciosesion";
 }
+
+function cerrarVentanaMasInformacion(index) {
+    const divMasInformacion = divsMasInformacion[index];
+    const fondoOpaco = fondosOpacos[index];
+
+    // Ocultar la ventana de información
+    divMasInformacion.classList.remove('active'); // Quitar la clase 'active' para ocultar la ventana de información
+    setTimeout(function() {
+        divMasInformacion.style.display = 'none';
+    }, 300); // Retrasar un poco para que la transición tenga tiempo de completarse
+
+    // Ocultar el fondo opaco asociado
+    fondoOpaco.style.display = 'none';
+}
+
+// Agregar evento de clic al área circundante para cerrar la ventana de mas-información y ocultar su fondo opaco asociado
+window.addEventListener('click', function(event) {
+    // Verificar si se hizo clic fuera de alguna ventana de mas-información
+    divsMasInformacion.forEach((divMasInformacion, index) => {
+        if (!divMasInformacion.contains(event.target)) {
+            // Si se hizo clic fuera de la ventana de mas-información, llamar a la función de cierre
+            cerrarVentanaMasInformacion(index);
+        }
+    });
+});
 
 
 

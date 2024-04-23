@@ -13,24 +13,27 @@
         <div class="col d-flex align-item-center justify-content-center">
             <div class="contenedor-reserva">
                 <h1 class="titulo-general text-center">{% trans "Detalle Reserva"%}</h1>
-                <p> {% trans "Tipo habitación:"%}<strong>{{hab_seleccionada.tipo_hab}}</strong></p>
-                <p> {% trans "Fecha Llegada:"%}<strong>{{hab_seleccionada.fecha_llegada}}</strong></p>
-                <p> {% trans "Fecha Salida:"%}<strong>{{hab_seleccionada.fecha_salida}}</strong></p>
-                <p> {% trans "Total Reserva:"%} <strong>$ {{hab_seleccionada.total}} CLP</strong></p>
-                <p> {% trans "Pago Inicial:"%} <strong>$ {{hab_seleccionada.pago_inicial}} CLP</strong></p>
-                <p> {% trans "Pago Pendiente:"%}<strong>$ {{hab_seleccionada.pago_pendiente}} CLP</strong></p>
+                <p> {% trans "Tipo habitación:"%}<strong> {{hab_seleccionada.titulo_hab}}</strong></p>
+                <p> {% trans "Tipo habitación:"%}<strong> {{hab_seleccionada.tipo_hab}}</strong></p>
+                <p> {% trans "Fecha Llegada:"%}<strong> {{hab_seleccionada.fecha_llegada}}</strong></p>
+                <p> {% trans "Fecha Salida:"%}<strong> {{hab_seleccionada.fecha_salida}}</strong></p>
+                <p> {% trans "Total Reserva:"%} <strong> $ {{hab_seleccionada.total}} CLP</strong></p>
+                <p> {% trans "Pago Inicial:"%} <strong> $ {{hab_seleccionada.pago_inicial}} CLP</strong></p>
+                <p> {% trans "Pago Pendiente:"%}<strong> $ {{hab_seleccionada.pago_pendiente}} CLP</strong></p>
                 {% if hab_seleccionada.contador_adultos >= 1 and hab_seleccionada.contador_ninos > 0 %}
-                    <p> {% trans "Adultos:"%}<strong>{{hab_seleccionada.contador_adultos}}</strong></p>
-                    <p> {% trans "Niños:"%}<strong>{{hab_seleccionada.contador_ninos}}</strong></p>
+                    <p> {% trans "Adultos:"%}<strong> {{hab_seleccionada.contador_adultos}}</strong></p>
+                    <p> {% trans "Niños:"%}<strong> {{hab_seleccionada.contador_ninos}}</strong></p>
                 {% else %}
-                    <p> {% trans "Adultos:"%}<strong>{{hab_seleccionada.contador_adultos}}</strong></p>
+                    <p> {% trans "Adultos:"%}<strong> {{hab_seleccionada.contador_adultos}}</strong></p>
                 {% endif %}
                 <!-- Botón para modificar reserva (Redirigir al index)-->
                 <div class="row">
                     <div class="col">
                         <a href="{% url 'index' %}">
                             <button id="btn-reservar-btn" class="btn btn-warning" type="button" style="color: #fff;">
-                                <i class='bx bxs-edit-alt mr-3'></i>{% trans "Modificar"%}</button>
+                                <i class='bx bxs-edit-alt mr-3'></i>
+                                {% trans "Modificar"%}
+                            </button>
                         </a>
                     </div>
                 </div>
@@ -50,21 +53,32 @@
             </div>
             <div class="col"></div>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-4 d-flex justify-content-center">
             <div class="col"></div>
-            <div class="col text-center">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-6">
                 <p>{% trans "Pago por transferencia bancaria:"%}</p>
                 <a href="{% url 'transferencias' %}">
                     <div class="pago-transferencia">
                         <!-- Imagen Transferencia -->
-                        <img src="{% static 'img/logo-transf.png' %}" alt="imagen-trans" style="max-width: 25%; height: auto;">
+                        <img src="{% static 'img/logo-transf.png' %}" alt="imagen-trans" style=" width: 250px">
                     </div>
                 </a>
                 
             </div>
             <div class="col"></div>
+
         </div>
     </form>
+    <div class="row mt-5">
+        <footer class="footer-pag p-2">
+            <div class="col-md-6 text-md-left text-center" style="margin-top: 5px;">
+                <!-- Ajuste de margen superior -->
+                <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
+                <!-- Dirección ficticia -->
+            </div>
+        </footer>
+    </div>
 </div>
 
 <script>

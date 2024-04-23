@@ -62,9 +62,9 @@
             <!-- Contenedores Habitaciones -->
             <div class="row mt-2 justify-content-center">
                 {% for habitacion in habitaciones %}
-                <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center">
-                    <div class="card no-border">
-                        <div class="box-rec" data-room="{{ habitacion.cantidad }}">
+                <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img justify-content-center" style="background: none;">
+                    <div class="card no-border" style="background: transparent;">
+                        <div class="box-rec" data-room="{{ habitacion.estado }}">
                             <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}">
                         </div>
                         <div class="card-body text-center">
@@ -82,9 +82,15 @@
                                 </div>
                                 <div class="fondo-opaco"></div>
                                 {% if user.is_authenticated %}
-                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
-                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
-                                </div>
+                                    {% if habitacion.estado == 'Disponible' %}
+                                        <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                            <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
+                                        </div>
+                                    {% else %}
+                                        <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                            <button id="btn-reservar-btn" class="btn btn-primary" type="submit" disabled>{% trans "Reservar" %}</button>
+                                        </div>
+                                    {% endif %}
                                 {% else %}
                                 <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
                                 {% endif %}
@@ -127,9 +133,15 @@
                                     <div class="row mt-4">
                                         <div class="col">
                                             {% if user.is_authenticated %}
-                                            <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
-                                                <button id="btn-reservar-btn" class="btn btn-primary" type="submit"> {% trans "Reservar" %}</button>
-                                            </div>
+                                                {% if habitacion.estado == 'Disponible' %}
+                                                    <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto" style="display: none;">
+                                                        <button id="btn-reservar-btn" class="btn btn-primary" type="submit"> {% trans "Reservar" %}</button>
+                                                    </div>
+                                                {% else %}
+                                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit" disabled>{% trans "Reservar" %}</button>
+                                                </div>
+                                                {% endif %}
                                             {% else %}
                                                 <button id="btn-reservar-btn" class="btn btn-primary" type="button" onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
                                             {% endif %}
@@ -178,7 +190,7 @@
     var idioma = "{{ request.LANGUAGE_CODE }}";
     // Verifica el idioma actual y cambia el contenido según corresponda
     if (idioma === "es") {
-        document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
+        // document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
     } else if (idioma === "en") {
         document.querySelector('.box-rec').setAttribute('data-room', 'Available');
     }

@@ -28,9 +28,10 @@
                     <thead class="table-light">
                         <tr>
                             <th scope="col">{% trans "Id Reserva" %}</th>
-                            <th scope="col">{% trans "Tipo Habitación" %}</th>
+                            <th scope="col">{% trans "Habitación" %}</th>
+                            <th scope="col">{% trans "Total" %}</th>
                             <th scope="col">{% trans "Pago Reserva" %}</th>
-                            <th scope="col">{% trans "Total Restante" %}</th>
+                            <th scope="col">{% trans "Pago Pendiente" %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +40,10 @@
                                 {{datos_reserva.id_reserva}}
                             </td>
                             <td>
-                                {{datos_reserva.tipo_hab}}
+                                {{datos_reserva.habitacion}}
+                            </td>
+                            <td>
+                                $ {{datos_reserva.total}} CLP
                             </td>
                             <td>
                                 $ {{datos_reserva.pago_inicial}} CLP

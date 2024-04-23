@@ -42,6 +42,7 @@
                             <th scope="col">{% trans "Capacidad Máxima"%}</th>
                             <th scope="col">{% trans "Precio"%}</th>
                             <th scope="col">{% trans "Imagen"%}</th>
+                            <th scope="col">{% trans "Estado"%}</th>
                         </tr>
                     </thead>
                     <tbody class="habitaciones-table">
@@ -56,6 +57,7 @@
                             <td>
                                 <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}" class="img-fluid" style="width: 50px; height: 50px;">
                             </td>
+                            <td>{{ habitacion.estado }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

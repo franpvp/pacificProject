@@ -38,10 +38,10 @@
                                 <th scope="col">{% trans "ID Tipo habitación"%}</th>
                                 <th scope="col">{% trans "Título"%}</th>
                                 <th scope="col">{% trans "Descripción"%}</th>
-                                <th scope="col">{% trans "Cantidad Disponibles"%}</th>
                                 <th scope="col">{% trans "Capacidad Máxima"%}</th>
                                 <th scope="col">{% trans "Precio"%}</th>
                                 <th scope="col">{% trans "Imagen"%}</th>
+                                <th scope="col">{% trans "Estado"%}</th>
                                 <th scope="col">{% trans "Acciones"%}</th>
                             </tr>
                         </thead>
@@ -58,7 +58,6 @@
                                     </td>
                                     <td>
                                         <textarea class="editable-input form-control text-center" type="text" name="descripcion" id="descripcion" value="{{ habitacion.descripcion }}" style="max-height: 200px; min-width: 0;" disabled>{{ habitacion.descripcion }}</textarea>
-                                        <!-- <input class="editable-input form-control text-center" type="text" name="descripcion" id="descripcion" value="{{ habitacion.descripcion }}" disabled> -->
                                     </td>
                                     <td>
                                         <input class="editable-input form-control text-center" type="text" name="capacidad_max" id="capacidad_max" value="{{ habitacion.capacidad_max }}" disabled>
@@ -68,6 +67,12 @@
                                     </td>
                                     <td>
                                         <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;">
+                                    </td>
+                                    <td>
+                                        <select id="estado_select" class="editable-input form-control text-center" name="estado" aria-label="Default select example" disabled>
+                                            <option value="Disponible" {% if habitacion.estado == "Disponible" %}selected{% endif %}>Disponible</option>
+                                            <option value="No Disponible" {% if habitacion.estado == "No Disponible" %}selected{% endif %}>No Disponible</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
