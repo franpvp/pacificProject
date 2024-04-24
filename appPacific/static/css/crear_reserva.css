@@ -24,3 +24,14 @@
     transform: scale(1.05);
     transition: all 0.3 ease-in-out;
 }
+
+#precioInfo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 400px;
+    height: auto;
+    border: 1px solid #d9d9d9;
+    border-radius: 18px;
+}

@@ -64,6 +64,26 @@ a{
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
+/* Botón Editar */
+.btn-editar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #FFA011;
+    padding-left: 10px;
+    color: #FFA011;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-editar:hover{
+    color: #fff;
+    background: #FFA011;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
 
 .btn-reg:hover{
     color:white;
@@ -361,5 +381,11 @@ li{
 .btn-wsp:hover{
     transform: scale(1.05);
     transition: all 0.2s ease-in-out;
+}
+
+.contenedor-mensajes{
+    padding: 20px;
+    height: 60px;
+    color: white;
 }
 

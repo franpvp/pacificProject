@@ -10,6 +10,7 @@ from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habit
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import RegistroUsuarioAdminForm
 import binascii
+import locale
 import requests
 from django.conf import settings
 import json
@@ -24,6 +25,7 @@ import random
 import string
 from django.contrib.sessions.models import Session
 import re
+from datetime import datetime, timedelta
 from appPacific import models
 from django.utils.translation import gettext as _
 from .decorators import admin_required
@@ -34,7 +36,7 @@ from django.core.mail import send_mail
 from django.views.generic import View
 from rest_framework import generics
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
-
+import calendar
 # Create your views here.
 
 # Vista Index
@@ -347,10 +349,7 @@ def reserva_realizada(request):
     datos_usuario = User.objects.get(pk = id_user)
     # Obtener el Order ID de PayPal
     order_id = request.session.get('order_id')
-
     datos_reserva = Reserva.objects.get(id_user = id_user, order_id = order_id)
-    # Borrar los datos de la sesión
-    request.session.flush()
     return render(request, 'app/reserva_realizada.html', {'datos_reserva': datos_reserva, 'datos_usuario': datos_usuario})
 
 # Vista Nosotros
@@ -444,7 +443,7 @@ def modificar_habitacion(request):
         habitacion.capacidad_max = capacidad_max
         habitacion.precio = precio
         habitacion.estado = estado
-
+        # Guardar actualizaciones de habitación
         habitacion.save()
     habitaciones = Habitacion.objects.all()
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
@@ -476,6 +475,7 @@ def crear_reserva_pacific(request):
         for habitacion in hab_disponibles:
             id_tipo_hab = habitacion['id_tipo_hab']
             titulo_hab = habitacion['titulo_hab']
+            print("La habitacion es: ", titulo_hab)
             capacidad_max = habitacion['capacidad_max']
             precio = int(habitacion['precio'])
             pago_inicial = int(precio*0.3)
@@ -490,7 +490,8 @@ def crear_reserva_pacific(request):
     if request.method == 'POST':
         nombre_cli = request.POST.get('nombre_cli')
         apellidos_cli = request.POST.get('apellidos_cli')
-        id_user = User.objects.filter(username=nombre_cli, last_name=apellidos_cli)
+        user = User.objects.get(first_name=nombre_cli, last_name=apellidos_cli)
+        id_user = user.id
         correo = request.POST.get('correo')
         celular = request.POST.get('celular')
         fecha_llegada = request.POST.get('fecha_llegada')
@@ -499,10 +500,11 @@ def crear_reserva_pacific(request):
         cant_ninos = request.POST.get('cant_ninos')
 
         paypal = request.POST.get('paypal')
-        get_titulo_hab = request.POST.get('titulo_hab')
-        get_precio = request.POST.get('precio')
-        get_pago_inicial = request.POST.get('pago_inicial')
-        get_pago_pendiente = request.POST.get('pago_pendiente')
+        get_titulo_hab = request.session.get('titulo_hab')
+        print("Titulo habitacion POST: ", get_titulo_hab)
+        get_precio = request.session.get('precio')
+        get_pago_inicial = request.session.get('pago_inicial')
+        get_pago_pendiente = request.session.get('pago_pendiente')
 
         if paypal:
             reserva = Reserva(
@@ -516,7 +518,7 @@ def crear_reserva_pacific(request):
                 total = get_precio,
                 pago_inicial = get_pago_inicial,
                 pago_pendiente = get_pago_pendiente,
-                estado_pago = 'Pendiente'
+                estado_pago = 'En Espera de Pago'
             )
             # Guardar reserva
             reserva.save()
@@ -533,7 +535,40 @@ def eliminar_reserva_pacific(request):
 # Vista Administrador Gestion Reservas -modificar
 @admin_required
 def modificar_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+
+        fecha_llegada_obj = datetime.strptime(fecha_llegada, '%Y-%m-%d').date()
+        fecha_salida_obj = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        habitacion = request.POST.get('habitacion')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        estado_pago = request.POST.get('estado_pago')
+        
+        # Obtener datos de reserva por id_reserva
+        reserva = Reserva.objects.get(id_reserva = id_reserva)
+        # Actualizar campos de reserva
+        reserva.fecha_llegada = fecha_llegada_obj
+        reserva.fecha_salida = fecha_salida_obj
+        reserva.cant_adultos = cant_adultos
+        reserva.cant_ninos = cant_ninos
+        reserva.habitacion = habitacion
+        reserva.tipo_metodo_pago = tipo_metodo_pago
+        reserva.estado_pago = estado_pago
+        # Guardar actualizaciones de reserva
+        reserva.save()
+
+    reservas = Reserva.objects.all()
+
+    for reserva in reservas:
+        reserva.fecha_llegada = reserva.fecha_llegada.strftime('%Y-%m-%d')
+        reserva.fecha_salida = reserva.fecha_salida.strftime('%Y-%m-%d')
+    
+    return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html', {'reservas': reservas})
 
 @admin_required
 def modificar_reporte_reserva(request):
@@ -545,10 +580,53 @@ def modificar_reporte_reserva(request):
         reporte_reserva.hacer_checkout(hora_salida=datetime.now().time()) 
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
+
 # Vista Administrador Gestion Reservas -ver calendario
 @admin_required
 def ver_calendario_pacific(request):
-    return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html')
+    # Establecer la localización en español
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    # Obtener día actual
+    dia_actual = datetime.now().day
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+
+    # Obtener los días del mes actual
+    nombre_mes_actual, dias_mes_actual = obtener_dias_mes(mes_actual, año_actual)
+    nombre_mes_actual = nombre_mes_actual.capitalize()
+
+    lista_dias = ['Lun.', 'Mar.', 'Mié.','Jue.','Vié.','Sáb.','Dom.']
+
+    return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html', {
+        'dia_actual': dia_actual,
+        'nombre_mes_actual': nombre_mes_actual,
+        'dias_mes_actual': dias_mes_actual,
+        'año_actual': año_actual,
+        'lista_dias': lista_dias
+    })
 
 # Vista Administrador Gestion Reservas -ver reserva
 @admin_required

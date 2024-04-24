@@ -7,16 +7,31 @@
 {% load i18n %}
 
 {% block contenido %}
-<div class="container-fluid" style="padding-top: 180px;">
+<div class="container-fluid" style="padding-top: 105px;">
+    <!-- Mensaje Desplegable -->
+    {% if messages %}
+    <div class="row">
+        <div class="col p-0" style="width: 100%;">
+            <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                    {% for message in messages %}
+                        <p class="m-0">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="btn-close"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col"></div>
-        <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
             <!-- Barra Custom Buscador -->
-            <div class="search-bar mb-5">
+            <div class="search-bar mb-3 mt-3">
                 <form id="form-busqueda" method="post" action="{% url 'index' %}">
                     {% csrf_token %}
                     <div class="row justify-content-center">
-                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
                             <div class="input-group">
                                 <input id="fecha_llegada" name="fecha_llegada" type="text"
                                     class="form-control date-range text-center"
@@ -32,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
                             <div class="input-group">
                                 <input id="fecha_salida" name="fecha_salida" type="text"
                                     class="form-control date-range text-center"
@@ -48,63 +63,85 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3 ml-3 mr-3">
+                        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-3 d-flex justify-content-center mt-3 mb-3">
                             <!-- Selector Cantidad Adultos -->
-                            <div class="btn-adultos">
-                                {% trans "Adultos" %}
+                            <div class="btn-huespedes">
+                                {% trans "Huéspedes" %}
+                                <i class='bx bxs-chevron-down ml-2' ></i>
                             </div>
-                            <div class="box-btn-adultos">
-                                <div class="contenido-sec">
-                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle'
-                                        style="margin-right: 10px;"></i>
-                                    <div id="contador-adultos" class="contador-adultos">0</div>
-                                    <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
-                                    <!-- Campo contador_adultos oculto -->
-                                    <input type="hidden" id="contador_adultos_input" name="contador_adultos">
+                            <div class="contenedor-huespedes">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">Adultos
+                                            <div class="row">
+                                                <div class="col" style="color: rgb(91, 90, 90); font-weight: 200; font-size: 13px;">Edad: 13 años o más</div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <div id="btn-minus-adultos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-minus'></i>
+                                                </div>
+                                                <div id="contador-adultos" class="contador-adultos ml-3 mr-3" style="font-weight: lighter;">0</div>
+                                                <div id="btn-plus-adultos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-plus'></i>
+                                                </div>
+                                                <!-- Campo contador_adultos oculto -->
+                                                <input type="hidden" id="contador_adultos_input" name="contador_adultos">
+                                            </div>     
+                                        </div>
+                                    </div>
+                                    <hr style="color: #D9D9D9;">
+                                    <div class="row">
+                                        <div class="col">Niños
+                                            <div class="row">
+                                                <div class="col" style="color: rgb(91, 90, 90); font-weight: 200; font-size: 13px;">
+                                                    Edades 2 - 12 años
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <div id="btn-minus-ninos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-minus'></i>
+                                                </div>
+                                                <div id="contador-ninos" class="contador-ninos ml-3 mr-3" style="font-weight: lighter;">0</div>
+                                                <div id="btn-plus-ninos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-plus'></i>
+                                                </div>
+                                                <!-- Campo contador_ninos oculto -->
+                                                <input type="hidden" id="contador_ninos_input" name="contador_ninos">
+                                            </div>                    
+                                            <!-- Campo contador_ninos oculto -->
+                                            <input type="hidden" id="contador_ninos_input" name="contador_ninos">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3">
-                            <!-- Selector Cantidad Niños -->
-                            <div class="btn-ninos">
-                                {% trans "Niños" %}
+                        
+                    </div>
+                    <div class="row justify-content-center">
+                        <!-- Botón de búsqueda -->
+                        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12 mt-3 mb-3 d-flex justify-content-center">
+                            <div id="btn-buscar" class="d-flex align-items-center">
+                                <button class="btn-buscador" type="submit" style="display: flex; justify-content: center; align-items: center;">
+                                    <i class='bx bxs-search' id="icono-buscador"></i>
+                                    <span id="texto-buscador">Buscar</span>
+                                </button>
                             </div>
-                            <div class="box-btn-ninos">
-                                <div class="contenido-sec">
-                                    <i id="btn-minus-ninos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                    <div id="contador-ninos" class="contador-ninos">0</div>
-                                    <i id="btn-plus-ninos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
-                                    <!-- Campo contador_ninos oculto -->
-                                    <input type="hidden" id="contador_ninos_input" name="contador_ninos">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Botón Buscador -->
-                        <div id="btn-buscar"
-                            class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3"
-                            style="cursor: pointer;">
-                            <button type="submit" style="border: none; background: none;">
-                                <img src="{% static 'img/buscador.png' %}" alt="img-user"
-                                    style="width: 50px; height: 50px; margin-right: 15px;">
-                            </button>
                         </div>
                     </div>
-                </form>
+                </form> 
+                
             </div>
-            <!-- Muestra los mensajes de error -->
-            {% if messages %}
-            <div class="alert alert-danger text-center mt-3" role="alert">
-                <div class="m-0">
-                    {% for message in messages %}
-                    <p class="m-0">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
+            
         </div>
         <div class="col"></div>
+        
     </div>
+    
     <!-- Sección Habitaciones Recomendadas -->
     <div class="row justify-content-center mb-3">
         <div class="col d-flex align-item-center justify-content-center">
@@ -144,8 +181,7 @@
         </div>
         <div class="col-xs-6 col-sm-4 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
             <div class="btn-hab filtro" style="cursor: pointer;">
-                <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros"
-                    style="width: 20px; height: 20px; margin-right: 15px;">
+                <i class='bx bx-filter mr-3' ></i>
                 {% trans "Filtros" %}
                 <i class='bx bxs-chevron-down-circle pl-3' id="icono-filtro"></i>
             </div>

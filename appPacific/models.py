@@ -70,7 +70,7 @@ class ReporteReserva(models.Model):
 
 # Tipo Habitacion (Suite, Premium, Twin)
 class TipoHabitacion(models.Model):
-    id_tipo_hab = models.IntegerField(primary_key=True, unique=True, verbose_name="ID tipo habitación")
+    id_tipo_hab = models.AutoField(primary_key=True, unique=True, verbose_name="ID tipo habitación")
     tipo_hab = models.CharField(max_length=25, verbose_name="Tipo habitación")
 
     def __str__(self):

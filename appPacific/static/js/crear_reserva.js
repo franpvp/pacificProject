@@ -26,6 +26,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tipoHabSelect = document.getElementById('tipo_hab_select');
     const tituloHabSelect = document.getElementById('titulo_hab_select');
+    const precioElement = document.getElementById('precio');
+    const pagoInicialElement = document.getElementById('pago_inicial');
+    const pagoPendienteElement = document.getElementById('pago_pendiente');
+    const precioInfoDiv = document.getElementById('precioInfo');
 
     tipoHabSelect.addEventListener('change', function() {
         const selectedValue = this.value;
@@ -43,14 +47,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.habitaciones.forEach(habitacion => {
                     const option = document.createElement('option');
                     option.value = habitacion.id_tipo_hab; // Asigna el valor del ID de la habitación
-                    option.text = habitacion.titulo_hab; // Asigna el texto del título de la habitación
+                    option.text = `${habitacion.titulo_hab}  (Precio: $${habitacion.precio})`;
+                    option.setAttribute('data-precio', habitacion.precio); // Concatena el título y el precio
                     option.setAttribute('data-capacidad', habitacion.capacidad_max);
                     tituloHabSelect.appendChild(option);
                 });
+                // Mostrar el precio de la opción seleccionada
+                mostrarPrecioYPagos();
+                precioInfoDiv.style.display = 'block';
+                
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    });
+
+    // Función para mostrar el precio de la opción seleccionada
+    function mostrarPrecioYPagos() {
+        const selectedOption = tituloHabSelect.options[tituloHabSelect.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        precioElement.textContent = precio ? `Precio: $${precio} CLP` : '';
+
+        // Calcular el pago inicial y pendiente
+        const pagoInicial = precio ? parseInt(precio) * 0.3 : 0;
+        const pagoPendiente = precio ? parseInt(precio) * 0.7 : 0;
+        pagoInicialElement.textContent = `Pago inicial: $${pagoInicial} CLP`;
+        pagoPendienteElement.textContent = `Pago pendiente: $${pagoPendiente} CLP`;
+    }
+
+    // Mostrar el precio al cargar la página
+    mostrarPrecioYPagos();
+
+
+    // Agregar evento de cambio al select
+    tituloHabSelect.addEventListener('change', function() {
+        // Mostrar el precio cuando cambia la selección
+        mostrarPrecioYPagos();
     });
 });
 

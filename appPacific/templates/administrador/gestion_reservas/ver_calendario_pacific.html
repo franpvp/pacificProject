@@ -4,8 +4,57 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
+<div class="container-fluid" style="padding-top: 160px;">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mb-3 text-center">{% trans "Calendario Reservas"%}</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-8">
+            <div class="contenedor-calendario">
+                <div class="container-dias">
+                    <div class="row text-center">
+                        <!-- Botón retroceder -->
+                        <div class="col">
+                            <div class="btn-prev">
+                                <i class='bx bx-chevron-left'></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            {{ nombre_mes_actual }} {{ año_actual }}
+                        </div>
+                        <!-- Botón Avanzar -->
+                        <div class="col">
+                            <div class="btn-next ml-auto">
+                                <i class='bx bx-chevron-right'></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="grupo-dias nombres-dias">
+                        {% for dia in lista_dias %}
+                            <div class="nombre-dia">{{ dia }}</div>
+                        {% endfor %}
+                    </div>
+                    {% for dia, nombre_dia in dias_mes_actual %}
+                        {% if forloop.first or forloop.counter0|divisibleby:7 %}
+                            <div class="grupo-dias">
+                        {% endif %}
+                            <div class="btn-dia">{{ dia }}</div>
+                        {% if forloop.counter|divisibleby:7 or forloop.last %}
+                            </div> <!-- Cerrar el grupo de días después de cada grupo de 7 días o al final del bucle -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 
@@ -14,3 +63,8 @@
 {% block scripts %}
 
 {% endblock %}
+
+
+<script>
+
+</script>

@@ -63,7 +63,12 @@
                                         <input class="editable-input form-control text-center" type="text" name="capacidad_max" id="capacidad_max" value="{{ habitacion.capacidad_max }}" disabled>
                                     </td>
                                     <td>
-                                        <input class="editable-input form-control text-center" type="text" name="precio" id="precio" value="{{ habitacion.precio }}" disabled>
+                                        <input class="editable-input form-control text-center" 
+                                            type="text" 
+                                            name="precio"
+                                            id="precio"
+                                            value="{{ habitacion.precio }}"
+                                            disabled>
                                     </td>
                                     <td>
                                         <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="Imagen" class="img-fluid" style="width: 50px; height: 50px;">
@@ -76,7 +81,8 @@
                                     </td>
                                     <td>
                                         <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
-                                        <div class="btn-editar btn-reg" data-form-id="habitacion-form-{{ habitacion.id_hab }}">{% trans "Editar"%}</div>
+                                        <div class="btn-editar" data-form-id="habitacion-form-{{ habitacion.id_hab }}">
+                                            <i class='bx bxs-edit-alt pr-2'></i>{% trans "Editar"%}</div>
                                         <button type="submit" class="btn-guardar btn btn-primary" style="display: none;">{% trans "Guardar"%}</button>
                                     </td>
                                 </tr>
