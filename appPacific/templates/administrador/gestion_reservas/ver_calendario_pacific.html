@@ -16,7 +16,7 @@
     <div class="row justify-content-center">
         <div class="col-xs-10 col-sm-10 col-md-10 col-lg-8">
             <div class="contenedor-calendario">
-                <div class="container-dias">
+                <div id="calendario" class="container-dias">
                     <div class="row text-center">
                         <!-- Botón retroceder -->
                         <div class="col">
@@ -41,12 +41,22 @@
                         {% endfor %}
                     </div>
                     {% for dia, nombre_dia in dias_mes_actual %}
-                        {% if forloop.first or forloop.counter0|divisibleby:7 %}
-                            <div class="grupo-dias">
-                        {% endif %}
-                            <div class="btn-dia">{{ dia }}</div>
-                        {% if forloop.counter|divisibleby:7 or forloop.last %}
-                            </div> <!-- Cerrar el grupo de días después de cada grupo de 7 días o al final del bucle -->
+                        {% if dia < dia_actual %}
+                            {% if forloop.first or forloop.counter0|divisibleby:7 %}
+                                <div class="grupo-dias">
+                            {% endif %}
+                                <div class="btn-dia dia-pasado">{{ dia }}</div>
+                            {% if forloop.counter|divisibleby:7 or forloop.last %}
+                                </div> <!-- Cerrar el grupo de días después de cada grupo de 7 días o al final del bucle -->
+                            {% endif %}
+                        {% else %}
+                            {% if forloop.first or forloop.counter0|divisibleby:7 %}
+                                <div class="grupo-dias">
+                            {% endif %}
+                                <div class="btn-dia">{{ dia }}</div>
+                            {% if forloop.counter|divisibleby:7 or forloop.last %}
+                                </div> <!-- Cerrar el grupo de días después de cada grupo de 7 días o al final del bucle -->
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>

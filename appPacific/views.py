@@ -189,7 +189,9 @@ def cerrarsesion(request):
 # Vistas Relacionadas con el usuario registrado:
 @login_required
 def misreservas(request):
-    return render(request, 'registration/mireserva.html')
+    id_user = request.session.get('id_user')
+    reservas = Reserva.objects.filter(id_user = id_user)
+    return render(request, 'registration/misreservas.html',{'reservas': reservas})
 
 @login_required
 def misdatos(request):

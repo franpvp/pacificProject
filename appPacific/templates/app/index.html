@@ -11,24 +11,68 @@
     <!-- Mensaje Desplegable -->
     {% if messages %}
     <div class="row">
-        <div class="col p-0" style="width: 100%;">
+        <div class="col p-0">
             <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
                     {% for message in messages %}
                         <p class="m-0">{{ message }}</p>
                     {% endfor %}
                 </div>
-                <div class="btn-close"></div>
+                <div class="btn-close" onclick="cerrarMensaje()"></div>
             </div>
         </div>
     </div>
     {% endif %}
+    <!-- Slider de Imágenes de Servicios del Hotel -->
+    <div class="row">
+        <div class="col p-0" style="width: 50%;">
+            <div id="carouselExampleCaptions" class="carousel slide">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img src="{% static '/img/img_slide/piscina-hotel.jpg' %}" class="d-block w-100" alt="img1">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Sumérgete en el Paraíso: Nuestra Piscina de Ensueño te Espera</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Nuestra piscina del hotel ofrece un oasis de tranquilidad y serenidad. Disfruta de aguas cristalinas, un entorno exuberante y la oportunidad de relajarte y rejuvenecer bajo el sol. ¿Qué esperas? Ven y sumérgete en el lujo en nuestra piscina de ensueño.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{% static '/img/img_slide/restaurant-hotel.jpg' %}" class="d-block w-100" alt="img2">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Descubre una Experiencia Gastronómica Única en nuestro Restaurante del Hotel</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Disfruta de una experiencia culinaria única en nuestro restaurante exclusivo. Nuestros chefs expertos preparan platos deliciosos con ingredientes frescos y locales. Ven y déjate seducir por la elegancia y el sabor en nuestro restaurante del hotel.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{% static '/img/img_slide/gym-hotel.jpg' %}" class="d-block w-100" alt="img3">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Eleva tu Entrenamiento: Descubre Nuestro Gimnasio de Primer Nivel</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Potencia tu bienestar en nuestro gimnasio completamente equipado. Con equipos de última generación y un ambiente motivador, nuestro gimnasio te ofrece todo lo que necesitas para alcanzar tus objetivos de fitness. ¡Ven y descubre un nuevo nivel de salud y vitalidad en nuestro gimnasio del hotel!</p>
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col"></div>
         <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
             <!-- Barra Custom Buscador -->
-            <div class="search-bar mb-3 mt-3">
-                <form id="form-busqueda" method="post" action="{% url 'index' %}">
+            <form id="form-busqueda" method="post" action="{% url 'index' %}">
+                <div class="search-bar mb-3 mt-5">
                     {% csrf_token %}
                     <div class="row justify-content-center">
                         <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
@@ -122,21 +166,19 @@
                         </div>
                         
                     </div>
-                    <div class="row justify-content-center">
-                        <!-- Botón de búsqueda -->
-                        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12 mt-3 mb-3 d-flex justify-content-center">
-                            <div id="btn-buscar" class="d-flex align-items-center">
-                                <button class="btn-buscador" type="submit" style="display: flex; justify-content: center; align-items: center;">
-                                    <i class='bx bxs-search' id="icono-buscador"></i>
-                                    <span id="texto-buscador">Buscar</span>
-                                </button>
-                            </div>
+                </div>
+                <div class="row justify-content-center">
+                    <!-- Botón de búsqueda -->
+                    <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12 mb-3 d-flex justify-content-center">
+                        <div id="btn-buscar" class="d-flex align-items-center">
+                            <button class="btn-buscador" type="submit" style="display: flex; justify-content: center; align-items: center;">
+                                <i class='bx bxs-search' id="icono-buscador"></i>
+                                <span id="texto-buscador">Buscar</span>
+                            </button>
                         </div>
                     </div>
-                </form> 
-                
-            </div>
-            
+                </div>
+            </form>
         </div>
         <div class="col"></div>
         
@@ -342,13 +384,33 @@
         });
     });
 
-        var idioma = "{{ request.LANGUAGE_CODE }}";
-        // Verifica el idioma actual y cambia el contenido según corresponda
-        if (idioma === "es") {
-            // document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
-        } else if (idioma === "en") {
-            document.querySelector('.box-rec').setAttribute('data-room', 'Available');
-        }
+    var idioma = "{{ request.LANGUAGE_CODE }}";
+    // Verifica el idioma actual y cambia el contenido según corresponda
+    if (idioma === "es") {
+        // document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
+    } else if (idioma === "en") {
+        document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+    }
+    // Funcion para dar display none a contenedor de mensajes
+    function cerrarMensaje() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        mensaje.style.display = 'none';
+    }
+    // Quitar mensaje después de 4 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        setTimeout(function() {
+            mensaje.style.display = 'none';
+        }, 4000); // 5000 milisegundos = 5 segundos
+    });
+
+    // Función para avanzar al siguiente carousel
+    function avanzarCarousel() {
+        $('#carouselExampleCaptions').carousel('next');
+    }
+
+    // Temporizador para avanzar al siguiente carousel cada 5 segundos
+    setInterval(avanzarCarousel, 7000);
 
     </script>
 

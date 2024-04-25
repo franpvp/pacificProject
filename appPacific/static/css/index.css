@@ -368,6 +368,11 @@ a{
     z-index: 4000;
 }
 
+.carousel-item img {
+    width: 100%; /* Establecer el ancho deseado */
+    height: 600px; /* Establecer la altura deseada */
+    object-fit: cover; /* Escalar la imagen para que se ajuste al contenedor manteniendo la relación de aspecto */
+}
 @media (max-width: 991px) {
     .search-bar {
         border-radius: 18px;

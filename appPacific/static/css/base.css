@@ -153,7 +153,7 @@ a{
     background-color: #12171e;
     padding: 0.4rem 0.8rem;
     transition: all 0.4s ease;
-    z-index: 2600;
+    z-index: 5000;
 }
 
 .sidebar.active{
@@ -365,6 +365,13 @@ li{
         min-height: 100vh;
         margin-left: 80px;
     }
+    
+}
+
+@media (max-width: 1321px) {
+    .contenedor-user{
+        display: flex !important;
+    }
 }
 
 /* Botón wsp */
@@ -387,5 +394,64 @@ li{
     padding: 20px;
     height: 60px;
     color: white;
+}
+
+.contenedor-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 24px;
+    left: 85%;
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+    border: 1px solid #D9D9D9;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: box-shadow 0.4s ease;
+    z-index: 10000;
+}
+
+.contenedor-user:hover{
+    background: #D9D9D9;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.fondo-perfil{
+    height: 170px;
+    width: auto;
+    background: #25303f;
+    z-index: 180;
+}
+.contenedor-perfil{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    top: 60px;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #D9D9D9;
+    border-radius: 50%;
+    z-index: 200;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: #fff;
+}
+
+.info-user{
+    background: #25303f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border: 1px solid #D9D9D9;
+    border-radius: 18px;
+    padding: 40px;
+    font-size: 20px;
+    font-weight: 300;
 }
 

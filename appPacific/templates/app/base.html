@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pacific</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/registro.css' %}">
@@ -31,12 +35,16 @@
     
     <!-- Contenido Principal -->
     <div class="contenido-main">
-        <nav class="navbar navbar-expand-lg p-2" style="position: fixed; z-index: 6000; background: #0277e6;">
+        <nav class="navbar navbar-expand-lg p-2" style="position: fixed; z-index: 4900; background: #0277e6;">
             <div class="container-fluid">
                 <div class="contenido-logo">
                     <a class="navbar-brand" href="{% url 'index' %}">
                         <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
                     </a>
+                </div>
+                <!-- Icono Usuario -->
+                <div class="contenedor-user" style="color: black; display: none;" >
+                    <i class='bx bxs-user'></i>
                 </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav justify-content-center flex-grow-1">
@@ -158,6 +166,8 @@
                     class="mr-2">
             </div>
         </a>
+
+        
         
         {% block contenido %}
         {% endblock %}
