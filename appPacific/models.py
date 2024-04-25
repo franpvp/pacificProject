@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group as AuthGroup, Permission as AuthPermission
+
 
 # Create your models here.
 
@@ -105,3 +107,38 @@ class DatosBancarios(models.Model):
 
 
 
+class User(AbstractUser):
+    ROLES = (
+        ('cliente', 'Cliente'),
+        ('admin', 'Administrador'),
+        ('vendedor', 'Vendedor'),
+    )
+    
+    rol = models.CharField(max_length=20, choices=ROLES, default='cliente')
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Verifica si es un usuario nuevo
+            if self.is_superuser:
+                self.rol = 'admin'
+            else:
+                self.rol = 'cliente'
+        super().save(*args, **kwargs)
+
+    groups = models.ManyToManyField(
+        AuthGroup,
+        through='UserGroup',
+        related_name='custom_user_set',  # Cambia 'custom_user_set' a un nombre único si es necesario
+    )
+    user_permissions = models.ManyToManyField(
+        AuthPermission,
+        through='UserPermission',
+        related_name='custom_user_set',  # Cambia 'custom_user_set' a un nombre único si es necesario
+    )
+
+class UserGroup(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(AuthGroup, on_delete=models.CASCADE)
+
+class UserPermission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    permission = models.ForeignKey(AuthPermission, on_delete=models.CASCADE)
