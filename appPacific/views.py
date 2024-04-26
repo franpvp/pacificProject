@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from appPacific.decorators import admin_required
 from .models import Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
 from django.http import HttpResponseRedirect
-from .forms import RegistroUsuarioAdminForm
 import binascii
 import requests
 from django.conf import settings
