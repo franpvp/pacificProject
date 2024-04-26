@@ -28,9 +28,8 @@
     <div class="row justify-content-center">
         <div class="col">
             {% if habitaciones|length == 0 %}
-            <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}
-            <p>
-                {% else %}
+            <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}<p>
+            {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>

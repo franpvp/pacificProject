@@ -8,21 +8,6 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 105px;">
-    <!-- Mensaje Desplegable -->
-    {% if messages %}
-    <div class="row">
-        <div class="col p-0">
-            <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
-                <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
-                    {% for message in messages %}
-                        <p class="m-0">{{ message }}</p>
-                    {% endfor %}
-                </div>
-                <div class="btn-close" onclick="cerrarMensaje()"></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
     <!-- Slider de Imágenes de Servicios del Hotel -->
     <div class="row">
         <div class="col p-0" style="width: 50%;">
@@ -66,13 +51,27 @@
             </div>
         </div>
     </div>
-    
+    <!-- Mensaje Desplegable -->
+    {% if messages %}
+    <div class="row mt-3">
+        <div class="col p-0">
+            <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                    {% for message in messages %}
+                        <p class="m-0">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="btn-close" onclick="cerrarMensaje()"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col"></div>
         <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
             <!-- Barra Custom Buscador -->
             <form id="form-busqueda" method="post" action="{% url 'index' %}">
-                <div class="search-bar mb-3 mt-5">
+                <div class="search-bar mb-3 mt-4">
                     {% csrf_token %}
                     <div class="row justify-content-center">
                         <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
@@ -387,9 +386,9 @@
     var idioma = "{{ request.LANGUAGE_CODE }}";
     // Verifica el idioma actual y cambia el contenido según corresponda
     if (idioma === "es") {
-        // document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
+        // document.querySelectorAll('.box-rec').setAttribute('data-room', 'Disponible');
     } else if (idioma === "en") {
-        document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+        // document.querySelectorAll('.box-rec').setAttribute('data-room', 'Available');
     }
     // Funcion para dar display none a contenedor de mensajes
     function cerrarMensaje() {

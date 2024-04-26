@@ -8,6 +8,21 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 120px;">
+    <!-- Mensaje Desplegable -->
+    {% if messages %}
+    <div class="row mt-3">
+        <div class="col p-0">
+            <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                    {% for message in messages %}
+                        <p class="m-0">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="btn-close" onclick="cerrarMensaje()"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col">
             <!-- Botones Selección Tipo Habitación -->
@@ -193,6 +208,12 @@
         // document.querySelector('.box-rec').setAttribute('data-room', 'Disponible');
     } else if (idioma === "en") {
         document.querySelector('.box-rec').setAttribute('data-room', 'Available');
+    }
+
+    // Funcion para dar display none a contenedor de mensajes
+    function cerrarMensaje() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        mensaje.style.display = 'none';
     }
 
     

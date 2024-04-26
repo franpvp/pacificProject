@@ -14,42 +14,46 @@
 
         </div>
     </div>
-    <div class="row ">
-        <div class="col d-flex justify-content-center align-item-center m-3">
-            <!-- Scrollable modal -->
-            <!-- Botón para abrir el modal -->
-            {% for reserva in reservas %}
-                <!-- Botón para abrir el modal de esta reserva -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ reserva.id_reserva }}">
-                    Reserva {{ reserva.id_reserva }}
-                </button>
-                <!-- Modal para esta reserva -->
-                <div class="modal fade" id="exampleModal{{ reserva.id_reserva }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ reserva.id_reserva }}" aria-hidden="true" style="z-index: 11000; height: 600px; top: 20%"">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel{{ reserva.id_reserva }}">Detalles de la Reserva {{ reserva.id_reserva }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul>
-                                    <li>Fecha de Llegada: {{ reserva.fecha_llegada }}</li>
-                                    <li>Fecha de Salida: {{ reserva.fecha_salida }}</li>
-                                    <li>Cantidad de Adultos: {{ reserva.cant_adultos }}</li>
-                                    <li>Cantidad de Niños: {{ reserva.cant_ninos }}</li>
-                                    <li>Habitación: {{ reserva.habitacion }}</li>
-                                    <li>Habitación: {{ reserva.habitacion }}</li>
-                                </ul>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary">Guardar cambios</button>
+    {% if habitaciones|length == 0 %}
+        <p class="text-center mb-5">{% trans "No se han realizado reservas."%}<p>
+    {% else %}
+        <div class="row ">
+            <div class="col d-flex justify-content-center align-item-center m-3">
+                <!-- Scrollable modal -->
+                <!-- Botón para abrir el modal -->
+                {% for reserva in reservas %}
+                    <!-- Botón para abrir el modal de esta reserva -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ reserva.id_reserva }}">
+                        Reserva {{ reserva.id_reserva }}
+                    </button>
+                    <!-- Modal para esta reserva -->
+                    <div class="modal fade" id="exampleModal{{ reserva.id_reserva }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ reserva.id_reserva }}" aria-hidden="true" style="z-index: 11000; height: 600px; top: 20%"">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel{{ reserva.id_reserva }}">Detalles de la Reserva {{ reserva.id_reserva }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                        <li>Fecha de Llegada: {{ reserva.fecha_llegada }}</li>
+                                        <li>Fecha de Salida: {{ reserva.fecha_salida }}</li>
+                                        <li>Cantidad de Adultos: {{ reserva.cant_adultos }}</li>
+                                        <li>Cantidad de Niños: {{ reserva.cant_ninos }}</li>
+                                        <li>Habitación: {{ reserva.habitacion }}</li>
+                                        <li>Habitación: {{ reserva.habitacion }}</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}

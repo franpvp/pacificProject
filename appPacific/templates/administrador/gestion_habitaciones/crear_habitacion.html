@@ -13,11 +13,11 @@
         <div class="col p-0" style="width: 100%;">
             {% for message in messages %}
                 {% if message.tags == 'success' %}
-                    <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="contenedor-mensajes alert alert-success" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
                             <p class="m-0">{{ message }}</p>
                         </div>
-                        <div class="btn-close"></div>
+                        <div class="btn-close" style="cursor: pointer;"></div>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -188,6 +188,13 @@
             document.getElementById(mensajeErrorId).style.display = 'none';
         }
     }
+
+    contenedorMensaje = document.querySelector('.contenedor-mensajes')
+    btnClose = document.querySelector('.btn-close')
+
+    btnClose.addEventListener('click', function() {
+        contenedorMensaje.style.display = 'none'
+    })  
 
 </script>
 

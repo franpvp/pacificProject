@@ -54,6 +54,8 @@ def index(request):
         contador_adultos = int(request.POST.get('contador_adultos', 0))
         contador_ninos_str = request.POST.get('contador_ninos')
         contador_ninos = int(contador_ninos_str) if contador_ninos_str else 0
+        total_huespedes = contador_adultos + contador_ninos # Contar Adultos y niños
+        total_huespedes_str = str(total_huespedes)
 
         # Validar que los campos de fechas no estén vacíos
         if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
@@ -68,6 +70,7 @@ def index(request):
         request.session['fecha_salida_hidden'] = fecha_salida_formateada
         request.session['contador_adultos'] = contador_adultos
         request.session['contador_ninos'] = contador_ninos
+        request.session['total_huespedes_str'] = total_huespedes_str
         
         # Redirigir a la vista 'habitaciones'
         return redirect('habitaciones')
@@ -222,11 +225,13 @@ def contacto(request):
 
 # Vista Habitaciones
 def habitaciones(request):
+    habitaciones = Habitacion.objects.all()
     # Obtener los parámetros de la URL
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
+    total_huespedes_str = request.session.get('total_huespedes_str')
 
     # Validar si los campos son nulos y redirigir si es necesario
     if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
@@ -234,22 +239,26 @@ def habitaciones(request):
 
     if request.method == 'POST' and fecha_llegada and fecha_salida and contador_adultos > 0:
         # Obtener los id de la habitacion cuando se haga clic en botón Reserva
-        id_hab = int(request.POST.get('id_hab'))
-        id_tipo_hab = request.POST.get('id_tipo_hab')
-
+        id_hab = request.POST.get('id_hab')
         row_hab = Habitacion.objects.get(id_hab=id_hab)
+        id_tipo_hab = request.POST.get('id_tipo_hab')
         row_tipo_hab = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab)
-
-        # Guardar los id de ambas habitaciones en sesiones
-        request.session['id_hab'] = row_hab.id_hab
-        request.session['titulo_hab'] = row_hab.titulo_hab
-        request.session['tipo_hab'] = row_tipo_hab.tipo_hab
-        request.session['precio'] = row_hab.precio
+        capacidad_max = row_hab.capacidad_max
+        if int(total_huespedes_str) <= capacidad_max:
+            # Guardar los id de ambas habitaciones en sesiones
+            request.session['id_hab'] = row_hab.id_hab
+            request.session['titulo_hab'] = row_hab.titulo_hab
+            request.session['tipo_hab'] = row_tipo_hab.tipo_hab
+            request.session['precio'] = row_hab.precio
+        else:
+            # Mostrar mensaje de que debe ingresar hasta cierta cantidad de huéspedes.
+            messages.error(request, _('La cantidad de huéspedes ingresada supera la capacidad permitida.'))
+            return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
         return redirect('metodo_pago')
-
+    
     idioma = request.LANGUAGE_CODE
-    habitaciones = Habitacion.objects.all()
+    
     for habitacion in habitaciones:
         if idioma == 'en':
             habitacion.titulo_hab = habitacion.titulo_en
@@ -269,7 +278,7 @@ def metodo_pago(request):
     titulo_hab = request.session.get('titulo_hab')
 
     # Obtener precio de habitacion
-    row_hab = Habitacion.objects.get(pk=id_hab)
+    row_hab = Habitacion.objects.get(id_hab=id_hab)
     total = int(row_hab.precio)
 
     # Calcular 30% del total
