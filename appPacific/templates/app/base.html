@@ -62,7 +62,7 @@
                             {% csrf_token %}
                             <img id="logo-chile" class="language-img" src="{% static 'img/logo-chile.png' %}" alt="es" style="width: 45px; height: auto;">
                             <img id="logo-eng" class="language-img" src="{% static 'img/logo-eng.webp' %}" alt="en" style="width: 45px; height: auto; display: none;">
-                            <select id="language-select" name="language">
+                            <select id="language-select" name="language" class="ml-3 mr-3">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
@@ -98,6 +98,12 @@
                                 </div>
                             </a>
                             <div class="lista-user" style="display: none;">
+                                <div class="btn-mi-perfil">
+                                    Mi Perfil 
+                                </div>
+                                <div class="btn-cerrar-sesion">
+                                    Cerrar Sesión 
+                                </div>
                             </div>
                         {% endif %}
                         <li class="switch" style="margin-top: 10px;">

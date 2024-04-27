@@ -1,7 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group as AuthGroup, Permission as AuthPermission
-
-
 # Create your models here.
 
 # Lista de opciones para variable "tipo_usuario"
@@ -106,39 +103,42 @@ class DatosBancarios(models.Model):
         return self.beneficiario
 
 
+# Tabla Creación Reserva (Con datos cliente)
+class Reserva(models.Model):
+    id_reserva = models.AutoField(primary_key=True, unique=True, verbose_name="Id reserva")
+    id_user = models.CharField(max_length=20, verbose_name="Id Usuario")
+    order_id = models.CharField(max_length=100, verbose_name="Id Orden PayPal", default='')
+    fecha_llegada = models.DateField(null=False, verbose_name="Fecha Llegada")
+    fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
+    cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
+    cant_ninos = models.IntegerField(verbose_name="Cantidad Niños", null=True)
+    tipo_hab = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE, verbose_name="Tipo Habitación")
+    tipo_metodo_pago = models.ForeignKey(MetodoPago, on_delete=models.CASCADE, verbose_name="Método de Pago cliente")
+    total = models.IntegerField(verbose_name="Total Reserva")
+    pago_inicial = models.IntegerField(verbose_name="Pago Inicial Reserva")
+    pago_pendiente = models.IntegerField(verbose_name="Pago Pendiente")
+    estado_pago = models.CharField(max_length=20, verbose_name="Estado Pago", default="Pendiente")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-class User(AbstractUser):
-    ROLES = (
-        ('cliente', 'Cliente'),
-        ('admin', 'Administrador'),
-        ('vendedor', 'Vendedor'),
-    )
+    def __str__(self):
+            return self.id_user
     
-    rol = models.CharField(max_length=20, choices=ROLES, default='cliente')
 
-    def save(self, *args, **kwargs):
-        if not self.pk:  # Verifica si es un usuario nuevo
-            if self.is_superuser:
-                self.rol = 'admin'
-            else:
-                self.rol = 'cliente'
-        super().save(*args, **kwargs)
+# Tabla Reporte Reserva
+class ReporteReserva(models.Model):
+    id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE, verbose_name="Reserva")
+    dia_ingreso = models.DateField(null=False, verbose_name="Dia Ingreso")
+    hora_ingreso = models.TimeField(null=True, blank=True)
+    dia_salida = models.DateField(null=False, verbose_name="Dia Salida")
+    hora_salida = models.TimeField(null=True, blank=True)
 
-    groups = models.ManyToManyField(
-        AuthGroup,
-        through='UserGroup',
-        related_name='custom_user_set',  # Cambia 'custom_user_set' a un nombre único si es necesario
-    )
-    user_permissions = models.ManyToManyField(
-        AuthPermission,
-        through='UserPermission',
-        related_name='custom_user_set',  # Cambia 'custom_user_set' a un nombre único si es necesario
-    )
+    def __str__(self):
+        return f"{self.dia_ingreso} - {self.hora_ingreso}"
 
-class UserGroup(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(AuthGroup, on_delete=models.CASCADE)
+    def hacer_checkin(self, hora_checkin):
+        self.hora_checkin = hora_checkin
+        self.save()
 
-class UserPermission(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    permission = models.ForeignKey(AuthPermission, on_delete=models.CASCADE)
+    def hacer_checkout(self, hora_checkout):
+        self.hora_checkout = hora_checkout
+        self.save()

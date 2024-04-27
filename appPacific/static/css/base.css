@@ -440,11 +440,37 @@ li{
     top: 85px;
     right: 100px;
     width: 200px;
-    height: 200px;
-    background: #25303f;
-    border-radius: 18px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    
+    height: 150px;
+}
+
+.btn-mi-perfil{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #eee;
+    border-radius: 18px 18px 0 0;
+    cursor: pointer;
+}
+
+.btn-mi-perfil:hover{
+    color: #fff;
+    background: #3498db;
+}
+
+.btn-cerrar-sesion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 0 0 18px 18px;
+    background: #eee;
+    cursor: pointer;
+}
+
+.btn-cerrar-sesion:hover{
+    color: #fff;
+    background: #3498db;
 }
 
 .listado-idiomas{
