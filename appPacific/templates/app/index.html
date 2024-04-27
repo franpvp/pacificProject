@@ -7,16 +7,74 @@
 {% load i18n %}
 
 {% block contenido %}
-<div class="container-fluid" style="padding-top: 180px;">
+<div class="container-fluid" style="padding-top: 105px;">
+    <!-- Slider de Imágenes de Servicios del Hotel -->
+    <div class="row">
+        <div class="col p-0" style="width: 50%;">
+            <div id="carouselExampleCaptions" class="carousel slide">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img src="{% static '/img/img_slide/piscina-hotel.jpg' %}" class="d-block w-100" alt="img1">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Sumérgete en el Paraíso: Nuestra Piscina de Ensueño te Espera</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Nuestra piscina del hotel ofrece un oasis de tranquilidad y serenidad. Disfruta de aguas cristalinas, un entorno exuberante y la oportunidad de relajarte y rejuvenecer bajo el sol. ¿Qué esperas? Ven y sumérgete en el lujo en nuestra piscina de ensueño.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{% static '/img/img_slide/restaurant-hotel.jpg' %}" class="d-block w-100" alt="img2">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Descubre una Experiencia Gastronómica Única en nuestro Restaurante del Hotel</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Disfruta de una experiencia culinaria única en nuestro restaurante exclusivo. Nuestros chefs expertos preparan platos deliciosos con ingredientes frescos y locales. Ven y déjate seducir por la elegancia y el sabor en nuestro restaurante del hotel.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{% static '/img/img_slide/gym-hotel.jpg' %}" class="d-block w-100" alt="img3">
+                    <div class="carousel-caption d-none d-md-block" style="opacity: 0.9; background: #D9D9D9; padding: 40px;">
+                        <h5 style="color: black;">Eleva tu Entrenamiento: Descubre Nuestro Gimnasio de Primer Nivel</h5>
+                        <p class="mt-4 text-center" style="color: black; font-size: 13px; text-align: justify;">Potencia tu bienestar en nuestro gimnasio completamente equipado. Con equipos de última generación y un ambiente motivador, nuestro gimnasio te ofrece todo lo que necesitas para alcanzar tus objetivos de fitness. ¡Ven y descubre un nuevo nivel de salud y vitalidad en nuestro gimnasio del hotel!</p>
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Mensaje Desplegable -->
+    {% if messages %}
+    <div class="row mt-3">
+        <div class="col p-0">
+            <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                    {% for message in messages %}
+                        <p class="m-0">{{ message }}</p>
+                    {% endfor %}
+                </div>
+                <div class="btn-close" onclick="cerrarMensaje()"></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col"></div>
-        <div class="col-xs-10 col-sm-10 col-md-11 col-lg-10">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
             <!-- Barra Custom Buscador -->
-            <div class="search-bar mb-5">
-                <form id="form-busqueda" method="post" action="{% url 'index' %}">
+            <form id="form-busqueda" method="post" action="{% url 'index' %}">
+                <div class="search-bar mb-3 mt-4">
                     {% csrf_token %}
                     <div class="row justify-content-center">
-                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
                             <div class="input-group">
                                 <input id="fecha_llegada" name="fecha_llegada" type="text"
                                     class="form-control date-range text-center"
@@ -32,7 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-3 d-flex align-items-center mt-3 mb-3">
+                        <div class="col-xs-8 col-sm-10 col-md-5 col-lg-4 d-flex align-items-center mt-3 mb-3">
                             <div class="input-group">
                                 <input id="fecha_salida" name="fecha_salida" type="text"
                                     class="form-control date-range text-center"
@@ -48,62 +106,90 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3 ml-3 mr-3">
+                        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-3 d-flex justify-content-center mt-3 mb-3">
                             <!-- Selector Cantidad Adultos -->
-                            <div class="btn-adultos">
-                                {% trans "Adultos" %}
+                            <div class="btn-huespedes">
+                                {% trans "Huéspedes" %}
+                                <i class='bx bxs-chevron-down ml-2' ></i>
                             </div>
-                            <div class="box-btn-adultos">
-                                <div class="contenido-sec">
-                                    <i id="btn-minus-adultos" class='bx bxs-minus-circle'
-                                        style="margin-right: 10px;"></i>
-                                    <div id="contador-adultos" class="contador-adultos">0</div>
-                                    <i id="btn-plus-adultos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
-                                    <!-- Campo contador_adultos oculto -->
-                                    <input type="hidden" id="contador_adultos_input" name="contador_adultos">
+                            <div class="contenedor-huespedes">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col">Adultos
+                                            <div class="row">
+                                                <div class="col" style="color: rgb(91, 90, 90); font-weight: 200; font-size: 13px;">Edad: 13 años o más</div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <div id="btn-minus-adultos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-minus'></i>
+                                                </div>
+                                                <div id="contador-adultos" class="contador-adultos ml-3 mr-3" style="font-weight: lighter;">0</div>
+                                                <div id="btn-plus-adultos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-plus'></i>
+                                                </div>
+                                                <!-- Campo contador_adultos oculto -->
+                                                <input type="hidden" id="contador_adultos_input" name="contador_adultos">
+                                            </div>     
+                                        </div>
+                                    </div>
+                                    <hr style="color: #D9D9D9;">
+                                    <div class="row">
+                                        <div class="col">Niños
+                                            <div class="row">
+                                                <div class="col" style="color: rgb(91, 90, 90); font-weight: 200; font-size: 13px;">
+                                                    Edades 2 - 12 años
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <div id="btn-minus-ninos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-minus'></i>
+                                                </div>
+                                                <div id="contador-ninos" class="contador-ninos ml-3 mr-3" style="font-weight: lighter;">0</div>
+                                                <div id="btn-plus-ninos" class="btn_contador" style="display: flex; align-items: center; justify-content: center;">
+                                                    <i class='bx bx-plus'></i>
+                                                </div>
+                                                <!-- Campo contador_ninos oculto -->
+                                                <input type="hidden" id="contador_ninos_input" name="contador_ninos">
+                                            </div>                    
+                                            <!-- Campo contador_ninos oculto -->
+                                            <input type="hidden" id="contador_ninos_input" name="contador_ninos">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
-                        <div class="col-xs-10 col-sm-10 col-md-5 col-lg-2 d-flex justify-content-center mt-3 mb-3">
-                            <!-- Selector Cantidad Niños -->
-                            <div class="btn-ninos">
-                                {% trans "Niños" %}
-                            </div>
-                            <div class="box-btn-ninos">
-                                <div class="contenido-sec">
-                                    <i id="btn-minus-ninos" class='bx bxs-minus-circle' style="margin-right: 10px;"></i>
-                                    <div id="contador-ninos" class="contador-ninos">0</div>
-                                    <i id="btn-plus-ninos" class='bx bxs-plus-circle' style="margin-left: 10px;"></i>
-                                    <!-- Campo contador_ninos oculto -->
-                                    <input type="hidden" id="contador_ninos_input" name="contador_ninos">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Botón Buscador -->
-                        <div id="btn-buscar"
-                            class="col-md-1 col-lg-1 d-flex justify-content-end align-item-center ml-auto mt-3 mb-3"
-                            style="cursor: pointer;">
-                            <button type="submit" style="border: none; background: none;">
-                                <img src="{% static 'img/buscador.png' %}" alt="img-user"
-                                    style="width: 50px; height: 50px; margin-right: 15px;">
+                        
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <!-- Botón de búsqueda -->
+                    <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12 mb-3 d-flex justify-content-center">
+                        <div id="btn-buscar" class="d-flex align-items-center">
+                            <button class="btn-buscador" type="submit" style="display: flex; justify-content: center; align-items: center;">
+                                <i class='bx bxs-search' id="icono-buscador"></i>
+                                <span id="texto-buscador">Buscar</span>
                             </button>
                         </div>
                     </div>
-                </form>
-            </div>
-            <!-- Muestra los mensajes de error -->
-            {% if messages %}
-            <div class="alert alert-danger text-center mt-3" role="alert">
-                <div class="m-0">
-                    {% for message in messages %}
-                    <p class="m-0">{{ message }}</p>
-                    {% endfor %}
                 </div>
-            </div>
-            {% endif %}
+            </form>
         </div>
         <div class="col"></div>
+        
+    </div>
+    
+    <!-- Sección Habitaciones Recomendadas -->
+    <div class="row justify-content-center mb-3">
+        <div class="col d-flex align-item-center justify-content-center">
+            <div class="titulo-rec">
+                {% trans "Nuestras Habitaciones" %}
+            </div>
+        </div>
     </div>
     <!-- Botones Selección Tipo Habitación -->
     <div class="row justify-content-center">
@@ -136,8 +222,7 @@
         </div>
         <div class="col-xs-6 col-sm-4 col-md-12 col-lg-3 d-flex align-item-center justify-content-center">
             <div class="btn-hab filtro" style="cursor: pointer;">
-                <img class="img-fluid" src="{% static 'img/filtrar.png' %}" alt="img-filtros"
-                    style="width: 20px; height: 20px; margin-right: 15px;">
+                <i class='bx bx-filter mr-3' ></i>
                 {% trans "Filtros" %}
                 <i class='bx bxs-chevron-down-circle pl-3' id="icono-filtro"></i>
             </div>
@@ -158,54 +243,54 @@
             </div>
         </div>
     </div>
-    <!-- Sección Habitaciones Recomendadas -->
-    <div class="row justify-content-center mt-4">
-        <div class="col d-flex align-item-center justify-content-center">
-            <div class="titulo-rec">
-                {% trans "Nuestras Habitaciones" %}
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Contenedores Habitaciones -->
     <div class="row mt-2 justify-content-center">
         {% for habitacion in habitaciones %}
         <div class="habitacion tipo-{{ habitacion.id_tipo_hab }} col-xs-12 col-sm-12 col-md-6 col-lg-4 contenedor-img">
-            <div class="card no-border">
-                <div class="box-rec" data-room="{{ habitacion.cantidad }}">
-                    <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}">
+            <div class="card no-border" style="background: transparent;">
+                <div class="box-rec" data-room="{{ habitacion.estado }}">
+                    <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}">
                 </div>
                 <div class="card-body text-center">
                     {% if idioma_seleccionado == 'en' %}
                     <h5 class="card-title"> {{ habitacion.titulo_en }}</h5>
                     <p class="card-text"> {{ habitacion.descripcion_en }}</p>
                     {% else %}
-                    <h5 class="card-title"> {{ habitacion.titulo }}</h5>
+                    <h5 class="card-title"> {{ habitacion.titulo_hab }}</h5>
                     <p class="card-text"> {{ habitacion.descripcion }}</p>
                     {% endif %}
                     <p class="precio card-text" data-precio="{{ habitacion.precio }}">{{ habitacion.precio |
                         stringformat:"d" }}</p>
+                    <div class="btn-mostrar-info" data-habitacion="{{ habitacion.id_hab }}">
+                        <i class='bx bxs-info-circle pr-2'></i>
+                        {% trans "Más Información" %}
+                    </div>
                     <form method="post" action="{% url 'index' %}">
                         {% csrf_token %}
                         <input type="hidden" name="id_hab" value="{{ habitacion.id_hab }}">
                         <input type="hidden" name="id_tipo_hab" value="{{ habitacion.id_tipo_hab }}">
-                        <div id="btn-mostrar-info" class="btn-mostrar-info">
-                            <i class='bx bxs-info-circle pr-2'></i>
-                            {% trans "Más Información" %}
-                        </div>
+                        
                         {% if user.is_authenticated %}
-                        <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
-                            <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
-                        </div>
+                            {% if habitacion.estado == 'Disponible' %}
+                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit">{% trans "Reservar" %}</button>
+                                </div>
+                            {% else %}
+                                <div id="btn-reservar" class="d-grid gap-2 col-6 mx-auto">
+                                    <button id="btn-reservar-btn" class="btn btn-primary" type="submit" disabled>{% trans "Reservar" %}</button>
+                                </div>
+                            {% endif %}
                         {% else %}
                         <button id="btn-reservar-btn" class="btn btn-primary" type="button"
                             onclick="mostrarMensaje()">{% trans "Reservar" %}</button>
                         {% endif %}
                         <div class="fondo-opaco"></div>
                         <!-- Mostrar ventana con información mas detallada de la habitación -->
-                        <div class="mas-informacion text-center m-auto">
-                            <div class="btn-close"></div>
+                        <div class="mas-informacion id-hab-{{ habitacion.id_hab }} text-center m-auto" style="max-height: 600px; overflow-y: auto;">
+                            <div class="btn-close" ></div>
                             <div class="row">
+                                <h5 class="card-title m-0">{{ habitacion.titulo_hab }}</h5>
                                 <div class="col-sm-12 col-md-12 col-lg-12">
                                     <div class="contenido-imagenes">
                                         <img src="data:image/jpeg;base64,{{ habitacion.imagen }}"
@@ -213,22 +298,28 @@
                                             style="border-radius: 40px;">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 mt-3 d-flex justify-content-center">
+                                <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
                                     <div class="contenido-habitacion">
-                                        <h5 class="card-title">{{ habitacion.titulo }}</h5>
                                         <p>
                                             {% trans "Esta habitación ofrece:" %}
-                                            {{ habitacion.capacidad_huespedes }} {% trans "huéspedes" %},
-                                            {{ habitacion.cantidad_habitaciones }} {% trans "habitación" %},
                                             {{ habitacion.camas }} {% trans "cama" %},
                                             {{ habitacion.banos }} {% trans "baño" %}
                                         </p>
-                                        <p>{% trans "Sevicios Incluidos:" %}
-                                            <!-- Campo True o False en BBDD -->
-                                            {{ habitacion.desayuno }}
-                                            {{ habitacion.piscina }}
-                                            {{ habitacion.gimnasio }}
-                                        </p>
+                                        <p class="mt-3">{% trans "Servicios Incluidos:" %}</p>
+                                        <ul class="list-inline">
+                                            <li class="list-group-item">Desayuno</li>
+                                            <li class="list-group-item">Piscina</li>
+                                            <li class="list-group-item">Gimnasio</li>
+                                        </ul>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                            <label class="form-check-label" for="inlineCheckbox1">Transporte Aereopuerto</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                            <label class="form-check-label" for="inlineCheckbox2">Restaurante VIP</label>
+                                        </div>
+                                        <p class="mt-3"> * Capacidad Máxima: <strong>{{ habitacion.capacidad_max }} {% trans "huéspedes" %}</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -252,14 +343,74 @@
         </div>
         {% endfor %}
     </div>
+    <div class="row">
+        <footer class="footer-pag p-2">
+            <div class="col-md-6 text-md-left text-center" style="margin-top: 5px;">
+                <!-- Ajuste de margen superior -->
+                <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
+                <!-- Dirección ficticia -->
+            </div>
+        </footer>
+    </div>
+
+
     <script>
-        var idioma = "{{ request.LANGUAGE_CODE }}";
-        // Verifica el idioma actual y cambia el contenido según corresponda
-        if (idioma === "es") {
-            document.querySelector('.box-rec').setAttribute('data-room', 'Disponibles');
-        } else if (idioma === "en") {
-            document.querySelector('.box-rec').setAttribute('data-room', 'Available');
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+        var buttons = document.querySelectorAll('.btn-mostrar-info');
+        console.log("Número de botones encontrados:", buttons.length);
+        
+        buttons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                console.log("Botón clickeado:", this.getAttribute('data-habitacion'));
+                
+                var habitacionId = this.getAttribute('data-habitacion');
+                
+                // Ocultar todas las ventanas de información
+                document.querySelectorAll('.mas-informacion').forEach(function(info) {
+                    info.style.display = 'none';
+                });
+                
+                // Mostrar solo la ventana de información de la habitación seleccionada
+                var infoHabitacion = document.querySelector('.mas-informacion.id-hab-' + habitacionId);
+                if (infoHabitacion) {
+                    console.log("Mostrando ventana de información para la habitación:", habitacionId);
+                    infoHabitacion.style.display = 'block';
+                } else {
+                    console.log("No se encontró la ventana de información para la habitación:", habitacionId);
+                }
+            });
+        });
+    });
+
+    var idioma = "{{ request.LANGUAGE_CODE }}";
+    // Verifica el idioma actual y cambia el contenido según corresponda
+    if (idioma === "es") {
+        // document.querySelectorAll('.box-rec').setAttribute('data-room', 'Disponible');
+    } else if (idioma === "en") {
+        // document.querySelectorAll('.box-rec').setAttribute('data-room', 'Available');
+    }
+    // Funcion para dar display none a contenedor de mensajes
+    function cerrarMensaje() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        mensaje.style.display = 'none';
+    }
+    // Quitar mensaje después de 4 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        setTimeout(function() {
+            mensaje.style.display = 'none';
+        }, 4000); // 5000 milisegundos = 5 segundos
+    });
+
+    // Función para avanzar al siguiente carousel
+    function avanzarCarousel() {
+        $('#carouselExampleCaptions').carousel('next');
+    }
+
+    // Temporizador para avanzar al siguiente carousel cada 5 segundos
+    setInterval(avanzarCarousel, 7000);
+
     </script>
 
 </div>

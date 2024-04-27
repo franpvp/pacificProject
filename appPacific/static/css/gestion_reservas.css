@@ -5,3 +5,87 @@
     border-radius: 20px; 
 }
 
+.contenedor-calendario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 18px;
+    padding: 40px;
+    border: 1px solid #D9D9D9;
+}
+
+.grupo-dias {
+    margin-top: 20px;
+    display: flex; /* Mostrar los días en línea */
+    flex-wrap: nowrap; /* No permitir que los días se envuelvan dentro del grupo */
+}
+
+.nombres-dias{
+    display: flex;
+    justify-content: space-around; /* Distribuye los nombres de los días uniformemente en el ancho disponible */
+    margin-bottom: 10px;
+}
+
+
+.btn-dia{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: black;
+    margin-right: 15px; /* Ajusta el espaciado entre los días */
+    margin-bottom: 5px;
+}
+
+.btn-dia:hover{
+    background: #202835;
+    opacity: 0.6;
+    color: #fff;
+}
+
+.btn-prev{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.btn-prev:hover{
+    width: 30px;
+    height: 30px;
+    background: #D9D9D9;
+}
+
+.btn-next{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.btn-next:hover{
+    width: 30px;
+    height: 30px;
+    background: #D9D9D9;
+}
+
+.dia-pasado {
+    opacity: 0.5;
+}
+
+.btn-dia.dia-pasado:hover {
+    background-color: transparent; 
+    color: inherit;
+    cursor: default; /* Cambia el cursor de nuevo al valor predeterminado */
+}

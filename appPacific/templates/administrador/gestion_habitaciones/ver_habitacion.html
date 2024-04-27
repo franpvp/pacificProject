@@ -28,9 +28,8 @@
     <div class="row justify-content-center">
         <div class="col">
             {% if habitaciones|length == 0 %}
-            <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}
-            <p>
-                {% else %}
+            <p class="text-center mb-5">{% trans "No hay habitaciones disponibles en este momento."%}<p>
+            {% else %}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -39,9 +38,10 @@
                             <th scope="col">{% trans "ID Tipo Habitación"%}</th>
                             <th scope="col">{% trans "Título"%}</th>
                             <th scope="col">{% trans "Descripción"%}</th>
-                            <th scope="col">{% trans "Cantidad"%}</th>
+                            <th scope="col">{% trans "Capacidad Máxima"%}</th>
                             <th scope="col">{% trans "Precio"%}</th>
                             <th scope="col">{% trans "Imagen"%}</th>
+                            <th scope="col">{% trans "Estado"%}</th>
                         </tr>
                     </thead>
                     <tbody class="habitaciones-table">
@@ -49,14 +49,14 @@
                         <tr class="text-center">
                             <td>{{ habitacion.id_hab }}</td>
                             <td>{{ habitacion.id_tipo_hab }}</td>
-                            <td>{{ habitacion.titulo }}</td>
+                            <td>{{ habitacion.titulo_hab }}</td>
                             <td>{{ habitacion.descripcion }}</td>
-                            <td>{{ habitacion.cantidad }}</td>
+                            <td>{{ habitacion.capacidad_max }}</td>
                             <td>{{ habitacion.precio }}</td>
                             <td>
-                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo }}"
-                                    class="img-fluid" style="width: 50px; height: 50px;">
+                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}" alt="{{ habitacion.titulo_hab }}" class="img-fluid" style="width: 50px; height: 50px;">
                             </td>
+                            <td>{{ habitacion.estado }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

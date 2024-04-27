@@ -10,10 +10,13 @@
         <div class="col-lg-6 reg-box">
             <h1 class="titulo-general text-center">{% trans "Registro de Usuario"%}</h1>
             <!-- Formulario de registro -->
+
+        
             <form id="registroForm" action="{% url 'crear_usuario_admin' %}" method="post">
                 {% csrf_token %}
                 <div class="row justify-content-center align-item-center">
-                    <div class="col-12 col-lg-8 pb-4">
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-6 pb-4">
+                        <!-- Input ID Tipo Habitación -->
                         <!-- Input Nombre -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="nombre" name="nombres"placeholder="{% trans 'nombre' %}"                            required>
@@ -47,7 +50,7 @@
                         <!-- Input Contraseña 2 -->
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="contrasena2" name="contrasena2" placeholder= "{% trans 'contraseña' %}" required>
-                            <label for="contrasena2">{% trans "Contraseña"%}</label>
+                            <label for="contrasena2">{% trans "Confirmar Contraseña"%}</label>
                         </div>
                         <!-- Checkbox Usuario Normal -->
                         <div class="form-check mb-3">
@@ -70,11 +73,11 @@
                                 {% trans "¿Quieres que sea Usuario Administrador?"%}
                             </label>
                         </div>
-                        <!-- Botón Registrar -->
-                        <div class="row">
-                            <div class="col d-flex justify-content-center pt-4">
-                                <button type="submit" class="btn btn-primary btn-reg">{% trans "Registrar"%}</button>
-                            </div>
+                    </div>
+                    <!-- Botón Registrar -->
+                    <div class="row">
+                        <div class="col d-flex justify-content-center pt-4">
+                            <button type="submit" class="btn btn-primary btn-reg">{% trans "Registrar"%}</button>
                         </div>
                         <br>
                         <!-- Mensajes de Error -->
@@ -123,5 +126,13 @@
         });
     });
 </script>
-
 {% endblock %}
+
+
+<div class="row m-auto justify-content-center">
+    <div class="col mt-4 mb-4">
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <button class="btn btn-success" type="submit"> {% trans "+ Agregar"%}</button>
+        </div>
+    </div>
+</div>

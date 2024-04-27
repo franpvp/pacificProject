@@ -8,6 +8,22 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
+    {% if messages %}
+    <div class="row">
+        <div class="col p-0" style="width: 100%;">
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="contenedor-mensajes alert alert-success" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                            <p class="m-0">{{ message }}</p>
+                        </div>
+                        <div class="btn-close" style="cursor: pointer;"></div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col d-flex m-auto justify-content-center">
             <nav aria-label="breadcrumb">
@@ -36,8 +52,8 @@
                 </div>
                 <!-- Input Título -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="{% trans 'Título' %}" required>
-                    <label for="titulo">{% trans "Título" %}</label>
+                    <input type="text" class="form-control" id="titulo_hab" name="titulo_hab" placeholder="{% trans 'Título' %}" required>
+                    <label for="titulo_hab">{% trans "Título" %}</label>
                 </div>
                 <!-- Input Descripción -->
                 <div class="form-floating mb-3">
@@ -54,16 +70,27 @@
                     <textarea class="form-control" placeholder="{% trans 'Descripción en inglés' %}" id="descripcion_en" name="descripcion_en" style="height: 100px"></textarea>
                     <label for="descripcion_en">{% trans "Descripción en inglés"%}</label>
                 </div>
-                <!-- Input Cantidad Disponibles -->
+                <!-- Input Capacidad Máxima -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="cantidad" name="cantidad" placeholder="cantidad" required>
-                    <label for="cantidad">{% trans "Cantidad"%}</label>
+                    <input type="text" class="form-control" id="capacidad_max" name="capacidad_max" placeholder="Capacidad Máxima" oninput="validateInput(this, 'mensaje-error-capacidad-max')" required>
+                    <label for="capacidad_max">{% trans "Capacidad Máxima"%}</label>
+                    <span id="mensaje-error-capacidad-max" style="color: rgb(255, 166, 0); display: none;">Por favor, ingrese solo números.</span>
                 </div>
+                
                 <!-- Input Cantidad Disponibles -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="precio" name="precio" placeholder="precio" required>
+                    <input class="form-control" 
+                        type="text" 
+                        name="precio" 
+                        id="precio" 
+                        value="{{ habitacion.precio }}" 
+                        placeholder="Precio"
+                        oninput="validateInput(this, 'mensaje-error-precio')"
+                        required>
                     <label for="precio">{% trans "Precio"%}</label>
+                    <span id="mensaje-error-precio" style="color: rgb(255, 166, 0); display: none;">Por favor, ingrese solo números.</span>
                 </div>
+                
                 <!-- Input Imagen -->
                 <div class="form-group">
                     <label for="cargarImagen">{% trans "Selecciona una imagen:"%}</label>
@@ -72,8 +99,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <div class="container">
             <div class="row m-auto justify-content-center">
@@ -105,7 +130,7 @@
                 </div>
             </div>
         </div>
-        {% if messages %}
+        <!-- {% if messages %}
             {% for message in messages %}
                 {% if message.tags == 'success' %}
                     <div class="alert alert-success text-center" role="alert">
@@ -117,7 +142,7 @@
                     </div>
                 {% endif %}
             {% endfor %}
-        {% endif %}
+        {% endif %} -->
 
     </form>
     
@@ -129,31 +154,47 @@
         document.getElementById('imagenMostrada').src = urlGuardada;
     }
 
-  // Capturar el evento de cambio en el input de tipo file
+    // Capturar el evento de cambio en el input de tipo file
     document.getElementById('cargarImagen').addEventListener('change', function(event) {
-    // Obtener el archivo cargado
-    const archivo = event.target.files[0];
-    
-    // Validar si se seleccionó un archivo
-    if (archivo) {
-      // Crear un objeto URL para mostrar la imagen cargada
-    const urlImagen = URL.createObjectURL(archivo);
+        // Obtener el archivo cargado
+        const archivo = event.target.files[0];
+        
+        // Validar si se seleccionó un archivo
+        if (archivo) {
+        // Crear un objeto URL para mostrar la imagen cargada
+        const urlImagen = URL.createObjectURL(archivo);
 
-      // Mostrar la imagen en el front-end
-    document.getElementById('imagenMostrada').src = urlImagen;
+        // Mostrar la imagen en el front-end
+        document.getElementById('imagenMostrada').src = urlImagen;
 
-      // Guardar la URL de la imagen en el almacenamiento local
-    localStorage.setItem('imagenURL', urlImagen);
+        // Guardar la URL de la imagen en el almacenamiento local
+        localStorage.setItem('imagenURL', urlImagen);
+        }
+        localStorage.clear();
+
+        function handleSubmit(event) {
+            // Prevenir el comportamiento predeterminado del envío del formulario
+            event.preventDefault();
+
+        }
+
+    });
+
+    function validateInput(input, mensajeErrorId) {
+        var inputValue = input.value;
+        if (!/^[0-9]+$/.test(inputValue)) {
+            document.getElementById(mensajeErrorId).style.display = 'inline';
+        } else {
+            document.getElementById(mensajeErrorId).style.display = 'none';
+        }
     }
-    localStorage.clear();
 
-    function handleSubmit(event) {
-        // Prevenir el comportamiento predeterminado del envío del formulario
-        event.preventDefault();
+    contenedorMensaje = document.querySelector('.contenedor-mensajes')
+    btnClose = document.querySelector('.btn-close')
 
-    }
-
-});
+    btnClose.addEventListener('click', function() {
+        contenedorMensaje.style.display = 'none'
+    })  
 
 </script>
 

@@ -69,6 +69,7 @@ window.paypal
                 orderData,
                 JSON.stringify(orderData, null, 2),
             );
+            window.location.href = '/reserva_realizada/';
             }
         } catch (error) {
             console.error(error);

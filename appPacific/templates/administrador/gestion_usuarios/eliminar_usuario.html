@@ -28,11 +28,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-center">
+                            <tr>
                                 <td>{{ usuario.id }}</td>
                                 <td>{{ usuario.first_name }}</td>
                                 <td>{{ usuario.last_name }}</td>
+                                <td>{{ usuario.username }}</td>
                                 <td>{{ usuario.email }}</td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger">{% trans "Eliminar Usuario"%}</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
