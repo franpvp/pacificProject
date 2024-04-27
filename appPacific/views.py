@@ -200,6 +200,7 @@ def cerrarsesion(request):
 def misreservas(request):
     id_user = request.session.get('id_user')
     reservas = Reserva.objects.filter(id_user = id_user)
+    print(reservas)
     return render(request, 'registration/misreservas.html',{'reservas': reservas})
 
 @login_required
@@ -410,11 +411,11 @@ def crear_habitacion(request):
         imagen_base64_str = imagen_base64.decode('utf-8')
 
         # Buscar el objeto TipoHabitacion con el ID proporcionado (Esto trae Suite, Premium o Twin)
-        # tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab) 
+        row_tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab)
 
         # Crear la instancia de Habitacion con la imagen codificada en base64
         habitacion = Habitacion(
-            id_tipo_hab=id_tipo_hab,
+            id_tipo_hab=row_tipo_habitacion,
             titulo_hab=titulo_hab,
             descripcion=descripcion,
             titulo_en=titulo_en,
@@ -457,9 +458,10 @@ def modificar_habitacion(request):
         estado = request.POST.get('estado')
 
         habitacion = Habitacion.objects.get(id_hab=id_hab)
+        row_tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab = id_tipo_hab)
 
         # Actualizar los campos de la habitación
-        habitacion.id_tipo_hab = id_tipo_hab
+        habitacion.id_tipo_hab = row_tipo_habitacion
         habitacion.titulo_hab = titulo_hab
         habitacion.descripcion = descripcion
         habitacion.capacidad_max = capacidad_max
@@ -536,13 +538,15 @@ def crear_reserva_pacific(request):
                 fecha_salida = fecha_salida,
                 cant_adultos =  cant_adultos,
                 cant_ninos =  cant_ninos,
-                habitacion = get_titulo_hab,
+                habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
                 tipo_metodo_pago = paypal,
                 total = get_precio,
                 pago_inicial = get_pago_inicial,
                 pago_pendiente = get_pago_pendiente,
                 estado_pago = 'En Espera de Pago'
             )
+
+            row_habitacion = Habitacion.objects.get()
             # Guardar reserva
             reserva.save()
         
@@ -571,6 +575,8 @@ def modificar_reserva_pacific(request):
         habitacion = request.POST.get('habitacion')
         tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
         estado_pago = request.POST.get('estado_pago')
+
+        metodo_pago = MetodoPago.objects.get(id_metodo_pago = tipo_metodo_pago)
         
         # Obtener datos de reserva por id_reserva
         reserva = Reserva.objects.get(id_reserva = id_reserva)
@@ -580,7 +586,7 @@ def modificar_reserva_pacific(request):
         reserva.cant_adultos = cant_adultos
         reserva.cant_ninos = cant_ninos
         reserva.habitacion = habitacion
-        reserva.tipo_metodo_pago = tipo_metodo_pago
+        reserva.tipo_metodo_pago = metodo_pago
         reserva.estado_pago = estado_pago
         # Guardar actualizaciones de reserva
         reserva.save()
@@ -880,18 +886,24 @@ def capture_order(request, order_id):
             # Obtener cant_ninos
             cant_ninos = request.session.get('contador_ninos')
             titulo_hab = request.session.get('titulo_hab')
-            tipo_metodo_pago = 'PayPal'
             # Obtener total
             total = request.session.get('total')
+
             # Con el Id de la habitacion obtener el registro de datos
             row_hab = Habitacion.objects.get(pk=id_hab)
+
             # Mediante session obtener el pago_inicial de la reserva
             pago_inicial = request.session.get('pago_inicial')
+
             # Obtener mediante session el pago_pendiente de la reserva
             pago_pendiente = request.session.get('pago_pendiente')
+
             # Fechas formateadas
             fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
             fecha_salida_formateada = request.session.get('fecha_salida_hidden')
+            
+            # Obtener tipo_metodo_pago
+            row_tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago = 1)
 
             # Crear objeto Reserva
             reserva = Reserva(
@@ -901,19 +913,29 @@ def capture_order(request, order_id):
                 fecha_salida = fecha_salida_formateada,
                 cant_adultos = cant_adultos,
                 cant_ninos = cant_ninos,
+                id_hab = row_hab,
                 habitacion = titulo_hab,
-                tipo_metodo_pago = tipo_metodo_pago,
+                id_metodo_pago = row_tipo_metodo_pago,
                 total = total,
                 pago_inicial = pago_inicial,
                 pago_pendiente = pago_pendiente,
             )
+            # Guardar objeto Reserva
+            reserva.save()
+            # Obtener la reserva recién creada
+            reserva_creada = Reserva.objects.latest('fecha_creacion')
+
             # Crear Reporte Reserva
             reporte_reserva = ReporteReserva(
+                id_reserva = reserva_creada,
                 dia_ingreso = fecha_llegada_formateada,
                 dia_salida = fecha_salida_formateada
             )
-            # Guardar objeto Reserva y Reporte Reserva en la base de datos
-            reserva.save()
+            # Cambiar estado de habitación a "No Disponible"
+            row_hab.estado = "No Disponible"
+            row_hab.save()
+            # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
+            # Guardar Reporte Reserva en la base de datos
             reporte_reserva.save()
 
         else:

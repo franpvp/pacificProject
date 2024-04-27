@@ -83,7 +83,7 @@
                                 {% trans "Iniciar Sesión"%}
                             </a>
                             <!-- Botón Registro -->
-                            <a href="{% url 'registro' %}" class="btn-reg ms-2">
+                            <a href="{% url 'registro' %}" class="btn-reg ml-2 mr-4">
                                 {% trans "Regístrate"%}
                             </a>
                         {% else %}
@@ -98,12 +98,17 @@
                                 </div>
                             </a>
                             <div class="lista-user" style="display: none;">
-                                <div class="btn-mi-perfil">
-                                    Mi Perfil 
-                                </div>
-                                <div class="btn-cerrar-sesion">
-                                    Cerrar Sesión 
-                                </div>
+                                <a href="{% url 'misdatos' %}">
+                                    <div class="btn-mi-perfil">
+                                        Mi Perfil 
+                                    </div>
+                                </a>
+                                <a href="{% url 'cerrarsesion' %}">
+                                    <div class="btn-cerrar-sesion">
+                                        Cerrar Sesión 
+                                    </div>
+                                </a>
+                                
                             </div>
                         {% endif %}
                         <li class="switch" style="margin-top: 10px;">

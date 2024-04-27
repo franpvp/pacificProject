@@ -50,14 +50,7 @@
                 </table>
             </div>
             {% if success_message %}
-            <div class="alert alert-success" role="alert">
-                {% for message in success_message %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% if success_message %}
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success text-center" role="alert">
                 {% for message in success_message %}
                     {{ message }}
                 {% endfor %}
