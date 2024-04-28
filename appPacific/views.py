@@ -7,9 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from appPacific.decorators import admin_required
-from .models import Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios
-from django.http import HttpResponseRedirect
+from .models import RegistroUsuario, TipoUsuario, Reserva, ReporteReserva, Habitacion, TipoHabitacion, DatosBancarios, MetodoPago
+from django.http import HttpResponse, HttpResponseRedirect
 import binascii
+import locale
 import requests
 from django.conf import settings
 import json
@@ -24,22 +25,25 @@ import random
 import string
 from django.contrib.sessions.models import Session
 import re
+from datetime import datetime, timedelta
 from appPacific import models
-import re
 from django.utils.translation import gettext as _
 from .decorators import admin_required, seller_required
 from django.db import connection
 from django.shortcuts import render
 from django.views.generic import View
 from rest_framework import generics
-from .models import MetodoPago, Reserva, ReporteReserva, TipoHabitacion, Habitacion, DatosBancarios
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
+import calendar
 from django.contrib.auth.models import AnonymousUser
 
 # Create your views here.
 
 # Vista Index
 def index(request):
+    habitacion_visible = request.POST.get('id_hab')
+    print(habitacion_visible)
+
     if request.method == 'POST':
         # Input Buscador
         fecha_llegada = request.POST.get('fecha_llegada')
@@ -49,9 +53,11 @@ def index(request):
         contador_adultos = int(request.POST.get('contador_adultos', 0))
         contador_ninos_str = request.POST.get('contador_ninos')
         contador_ninos = int(contador_ninos_str) if contador_ninos_str else 0
+        total_huespedes = contador_adultos + contador_ninos # Contar Adultos y niños
+        total_huespedes_str = str(total_huespedes)
 
         # Validar que los campos de fechas no estén vacíos
-        if not fecha_llegada or not fecha_salida:
+        if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
             messages.error(request, "Por favor, completa las fechas de llegada y salida")
             return redirect('index')
 
@@ -63,6 +69,7 @@ def index(request):
         request.session['fecha_salida_hidden'] = fecha_salida_formateada
         request.session['contador_adultos'] = contador_adultos
         request.session['contador_ninos'] = contador_ninos
+        request.session['total_huespedes_str'] = total_huespedes_str
         
         # Redirigir a la vista 'habitaciones'
         return redirect('habitaciones')
@@ -73,10 +80,10 @@ def index(request):
 
     for habitacion in habitaciones:
         if idioma == 'en':
-            habitacion.titulo = habitacion.titulo_en
+            habitacion.titulo_hab = habitacion.titulo_en
             habitacion.descripcion = habitacion.descripcion_en
     
-    return render(request, 'app/index.html', {'habitaciones': habitaciones})
+    return render(request, 'app/index.html', {'habitaciones': habitaciones, 'habitacion_visible':habitacion_visible})
 
 def registro(request):
     if request.method == 'POST':
@@ -124,7 +131,7 @@ def registro(request):
             user.save()
             login(request,user)
 
-            messages.success(request, "Registro Exitoso, por favor inicie sesion")
+            # messages.success(request, "Registro Exitoso, por favor inicie sesion")
             return redirect('index')
         
         except IntegrityError:  
@@ -134,6 +141,13 @@ def registro(request):
     return render(request, 'registration/registro.html')
 
 def iniciosesion(request):
+
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('administrador_home')
+        else:
+            return redirect('index')
+
     if request.method == 'POST':
         try:       
             usuario = request.POST.get('username')
@@ -144,18 +158,18 @@ def iniciosesion(request):
                 return render(request,'app/login.html')
 
             user = authenticate(request,username=usuario,password=password1)
-
             if user is not None:
                 login(request,user)
-                messages.success(request,"Inicio de sesión correcta")
+                # messages.success(request,"Inicio de sesión correcta")
                 name = request.user.first_name
                 request.session['id_user'] = user.id
-
                 # messages.success(request, _("Inicio de sesión correcta"))
                 
                 #Valida si el user es superusuario:
                 if user.is_superuser:
                     return redirect('administrador_home')
+                else:
+                    return redirect('index')
                 #Valida si el user es vender:
                 if user.is_staff:
                     return redirect('vendedor_home')           
@@ -172,20 +186,27 @@ def iniciosesion(request):
 
     return render(request, 'app/login.html')
 
+
 @login_required
 def cerrarsesion(request):
-    logout(request)
-    return redirect('home')
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('index')
+    else:
+        return redirect('iniciosesion')
 
 # Vistas Relacionadas con el usuario registrado:
 @login_required
 def misreservas(request):
-    return render(request, 'registration/mireserva.html')
+    id_user = request.session.get('id_user')
+    reservas = Reserva.objects.filter(id_user = id_user)
+    return render(request, 'registration/misreservas.html',{'reservas': reservas})
 
 @login_required
 def misdatos(request):
-    return render(request, 'registration/datopersonal.html')
-
+    id_user = request.session.get('id_user')
+    datos_usuario = User.objects.get(pk = id_user)
+    return render(request, 'registration/datopersonal.html',{'datos_usuario': datos_usuario})
 
 # Vista Home
 def home(request):
@@ -203,77 +224,85 @@ def contacto(request):
 
 # Vista Habitaciones
 def habitaciones(request):
+    habitaciones = Habitacion.objects.all()
     # Obtener los parámetros de la URL
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
+    total_huespedes_str = request.session.get('total_huespedes_str')
+
+    # Validar si los campos son nulos y redirigir si es necesario
+    if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
+        return redirect('index')
 
     if request.method == 'POST' and fecha_llegada and fecha_salida and contador_adultos > 0:
         # Obtener los id de la habitacion cuando se haga clic en botón Reserva
-        id_hab = int(request.POST.get('id_hab'))
-        id_tipo_hab = request.POST.get('id_tipo_hab')
-
+        id_hab = request.POST.get('id_hab')
         row_hab = Habitacion.objects.get(id_hab=id_hab)
+        id_tipo_hab = request.POST.get('id_tipo_hab')
         row_tipo_hab = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab)
-
-        # Guardar los id de ambas habitaciones en sesiones
-        request.session['id_hab'] = row_hab.id_hab
-        request.session['tipo_hab'] = row_tipo_hab.tipo_hab
-        request.session['precio'] = row_hab.precio
+        capacidad_max = row_hab.capacidad_max
+        if int(total_huespedes_str) <= capacidad_max:
+            # Guardar los id de ambas habitaciones en sesiones
+            request.session['id_hab'] = row_hab.id_hab
+            request.session['titulo_hab'] = row_hab.titulo_hab
+            request.session['tipo_hab'] = row_tipo_hab.tipo_hab
+            request.session['precio'] = row_hab.precio
+        else:
+            # Mostrar mensaje de que debe ingresar hasta cierta cantidad de huéspedes.
+            messages.error(request, _('La cantidad de huéspedes ingresada supera la capacidad permitida.'))
+            return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
         return redirect('metodo_pago')
-
+    
     idioma = request.LANGUAGE_CODE
-    habitaciones = Habitacion.objects.all()
+    
     for habitacion in habitaciones:
         if idioma == 'en':
-            habitacion.titulo = habitacion.titulo_en
+            habitacion.titulo_hab = habitacion.titulo_en
             habitacion.descripcion = habitacion.descripcion_en
     return render(request, 'app/habitaciones.html', {'habitaciones': habitaciones})
 
 # Vista Método Pago
 def metodo_pago(request):
+    # Obtener valores de id_hab y id_tipo_hab
+    id_hab = request.session.get('id_hab')
+    tipo_hab = request.session.get('tipo_hab')
     # Obtener los parámetros para mostrar en vista de método de pago
     fecha_llegada = request.session.get('fecha_llegada')
     fecha_salida = request.session.get('fecha_salida')
     contador_adultos = request.session.get('contador_adultos')
     contador_ninos = request.session.get('contador_ninos')
-
-    # Obtener valores de id_hab y id_tipo_hab
-    id_hab = request.session.get('id_hab')
-    tipo_hab = request.session.get('tipo_hab')
+    titulo_hab = request.session.get('titulo_hab')
 
     # Obtener precio de habitacion
-    row_hab = Habitacion.objects.get(pk=id_hab)
-    precio = row_hab.precio
-
-    precio_int = int(row_hab.precio)
-    print("El precio en vista de metodo_pago es: ", precio)
+    row_hab = Habitacion.objects.get(id_hab=id_hab)
+    total = int(row_hab.precio)
 
     # Calcular 30% del total
-    pago_inicial = int(0.3*precio_int)
-    pago_pendiente = int(0.7*precio_int)
+    pago_inicial = int(0.3*total)
+    pago_pendiente = int(0.7*total)
 
     # Guardar en una session los datos de total, pago_inicial, pago_pendiente
-    request.session['total'] = precio_int
+    request.session['total'] = total
     request.session['pago_inicial'] = pago_inicial
     request.session['pago_pendiente'] = pago_pendiente
 
     # Crear obteto cuando se selecciona habitacion
     hab_seleccionada = {
         'tipo_hab': tipo_hab,
+        'titulo_hab': titulo_hab,
         'fecha_llegada': fecha_llegada,
         'fecha_salida': fecha_salida,
         'contador_adultos': contador_adultos,
         'contador_ninos': contador_ninos,
-        'total': precio_int,
+        'total': total,
         'pago_inicial': pago_inicial,
         'pago_pendiente': pago_pendiente
     }
 
     return render(request, 'app/metodo_pago.html', {'hab_seleccionada':hab_seleccionada})
-
 
 def generar_codigo(length=8):
     caracteres = string.ascii_letters + string.digits
@@ -339,26 +368,23 @@ def transferencias(request):
 def reserva_realizada(request):
     id_user = request.session.get('id_user')
     datos_usuario = User.objects.get(pk = id_user)
-
     # Obtener el Order ID de PayPal
     order_id = request.session.get('order_id')
-
     datos_reserva = Reserva.objects.get(id_user = id_user, order_id = order_id)
     return render(request, 'app/reserva_realizada.html', {'datos_reserva': datos_reserva, 'datos_usuario': datos_usuario})
-
-
 
 # Vista Nosotros
 def nosotros(request):
     return render(request, 'app/nosotros.html')
 
 # VISTAS DEL ADMINISTRADOR
-
 # Vista Administrador Home
 @admin_required
 def administrador_home(request):
-    name = request.user.first_name
-    return render(request, 'administrador/administrador_home.html', {'nameadmin': name})
+    id_user = request.session.get('id_user')
+    datos_usuario = User.objects.get(pk = id_user)
+    nombre_de_usuario = datos_usuario.username
+    return render(request, 'administrador/administrador_home.html', {'nameadmin': nombre_de_usuario})
 
 # Vista Administrador Gestion Habitaciones
 @admin_required
@@ -371,11 +397,11 @@ def gestion_habitaciones(request):
 def crear_habitacion(request):
     if request.method == 'POST':
         id_tipo_hab = request.POST.get('id_tipo_hab')
-        titulo = request.POST.get('titulo')
+        titulo_hab = request.POST.get('titulo_hab')
         descripcion = request.POST.get('descripcion')
         titulo_en = request.POST.get('titulo_en')
         descripcion_en = request.POST.get('descripcion_en')
-        cantidad = request.POST.get('cantidad')
+        capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
         imagen_bytes = request.FILES.get('cargarImagen').read()
 
@@ -389,11 +415,11 @@ def crear_habitacion(request):
         # Crear la instancia de Habitacion con la imagen codificada en base64
         habitacion = Habitacion(
             id_tipo_hab=id_tipo_hab,
-            titulo=titulo,
+            titulo_hab=titulo_hab,
             descripcion=descripcion,
             titulo_en=titulo_en,
             descripcion_en=descripcion_en,
-            cantidad=cantidad,
+            capacidad_max = capacidad_max,
             precio=precio,
             imagen=imagen_base64_str  # Almacenar la imagen codificada en base64
         )
@@ -424,20 +450,22 @@ def modificar_habitacion(request):
     if request.method == 'POST':
         id_hab = request.POST.get('id_hab')
         id_tipo_hab = request.POST.get('id_tipo_hab')
-        titulo = request.POST.get('titulo')
+        titulo_hab = request.POST.get('titulo_hab')
         descripcion = request.POST.get('descripcion')
-        cantidad = request.POST.get('cantidad')
+        capacidad_max = request.POST.get('capacidad_max')
         precio = request.POST.get('precio')
+        estado = request.POST.get('estado')
 
         habitacion = Habitacion.objects.get(id_hab=id_hab)
 
         # Actualizar los campos de la habitación
         habitacion.id_tipo_hab = id_tipo_hab
-        habitacion.titulo = titulo
+        habitacion.titulo_hab = titulo_hab
         habitacion.descripcion = descripcion
-        habitacion.cantidad = cantidad
+        habitacion.capacidad_max = capacidad_max
         habitacion.precio = precio
-
+        habitacion.estado = estado
+        # Guardar actualizaciones de habitación
         habitacion.save()
     habitaciones = Habitacion.objects.all()
     return render(request, 'administrador/gestion_habitaciones/modificar_habitacion.html', {'habitaciones': habitaciones})
@@ -461,17 +489,66 @@ def gestion_reservas(request):
 # Vista Administrador Gestion Reservas -crear
 @admin_required
 def crear_reserva_pacific(request):
+    # Obtener lista de tipos de habitaciones
+    lista_tipo_hab = TipoHabitacion.objects.all()
+
+    if request.method == 'GET' and 'id_tipo_hab' in request.GET:
+        id_tipo_hab = request.GET.get('id_tipo_hab')
+        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab', 'titulo_hab', 'capacidad_max','precio')
+        for habitacion in hab_disponibles:
+            id_tipo_hab = habitacion['id_tipo_hab']
+            titulo_hab = habitacion['titulo_hab']
+            print("La habitacion es: ", titulo_hab)
+            capacidad_max = habitacion['capacidad_max']
+            precio = int(habitacion['precio'])
+            pago_inicial = int(precio*0.3)
+            pago_pendiente = int(precio*0.7)
+            request.session['titulo_hab'] = titulo_hab
+            request.session['precio'] = precio
+            request.session['pago_inicial'] = pago_inicial
+            request.session['pago_pendiente'] = pago_pendiente
+            print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
+        return JsonResponse({'habitaciones': list(hab_disponibles)})
+    
     if request.method == 'POST':
-        id_reserva = request.POST.get('id_reserva')
         nombre_cli = request.POST.get('nombre_cli')
         apellidos_cli = request.POST.get('apellidos_cli')
-        rut_cli = request.POST.get('rut_cli')
-        metodo_pago = request.POST.get('metodo_pago')
-        pago_reserva = request.POST.get('pago_reserva')
-        total_restante = request.POST.get('total_restante')
-        estado_pago = request.POST.get('estado_pago')
+        user = User.objects.get(first_name=nombre_cli, last_name=apellidos_cli)
+        id_user = user.id
+        correo = request.POST.get('correo')
+        celular = request.POST.get('celular')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
 
-    return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html')
+        paypal = request.POST.get('paypal')
+        get_titulo_hab = request.session.get('titulo_hab')
+        print("Titulo habitacion POST: ", get_titulo_hab)
+        get_precio = request.session.get('precio')
+        get_pago_inicial = request.session.get('pago_inicial')
+        get_pago_pendiente = request.session.get('pago_pendiente')
+
+        if paypal:
+            reserva = Reserva(
+                id_user = id_user,
+                fecha_llegada = fecha_llegada,
+                fecha_salida = fecha_salida,
+                cant_adultos =  cant_adultos,
+                cant_ninos =  cant_ninos,
+                habitacion = get_titulo_hab,
+                tipo_metodo_pago = paypal,
+                total = get_precio,
+                pago_inicial = get_pago_inicial,
+                pago_pendiente = get_pago_pendiente,
+                estado_pago = 'En Espera de Pago'
+            )
+            # Guardar reserva
+            reserva.save()
+        
+        return JsonResponse({'success': True})  # Devuelve una respuesta JSON de éxito
+
+    return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Administrador Gestion Reservas -eliminar
 @admin_required
@@ -481,7 +558,40 @@ def eliminar_reserva_pacific(request):
 # Vista Administrador Gestion Reservas -modificar
 @admin_required
 def modificar_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html')
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+
+        fecha_llegada_obj = datetime.strptime(fecha_llegada, '%Y-%m-%d').date()
+        fecha_salida_obj = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        habitacion = request.POST.get('habitacion')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        estado_pago = request.POST.get('estado_pago')
+        
+        # Obtener datos de reserva por id_reserva
+        reserva = Reserva.objects.get(id_reserva = id_reserva)
+        # Actualizar campos de reserva
+        reserva.fecha_llegada = fecha_llegada_obj
+        reserva.fecha_salida = fecha_salida_obj
+        reserva.cant_adultos = cant_adultos
+        reserva.cant_ninos = cant_ninos
+        reserva.habitacion = habitacion
+        reserva.tipo_metodo_pago = tipo_metodo_pago
+        reserva.estado_pago = estado_pago
+        # Guardar actualizaciones de reserva
+        reserva.save()
+
+    reservas = Reserva.objects.all()
+
+    for reserva in reservas:
+        reserva.fecha_llegada = reserva.fecha_llegada.strftime('%Y-%m-%d')
+        reserva.fecha_salida = reserva.fecha_salida.strftime('%Y-%m-%d')
+    
+    return render(request, 'administrador/gestion_reservas/modificar_reserva_pacific.html', {'reservas': reservas})
 
 @admin_required
 def modificar_reporte_reserva(request):
@@ -493,10 +603,53 @@ def modificar_reporte_reserva(request):
         reporte_reserva.hacer_checkout(hora_salida=datetime.now().time()) 
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
+
 # Vista Administrador Gestion Reservas -ver calendario
 @admin_required
 def ver_calendario_pacific(request):
-    return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html')
+    # Establecer la localización en español
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    # Obtener día actual
+    dia_actual = datetime.now().day
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+
+    # Obtener los días del mes actual
+    nombre_mes_actual, dias_mes_actual = obtener_dias_mes(mes_actual, año_actual)
+    nombre_mes_actual = nombre_mes_actual.capitalize()
+
+    lista_dias = ['Lun.', 'Mar.', 'Mié.','Jue.','Vié.','Sáb.','Dom.']
+
+    return render(request, 'administrador/gestion_reservas/ver_calendario_pacific.html', {
+        'dia_actual': dia_actual,
+        'nombre_mes_actual': nombre_mes_actual,
+        'dias_mes_actual': dias_mes_actual,
+        'año_actual': año_actual,
+        'lista_dias': lista_dias
+    })
 
 # Vista Administrador Gestion Reservas -ver reserva
 @admin_required
@@ -510,7 +663,7 @@ def gestion_usuarios(request):
     name = request.user.first_name
     return render(request, 'administrador/gestion_usuarios.html', {'nameadmin': name})
 
-# Vista Administrador Gestion Usuarios - crear usuario común o administrador
+# Vista Administrador Gestion Usuarios -crear usuario
 @admin_required
 def crear_usuario_admin(request):
     if request.method == 'POST':
@@ -583,7 +736,7 @@ def ver_usuarios_admin(request):
 
     success_message = request.GET.get('success_message')
     return render(request, 'administrador/gestion_usuarios/ver_usuario.html', 
-                  {'usuarios': usuarios, 'success_message': success_message})
+                {'usuarios': usuarios, 'success_message': success_message})
 
 
 # Vista Administrador Gestion Usuarios modificar usuario
@@ -624,9 +777,7 @@ def eliminar_usuario_admin(request, id_usuario):
     usuario = get_object_or_404(User, id=id_usuario)
     if request.method == 'POST':
         usuario.delete()
-        success_message = _("Usuario eliminado con éxito")
-        return HttpResponseRedirect(reverse('ver_usuarios_admin') + f'?{success_message}')
-
+        return redirect('ver_usuarios_admin')
     return render(request, 'administrador/gestion_usuarios/eliminar_usuario.html', {'usuario': usuario})
 
 # Vista Administrador Gestion Usuarios -tipo de usuario
@@ -728,7 +879,7 @@ def capture_order(request, order_id):
             cant_adultos = request.session.get('contador_adultos')
             # Obtener cant_ninos
             cant_ninos = request.session.get('contador_ninos')
-            tipo_hab = request.session.get('tipo_hab')
+            titulo_hab = request.session.get('titulo_hab')
             tipo_metodo_pago = 'PayPal'
             # Obtener total
             total = request.session.get('total')
@@ -738,7 +889,6 @@ def capture_order(request, order_id):
             pago_inicial = request.session.get('pago_inicial')
             # Obtener mediante session el pago_pendiente de la reserva
             pago_pendiente = request.session.get('pago_pendiente')
-
             # Fechas formateadas
             fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
             fecha_salida_formateada = request.session.get('fecha_salida_hidden')
@@ -751,7 +901,7 @@ def capture_order(request, order_id):
                 fecha_salida = fecha_salida_formateada,
                 cant_adultos = cant_adultos,
                 cant_ninos = cant_ninos,
-                tipo_hab = tipo_hab,
+                habitacion = titulo_hab,
                 tipo_metodo_pago = tipo_metodo_pago,
                 total = total,
                 pago_inicial = pago_inicial,
@@ -898,3 +1048,23 @@ class HabitacionListCreate(generics.ListCreateAPIView):
 class DatosBancariosListCreate(generics.ListCreateAPIView):
     queryset = DatosBancarios.objects.all()
     serializer_class = DatosBancariosSerializer
+
+# Enviar correo a cliente para realizar pago mediante paypal
+# @admin_required
+# def enviar_correo_paypal(request):
+#     if request.method == 'POST' and request.is_ajax():
+#         correo_electronico = request.POST.get('correo')
+
+#         # Aquí puedes enviar el correo electrónico usando la función send_mail de Django
+#         # Ejemplo:
+#         send_mail(
+#             'Asunto del correo',
+#             'Cuerpo del correo',
+#             'tu_correo@example.com',
+#             [correo_electronico],
+#             fail_silently=False,
+#         )
+
+#         return JsonResponse({'mensaje': 'Correo electrónico enviado con éxito.'})
+#     else:
+#         return JsonResponse({'error': 'La solicitud debe ser POST y AJAX.'}, status=400)

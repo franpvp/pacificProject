@@ -39,7 +39,7 @@ document.querySelectorAll('.btn-filtrar').forEach(btn => {
 
 // Filtrar por más ecónomicos o más caros
 function ordenarHabitaciones(orden) {
-    var preciosHabitaciones = document.querySelectorAll('.precio-hab'); // Seleccionamos todos los elementos con la clase 'precio-hab'
+    var preciosHabitaciones = document.querySelectorAll('.precio'); // Seleccionamos todos los elementos con la clase 'precio-hab'
 
     var habitacionesArray = Array.from(preciosHabitaciones).map(function(precioHabitacion) {
         return {
@@ -67,36 +67,80 @@ function ordenarHabitaciones(orden) {
 
 
 // Mostrar info de las habitaciones
-const enlaceMostrarInfo = document.getElementById('btn-mostrar-info');
-const divMasInformacion = document.querySelector('.mas-informacion');
-const divBtnClose = document.querySelector('.btn-close');
-const fondoOpaco = document.querySelector('.fondo-opaco');
+const enlacesMostrarInfo = document.querySelectorAll('.btn-mostrar-info');
+const fondosOpacos = document.querySelectorAll('.fondo-opaco');
+const divsMasInformacion = document.querySelectorAll('.mas-informacion');
+const divsBtnClose = document.querySelectorAll('.btn-close');
 
-// Agregar evento de clic al botón de "Más Información"
-enlaceMostrarInfo.addEventListener('click', function() {
-    // Mostrar la ventana de información con un retraso pequeño para permitir que el fondo opaco se muestre primero
-    setTimeout(function() {
-        divMasInformacion.style.display = 'block';
-        divMasInformacion.classList.add('active'); // Agregar la clase 'active' para mostrar la ventana de información
-    }, 200);
-    fondoOpaco.style.display = 'block'; // Mostrar el fondo semi-transparente
+
+
+// Iterar sobre cada botón de "Más Información"
+enlacesMostrarInfo.forEach((enlaceMostrarInfo, index) => {
+    // Agregar evento de clic al botón de "Más Información"
+    enlaceMostrarInfo.addEventListener('click', function(event) {
+        // Detener la propagación del evento para evitar que se cierre la ventana de mas-información al hacer clic en el botón
+        event.stopPropagation();
+
+        // Mostrar la ventana de información correspondiente al botón clicado
+        const divMasInformacion = divsMasInformacion[index];
+        const fondoOpaco = fondosOpacos[index];
+
+        // Mostrar la ventana de información con un retraso pequeño para permitir que el fondo opaco se muestre primero
+        setTimeout(function() {
+            divMasInformacion.style.display = 'block';
+            divMasInformacion.classList.add('active'); // Agregar la clase 'active' para mostrar la ventana de información
+        }, 200);
+        fondoOpaco.style.display = 'block'; // Mostrar el fondo semi-transparente
+    });
 });
 
-// Agregar evento de clic al botón de "Cerrar" en la ventana de información
-divBtnClose.addEventListener('click', function() {
-    // Ocultar la ventana de información
-    divMasInformacion.classList.remove('active'); // Quitar la clase 'active' para ocultar la ventana de información
-    setTimeout(function() {
-        divMasInformacion.style.display = 'none';
-    }, 300); // Retrasar un poco para que la transición tenga tiempo de completarse
-    fondoOpaco.style.display = 'none'; // Ocultar el fondo semi-transparente
-});
+// Iterar sobre cada botón de "Cerrar"
+divsBtnClose.forEach((divBtnClose, index) => {
+    // Agregar evento de clic al botón de "Cerrar" en la ventana de información correspondiente
+    divBtnClose.addEventListener('click', function() {
+        // Ocultar la ventana de información correspondiente al botón de "Cerrar" clicado
+        const divMasInformacion = divsMasInformacion[index];
+        const fondoOpaco = fondosOpacos[index];
 
+        // Ocultar la ventana de información
+        divMasInformacion.classList.remove('active'); // Quitar la clase 'active' para ocultar la ventana de información
+        setTimeout(function() {
+            divMasInformacion.style.display = 'none';
+        }, 300); // Retrasar un poco para que la transición tenga tiempo de completarse
+        fondoOpaco.style.display = 'none'; // Ocultar el fondo semi-transparente
+    });
+});
 
 function mostrarMensaje() {
     alert("Debe iniciar sesión antes de realizar una reserva.");
     window.location.href = "/iniciosesion";
 }
+
+function cerrarVentanaMasInformacion(index) {
+    const divMasInformacion = divsMasInformacion[index];
+    const fondoOpaco = fondosOpacos[index];
+
+    // Ocultar la ventana de información
+    divMasInformacion.classList.remove('active'); // Quitar la clase 'active' para ocultar la ventana de información
+    setTimeout(function() {
+        divMasInformacion.style.display = 'none';
+    }, 300); // Retrasar un poco para que la transición tenga tiempo de completarse
+
+    // Ocultar el fondo opaco asociado
+    fondoOpaco.style.display = 'none';
+}
+
+// Agregar evento de clic al área circundante para cerrar la ventana de mas-información y ocultar su fondo opaco asociado
+window.addEventListener('click', function(event) {
+    // Verificar si se hizo clic fuera de alguna ventana de mas-información
+    divsMasInformacion.forEach((divMasInformacion, index) => {
+        if (!divMasInformacion.contains(event.target)) {
+            // Si se hizo clic fuera de la ventana de mas-información, llamar a la función de cierre
+            cerrarVentanaMasInformacion(index);
+        }
+    });
+});
+
 
 
 

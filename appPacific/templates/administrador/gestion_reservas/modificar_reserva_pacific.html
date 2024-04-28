@@ -4,13 +4,225 @@
 {% endblock %}
 
 {% load static %}
+{% load i18n %}
 
 {% block contenido %}
+<div class="container-fluid" style="padding-top: 160px;">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Modificar Reservas" %}</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        {% for reserva in reservas %}
+        <div class="col">
+            {% if reservas|length == 0 %}
+                <p class="text-center mb-5">{% trans "No hay reservas."%}<p>
+            {% else %}
+            <div class="table-responsive">
+                <form id="reserva-form-{{ reserva.id_reserva }}" method="post" onsubmit="handleSubmit(event)">
+                    {% csrf_token %}
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">{% trans "Id Reserva"%}</th>
+                                <th scope="col">{% trans "Id Orden"%}</th>
+                                <th scope="col">{% trans "Fecha Llegada"%}</th>
+                                <th scope="col">{% trans "Fecha Salida"%}</th>
+                                <th scope="col">{% trans "Adultos"%}</th>
+                                <th scope="col">{% trans "Niños"%}</th>
+                                <th scope="col">{% trans "Habitación"%}</th>
+                                <th scope="col">{% trans "Método Pago"%}</th>
+                                <th scope="col">{% trans "Total"%}</th>
+                                <th scope="col">{% trans "Pago Inicial"%}</th>
+                                <th scope="col">{% trans "Pago Pendiente"%}</th>
+                                <th scope="col">{% trans "Estado Pago"%}</th>
+                                <th scope="col">{% trans "Acciones"%}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="habitaciones-table">
+                            <tr class="text-center">
+                                <td class="text-center">
+                                    {{ reserva.id_reserva }}
+                                </td>
+                                <td class="text-center">
+                                    {{ reserva.order_id }}
+                                </td>
+                                <td>
+                                    <input class="editable-input form-control text-center" type="text" name="fecha_llegada" id="fecha_llegada" value="{{ reserva.fecha_llegada }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    <input class="editable-input form-control text-center" type="text" name="fecha_salida" id="fecha_salida" value="{{ reserva.fecha_salida }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    <input class="editable-input form-control text-center" type="text" name="cant_adultos" id="cant_adultos" value="{{ reserva.cant_adultos }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    <input class="editable-input form-control text-center" type="text" name="cant_ninos" id="cant_ninos" value="{{ reserva.cant_ninos }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    <input class="editable-input form-control text-center" type="text" name="habitacion" id="habitacion" value="{{ reserva.habitacion }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    <input class="editable-input form-control text-center" type="text" name="tipo_metodo_pago" id="tipo_metodo_pago" value="{{ reserva.tipo_metodo_pago }}" disabled>
+                                </td>
+                                <td class="text-center">
+                                    {{ reserva.total }}
+                                </td>
+                                <td class="text-center">
+                                    {{ reserva.pago_inicial }}
+                                </td>
+                                <td class="text-center">
+                                    {{ reserva.pago_pendiente }}
+                                </td>
+                                <td>
+                                    <select id="estado_select" class="editable-input form-control text-center" name="estado_pago" aria-label="Default select example" disabled>
+                                        <option value="Pagado" {% if reserva.estado_pago == "Pagado" %}selected{% endif %}>Pagado</option>
+                                        <option value="Pendiente" {% if reserva.estado_pago == "Pendiente" %}selected{% endif %}>Pendiente</option>
+                                        <option value="En Espera de Pago" {% if reserva.estado_pago == "En Espera de Pago" %}selected{% endif %}>En Espera de Pago</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
+                                    <div class="btn-editar" data-form-id="reserva-form-{{ reserva.id_reserva }}">
+                                        <i class='bx bxs-edit-alt pr-2'></i>{% trans "Editar"%}</div>
+                                    <button type="submit" class="btn-guardar btn btn-primary" style="display: none;">{% trans "Guardar"%}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 
-
-{% endblock %}
-
-{% block scripts %}
-
-{% endblock %}
+<script>
+    //     const urlGuardada = localStorage.getItem('imagenURL');
+    //     if (urlGuardada) {
+    //         document.getElementById('imagenMostrada').src = urlGuardada;
+    //     }
+    
+    //   // Capturar el evento de cambio en el input de tipo file
+    //     document.getElementById('cargarImagen').addEventListener('change', function(event) {
+    //     // Obtener el archivo cargado
+    //     const archivo = event.target.files[0];
+        
+    //     // Validar si se seleccionó un archivo
+    //     if (archivo) {
+    //       // Crear un objeto URL para mostrar la imagen cargada
+    //     const urlImagen = URL.createObjectURL(archivo);
+    
+    //       // Mostrar la imagen en el front-end
+    //     document.getElementById('imagenMostrada').src = urlImagen;
+    
+    //       // Guardar la URL de la imagen en el almacenamiento local
+    //     localStorage.setItem('imagenURL', urlImagen);
+    //     }
+    
+    
+    
+        // function previewImage(event) {
+        //         var input = event.target;
+        //         var reader = new FileReader();
+        //         reader.onload = function() {
+        //             var dataURL = reader.result;
+        //             var img = document.getElementById('imagenPreview');
+        //             img.src = dataURL;
+        //         };
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+    
+        
+        document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".btn-editar").forEach(function(btnEditar) {
+            btnEditar.addEventListener("click", function() {
+                var formId = this.getAttribute('data-form-id');
+                console.log("ID del formulario:", formId);
+                var form = document.getElementById(formId);
+    
+                if (form) {
+                    console.log("Formulario encontrado:", form);
+                    console.log("Inputs encontrados:", form.querySelectorAll('.editable-input'));
+    
+                    form.querySelectorAll('.editable-input').forEach(input => {
+                        console.log("Input encontrado:", input);
+                        input.disabled = false;
+                    });
+    
+                    var btnGuardar = form.querySelector(".btn-guardar");
+                    if (btnGuardar) {
+                        console.log("Botón de guardar encontrado:", btnGuardar);
+                        btnGuardar.style.display = "inline-block";
+                    }
+                    this.style.display = "none";
+                } else {
+                    console.error("Formulario no encontrado con el ID:", formId);
+                }
+            });
+        });
+    });
+    
+    
+    
+    
+    function handleSubmit(event) {
+        event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
+    
+        var form = event.target; // Obtener el formulario que está siendo enviado
+    
+        // Realizar cualquier validación adicional del formulario aquí, si es necesario
+    
+        // Enviar el formulario utilizando JavaScript
+        fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+        })
+        .then(response => {
+            if (response.ok) {
+                // El formulario se envió correctamente, puedes hacer algo aquí si es necesario
+                console.log("Formulario enviado correctamente");
+                form.querySelectorAll('.editable-input').forEach(input => {
+                    input.disabled = true;
+                    form.querySelector(".btn-guardar").style.display = "none";
+                    form.querySelector(".btn-editar").style.display = "flex";
+                });
+            } else {
+                // Hubo un problema al enviar el formulario, manejarlo aquí si es necesario
+                console.error("Error al enviar el formulario");
+            }
+        })
+        .catch(error => {
+            // Manejar cualquier error de red aquí
+            console.error("Error de red al enviar el formulario", error);
+        });
+    }
+    
+    
+    
+    // document.querySelector(".btn-editar").addEventListener("click", function() {
+        
+    //     // Habilitar cada campo individualmente
+    //     document.getElementById('id_tipo_hab').disabled = false;
+    //     document.getElementById('titulo').disabled = false;
+    //     document.getElementById('descripcion').disabled = false;
+    //     document.getElementById('cantidad').disabled = false;
+    //     document.getElementById('precio').disabled = false;
+        
+    //     // Mostrar el botón de guardar y ocultar el botón de editar
+    //     document.querySelector(".btn-guardar").style.display = "inline-block";
+    //     document.querySelector(".btn-editar").style.display = "none";
+    // });
+    
+    </script>
+    
+    
+    {% endblock %}
+    
+    {% block scripts %}
+    
+    {% endblock %}

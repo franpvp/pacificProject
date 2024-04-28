@@ -143,9 +143,9 @@ LANGUAGES = [
     ('en', 'English'),
 ]
 
-LOCALE_PATHS = (
+LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
-)
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -160,8 +160,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Ajustes del correo:
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -170,5 +168,3 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_USER')
 EMAIL_SUBJECT_PREFIX = "Password recovery"
-
-

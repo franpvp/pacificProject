@@ -1,0 +1,37 @@
+.paypal{
+    width: 150px;
+    height: auto;
+    border: 1px solid #D9D9D9;
+    border-radius: 18px;
+    transition: all 0.5 ease-in-out;
+    padding: 30px;
+}
+
+.paypal:hover{
+    transform: scale(1.05);
+    transition: all 0.3 ease-in-out;
+}
+
+.transferencia{
+    width: 200px;
+    border: 1px solid #D9D9D9;
+    border-radius: 18px;
+    padding: 30px;
+    transition: all 0.5 ease-in-out;
+}
+
+.transferencia:hover{
+    transform: scale(1.05);
+    transition: all 0.3 ease-in-out;
+}
+
+#precioInfo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 400px;
+    height: auto;
+    border: 1px solid #d9d9d9;
+    border-radius: 18px;
+}

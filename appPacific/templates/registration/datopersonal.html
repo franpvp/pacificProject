@@ -6,11 +6,38 @@
 {% load i18n %} 
 
 {% block contenido %}
-<div class="container-fluid" style="padding-top: 160px;">
+<div class="container-fluid" style="padding-top: 103px;">
     <div class="row">
-        <div class="col">
-            <div class="titulo-general text-center">{% trans "Mis datos" %}</div>
+        <div class="col p-0">
+            <div class="fondo-perfil">
+                <div class="contenedor-perfil">
+                    <div class="btn-perfil">
+                        <i class='bx bxs-edit-alt'></i>
+                    </div>
+                </div>
+                <div style="font-size: 40px;" class="titulo-general text-center mt-5">{{ datos_usuario.username }} {{ datos_usuario.last_name }}</div>
+            </div>
+            
         </div>
+    </div>
+    <div class="row" style="margin-top: 200px;">
+        <div class="col"></div>
+        <div class="col-lg-8">
+            <p style="font-size: 20px;" class="text-center">Información básica</p>
+            <div class="info-user">
+                <div class="row mr-5">
+                    <div class="col-12">
+                        Nombre Completo: {{ datos_usuario.username }} {{ datos_usuario.last_name }}
+                    </div>
+                </div>
+                <div class="row ml-3">
+                    <div class="col-12">
+                        Correo: {{ datos_usuario.email }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
     </div>
 </div>
 {% endblock %}

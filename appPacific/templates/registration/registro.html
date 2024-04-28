@@ -2,7 +2,7 @@
 
 {% block css %}   
 {% endblock %}
-{% load static %}  
+{% load static %}
 {% load i18n %} 
 
 {% block contenido %}
@@ -51,7 +51,7 @@
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="password1" placeholder="Password" name="password1" onclick="showHiddenElement('pass1Hidden','password1')">
                             <p id="pass1Hidden" style="font-size: 12px; color: orange;"> {% trans "Debe contener al menos una mayúscula" %} </p>
-                            <label for="password1">Contraseña</label>
+                            <label for="password1">{% trans "Contraseña" %}</label>
                         </div>
                         <!-- Input Confirmar Contraseña -->
                         <div class="form-floating">

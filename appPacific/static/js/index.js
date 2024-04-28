@@ -7,10 +7,8 @@ btn.addEventListener('click', function() {
     sidebar.classList.toggle('active');
 });
 // Buscador Selector Hab, Cant Adultos y Niños
-let btn_adultos = document.querySelector('.btn-adultos');
-let btn_ninos = document.querySelector('.btn-ninos');
-let box_adultos = document.querySelector('.box-btn-adultos');
-let box_ninos = document.querySelector('.box-btn-ninos');
+let btn_huespedes = document.querySelector('.btn-huespedes');
+let contenedor_huespedes = document.querySelector('.contenedor-huespedes');
 let btn_minus_adultos = document.querySelector('#btn-minus-adultos');
 let btn_plus_adultos = document.querySelector('#btn-plus-adultos');
 let btn_minus_ninos = document.querySelector('#btn-minus-ninos');
@@ -20,14 +18,27 @@ var contenedorFiltro = document.querySelector('.filtro-opciones');
 var contadorAdultosInput = document.getElementById('contador_adultos_input');
 var contadorNinosInput = document.getElementById('contador_ninos_input');
 
-btn_adultos.addEventListener('click', function() {
-    // event.stopPropagation();
-    box_adultos.classList.toggle('active');
+// Event listener para el clic en cualquier parte del documento
+document.addEventListener('click', function(event) {
+    // Verificar si el clic no ocurrió dentro del contenedor de huéspedes y no fue en el botón de huéspedes
+    if (!contenedor_huespedes.contains(event.target) && event.target !== btn_huespedes) {
+        // Ocultar el contenedor de huéspedes
+        contenedor_huespedes.classList.remove('active');
+    }
 });
 
-btn_ninos.addEventListener('click', function() {
-    // event.stopPropagation();
-    box_ninos.classList.toggle('active');
+// Event listener para el clic en el botón de huéspedes
+btn_huespedes.addEventListener('click', function(event) {
+    // Evitar que el clic se propague al documento y active el listener del documento
+    event.stopPropagation();
+    // Alternar la clase activa del contenedor de huéspedes
+    contenedor_huespedes.classList.toggle('active');
+});
+
+// Event listener para el clic dentro del contenedor de huéspedes
+contenedor_huespedes.addEventListener('click', function(event) {
+    // Evitar que el clic se propague al documento y active el listener del documento
+    event.stopPropagation();
 });
 
 let contador_adultos = document.querySelector('.contador-adultos');
@@ -35,7 +46,35 @@ let contador_ninos = document.querySelector('.contador-ninos');
 let contador_1 = 0;
 let contador_2 = 0;
 
+// Función para actualizar el estilo del botón de restar de adultos
+function actualizarEstiloBotonRestarAdultos() {
+    if (contador_1 === 0) {
+        btn_minus_adultos.style.opacity = '0.5';
+        btn_minus_adultos.style.pointerEvents = 'none'; // Desactivar eventos de puntero (hover, clic)
+    } else {
+        btn_minus_adultos.style.opacity = '1';
+        btn_minus_adultos.style.pointerEvents = 'auto'; // Activar eventos de puntero
+    }
+}
 
+// Función para actualizar el estilo del botón de restar de niños
+function actualizarEstiloBotonRestarNinos() {
+    if (contador_2 === 0) {
+        btn_minus_ninos.style.opacity = '0.5';
+        btn_minus_ninos.style.pointerEvents = 'none'; // Desactivar eventos de puntero (hover, clic)
+    } else {
+        btn_minus_ninos.style.opacity = '1';
+        btn_minus_ninos.style.pointerEvents = 'auto'; // Activar eventos de puntero
+    }
+}
+
+// Función para actualizar el contenido del botón con los resultados de los contadores
+function actualizarContenidoBoton() {
+    let textoBoton = "Adulto" + (contador_1 !== 1 ? "s" : "") + ": " + contador_1 + ", Niño" + (contador_2 !== 1 ? "s" : "") + ": " + contador_2;
+    btn_huespedes.textContent = textoBoton;
+    actualizarEstiloBotonRestarAdultos(); // Actualizar estilo del botón de restar de adultos
+    actualizarEstiloBotonRestarNinos(); // Actualizar estilo del botón de restar de niños
+}
 
 // Contador Adultos
 btn_minus_adultos.addEventListener('click', function() {
@@ -43,12 +82,7 @@ btn_minus_adultos.addEventListener('click', function() {
         contador_1--;
         contador_adultos.textContent = contador_1;
         contadorAdultosInput.value = contador_1;
-        if(contador_1 != 1){
-            btn_adultos.textContent = "Adultos: " + contador_1;
-        } else{
-            btn_adultos.textContent = "Adulto: " + contador_1;
-        }
-        
+        actualizarContenidoBoton();
     }
 });
 
@@ -56,12 +90,7 @@ btn_plus_adultos.addEventListener('click', function() {
     contador_1++;
     contador_adultos.textContent = contador_1;
     contadorAdultosInput.value = contador_1;
-    if(contador_1 != 1){
-        btn_adultos.textContent = "Adultos: " + contador_1;
-    } else{
-        btn_adultos.textContent = "Adulto: " + contador_1;
-    }
-    
+    actualizarContenidoBoton();
 });
 
 // Contador Niños
@@ -70,12 +99,7 @@ btn_minus_ninos.addEventListener('click', function() {
         contador_2--;
         contador_ninos.textContent = contador_2;
         contadorNinosInput.value = contador_2;
-        if(contador_2 != 1){
-            btn_ninos.textContent = "Niños: " + contador_2;
-        } else{
-            btn_ninos.textContent = "Niño: " + contador_2;
-        }
-        
+        actualizarContenidoBoton();
     }
 });
 
@@ -83,13 +107,12 @@ btn_plus_ninos.addEventListener('click', function() {
     contador_2++;
     contador_ninos.textContent = contador_2;
     contadorNinosInput.value = contador_2;
-    if(contador_2 != 1){
-        btn_ninos.textContent = "Niños: " + contador_2;
-    } else{
-        btn_ninos.textContent = "Niño: " + contador_2;
-    }
-    
+    actualizarContenidoBoton();
 });
+
+// Llama a estas funciones al principio para establecer el estilo inicial de los botones de restar
+actualizarEstiloBotonRestarAdultos();
+actualizarEstiloBotonRestarNinos();
 
 // Botones Filtrar
 // Función para filtrar habitaciones por tipo
@@ -127,16 +150,11 @@ document.addEventListener('click', function(event) {
 // Detectar clics fuera del botón
 window.addEventListener('click', function(event) {
     // Verificar si el clic no se realizó dentro del contenedor del botón o su contenido
-    if (!btn_adultos.contains(event.target)) {
+    if (!btn_huespedes.contains(event.target)) {
         // Ocultar el contenido aquí
-        box_adultos.classList.remove('active');
+        contenedor_huespedes.classList.remove('active');
     } else{
-        box_adultos.classList.add('active');
-    }
-    if(!btn_ninos.contains(event.target)){
-        box_ninos.classList.remove('active');
-    } else{
-        box_ninos.classList.add('active');
+        contenedor_huespedes.classList.add('active');
     }
     // if (!btnFiltro.contains(event.target)) {
     //     contenedorFiltro.classList.remove('active');
@@ -254,3 +272,16 @@ function mostrarMensaje() {
     alert("Debe iniciar sesión antes de realizar una reserva.");
     window.location.href = "/iniciosesion";
 }
+
+
+const btnBuscador = document.getElementById('btn-buscador');
+const textoBuscador = document.getElementById('texto-buscador');
+const iconoBuscador = document.getElementById('icono-buscador');
+
+btnBuscador.addEventListener('mouseover', function() {
+    textoBuscador.textContent = 'Buscar';
+});
+
+btnBuscador.addEventListener('mouseout', function() {
+    textoBuscador.textContent = '';
+});

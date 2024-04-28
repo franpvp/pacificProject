@@ -1,9 +1,9 @@
 /* Estilos de boton switch para dark mode */
 
 .switch {
-    width: 80px;
-    height: 40px;
-    padding: 0 10px;
+    width: 70px;
+    height: 30px;
+    padding: 0 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -14,7 +14,7 @@
 }
 
 .switch i {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #fdc21c;
 }
 

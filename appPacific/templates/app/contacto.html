@@ -1,13 +1,13 @@
 {% extends 'app/base.html' %}
 
-{% block css %}   
+{% block css %}
 {% endblock %}
 {% load static %}
 {% load i18n %}
 
 {% block contenido %}
 
-<div class="container-fluid" style="padding-top: 160px;">
+<div class="container-fluid" style="padding-top: 150px;">
     <div class="container-fluid">
         <div class="titulo-general text-center">{% trans "Contacto" %}</div>
     </div>
@@ -16,27 +16,53 @@
             <p style="text-align: justify; line-height: 1.6;">
                 {% trans "¿Necesitas contactarte con nosotros? Completa el siguiente formulario:" %}
             </p>
-            <form method="post" action="#">
+            <!-- Usamos el servicio de formspree esta vinculado al correo pamela.mardones.alvarez@gmail.com donde llegan los correos con los datos del formulario HTML-->
+            <form id="contactForm" method="post" action="https://formspree.io/f/xwkgwyzb">
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                    <label for="floatingInput">{% trans "Correo Electrónico" %}</label>
+                    <input type="text" class="form-control" id="floatingInputName" name="Nombre" placeholder="nombre">
+                    <label for="floatingInputName">{% trans "Nombre" %}</label>
                 </div>
-                <div class="form-floating mb-3"> <!-- Agregamos la clase 'mb-3' para un margen inferior -->
-                    <input type="text" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">{% trans "Contraseña" %}</label>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInputEmail" name="Email"
+                        placeholder="name@example.com">
+                    <label for="floatingInputEmail">{% trans "Correo Electrónico" %}</label>
                 </div>
-                <div class="form-floating">
-                    <textarea class="form-control" id="floatingQuery" placeholder="Ingresa tu consulta" style="height: 100px;"></textarea>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" id="floatingQuery" name="Consulta" placeholder="Ingresa tu consulta"
+                        style="height: 100px;"></textarea>
                     <label for="consulta">{% trans "Ingresa tu consulta" %}</label>
                 </div>
                 <div class="row">
                     <div class="col d-flex justify-content-center pt-4">
-                        <button type="button" class="btn btn-outline-primary">{% trans "Enviar" %}</button>
+                        <button type="submit" class="btn btn-outline-primary me-2">{% trans "Enviar" %}</button>
                     </div>
                 </div>
             </form>
         </div>
+        <footer class="footer-pag p-2" style="margin-top: 90px;">
+            <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;">
+                <!-- Ajuste de margen superior -->
+                <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
+                <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
+                <!-- Dirección ficticia -->
+            </div>
+        </footer>
     </div>
+    
 </div>
+
+<script>
+    // Script para limpiar los campos cuando la página se carga
+    window.addEventListener('load', function () {
+        limpiarCampos();
+    });
+
+    // Función para limpiar los campos del formulario
+    function limpiarCampos() {
+        document.getElementById("floatingInputName").value = "";
+        document.getElementById("floatingInputEmail").value = "";
+        document.getElementById("floatingQuery").value = "";
+    }
+</script>
 
 {% endblock %}
