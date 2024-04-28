@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 # Create your models here.
 
 # Lista de opciones para variable "tipo_usuario"
@@ -93,7 +94,7 @@ class ReporteReserva(models.Model):
     dia_ingreso = models.DateField(null=False, verbose_name="Dia Ingreso")
     hora_ingreso = models.TimeField(null=True, blank=True)
     dia_salida = models.DateField(null=False, verbose_name="Dia Salida")
-    hora_salida = models.TimeField(null=True, blank=True)
+    hora_salida = models.TimeField(null=True, blank=True, default=datetime.time(12, 0))
 
     def __str__(self):
         return f"{self.dia_ingreso} - {self.hora_ingreso}"

@@ -557,7 +557,24 @@ def crear_reserva_pacific(request):
 # Vista Administrador Gestion Reservas -eliminar
 @admin_required
 def eliminar_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
+    # Se obtienen todos los registros de habitaciones
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html',{'reservas': reservas})
 
 # Vista Administrador Gestion Reservas -modificar
 @admin_required
@@ -575,8 +592,6 @@ def modificar_reserva_pacific(request):
         habitacion = request.POST.get('habitacion')
         tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
         estado_pago = request.POST.get('estado_pago')
-
-        metodo_pago = MetodoPago.objects.get(id_metodo_pago = tipo_metodo_pago)
         
         # Obtener datos de reserva por id_reserva
         reserva = Reserva.objects.get(id_reserva = id_reserva)
@@ -586,7 +601,6 @@ def modificar_reserva_pacific(request):
         reserva.cant_adultos = cant_adultos
         reserva.cant_ninos = cant_ninos
         reserva.habitacion = habitacion
-        reserva.tipo_metodo_pago = metodo_pago
         reserva.estado_pago = estado_pago
         # Guardar actualizaciones de reserva
         reserva.save()
@@ -605,8 +619,8 @@ def modificar_reporte_reserva(request):
     id_reserva = requests.POST.get('id_reserva')
     reporte_reserva = ReporteReserva.objects.get(pk=id_reserva)
     if request.method == 'POST':
-        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time()) 
-        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time()) 
+        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time())
+        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time())
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
 # Obtener fechas calendario
@@ -662,6 +676,11 @@ def ver_calendario_pacific(request):
 def ver_reserva_pacific(request):
     reservas = Reserva.objects.all()
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html', {'reservas': reservas})
+
+@admin_required
+def ver_reporte_pacific(request):
+    reporte_reservas = ReporteReserva.objects.all()
+    return render(request, 'administrador/gestion_reservas/ver_reporte_pacific.html', {'reporte_reservas': reporte_reservas})
 
 # Vista Administrador Gestion Usuarios
 @admin_required
@@ -1023,22 +1042,90 @@ def crear_reserva_pacific_vendedor(request):
 # Vista Vendedor Gestion Reservas -eliminar
 @seller_required
 def eliminar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html',{'reservas': reservas})
 
 # Vista Vendedor Gestion Reservas -modificar
 @seller_required
 def modificar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+
+        fecha_llegada_obj = datetime.strptime(fecha_llegada, '%Y-%m-%d').date()
+        fecha_salida_obj = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        habitacion = request.POST.get('habitacion')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        estado_pago = request.POST.get('estado_pago')
+        
+        # Obtener datos de reserva por id_reserva
+        reserva = Reserva.objects.get(id_reserva = id_reserva)
+        # Actualizar campos de reserva
+        reserva.fecha_llegada = fecha_llegada_obj
+        reserva.fecha_salida = fecha_salida_obj
+        reserva.cant_adultos = cant_adultos
+        reserva.cant_ninos = cant_ninos
+        reserva.habitacion = habitacion
+        reserva.estado_pago = estado_pago
+        # Guardar actualizaciones de reserva
+        reserva.save()
+
+    reservas = Reserva.objects.all()
+
+    for reserva in reservas:
+        reserva.fecha_llegada = reserva.fecha_llegada.strftime('%Y-%m-%d')
+        reserva.fecha_salida = reserva.fecha_salida.strftime('%Y-%m-%d')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html', {'reservas':reservas})
 
 # Vista Vendedor Gestion Reservas -ver calendario
 @seller_required
 def ver_calendario_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+    # Establecer la localización en español
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    # Obtener día actual
+    dia_actual = datetime.now().day
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+
+    # Obtener los días del mes actual
+    nombre_mes_actual, dias_mes_actual = obtener_dias_mes(mes_actual, año_actual)
+    nombre_mes_actual = nombre_mes_actual.capitalize()
+
+    lista_dias = ['Lun.', 'Mar.', 'Mié.','Jue.','Vié.','Sáb.','Dom.']
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html', {
+        'dia_actual': dia_actual,
+        'nombre_mes_actual': nombre_mes_actual,
+        'dias_mes_actual': dias_mes_actual,
+        'año_actual': año_actual,
+        'lista_dias': lista_dias
+    })
 
 # Vista Vendedor Gestion Reservas -ver reserva
 @seller_required
 def ver_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html',{'reservas':reservas})
 
 @seller_required
 def cerrarsesionvendedor(request):

@@ -8,18 +8,30 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
-    <div class="row justify-content-center">
-        <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Modificar Reservas" %}</h2>
+    <div class="row">
+        <div class="col d-flex m-auto justify-content-center">
+            <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">{% trans "Inicio"%}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'gestion_reservas' %}">{% trans "Gestión Reservas"%}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Modificar Reserva"%}</li>
+                </ol>
+            </nav>
         </div>
     </div>
     <div class="row justify-content-center">
-        {% for reserva in reservas %}
+        <div class="col">
+            <h2 class="titulo-general mb-3 text-center">{% trans "Modificar Reservas" %}</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
         <div class="col">
             {% if reservas|length == 0 %}
                 <p class="text-center mb-5">{% trans "No hay reservas."%}<p>
             {% else %}
             <div class="table-responsive">
+                {% for reserva in reservas %}
                 <form id="reserva-form-{{ reserva.id_reserva }}" method="post" onsubmit="handleSubmit(event)">
                     {% csrf_token %}
                     <table class="table table-bordered table-hover">
@@ -41,6 +53,7 @@
                             </tr>
                         </thead>
                         <tbody class="habitaciones-table">
+                            
                             <tr class="text-center">
                                 <td class="text-center">
                                     {{ reserva.id_reserva }}
@@ -64,7 +77,7 @@
                                     <input class="editable-input form-control text-center" type="text" name="habitacion" id="habitacion" value="{{ reserva.habitacion }}" disabled>
                                 </td>
                                 <td class="text-center">
-                                    <input class="editable-input form-control text-center" type="text" name="tipo_metodo_pago" id="tipo_metodo_pago" value="{{ reserva.id_metodo_pago }}" disabled>
+                                    {{ reserva.id_metodo_pago }}
                                 </td>
                                 <td class="text-center">
                                     {{ reserva.total }}
@@ -89,14 +102,14 @@
                                     <button type="submit" class="btn-guardar btn btn-primary" style="display: none;">{% trans "Guardar"%}</button>
                                 </td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </form>
-                
+                {% endfor %}
             </div>
             {% endif %}
         </div>
-        {% endfor %}
     </div>
 </div>
 
@@ -138,7 +151,7 @@
         //     }
     
         
-        document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll(".btn-editar").forEach(function(btnEditar) {
             btnEditar.addEventListener("click", function() {
                 var formId = this.getAttribute('data-form-id');
@@ -201,22 +214,6 @@
             console.error("Error de red al enviar el formulario", error);
         });
     }
-    
-    
-    
-    // document.querySelector(".btn-editar").addEventListener("click", function() {
-        
-    //     // Habilitar cada campo individualmente
-    //     document.getElementById('id_tipo_hab').disabled = false;
-    //     document.getElementById('titulo').disabled = false;
-    //     document.getElementById('descripcion').disabled = false;
-    //     document.getElementById('cantidad').disabled = false;
-    //     document.getElementById('precio').disabled = false;
-        
-    //     // Mostrar el botón de guardar y ocultar el botón de editar
-    //     document.querySelector(".btn-guardar").style.display = "inline-block";
-    //     document.querySelector(".btn-editar").style.display = "none";
-    // });
     
     </script>
     
