@@ -1,7 +1,7 @@
 {% extends 'administrador/base_administrador.html' %}
-{% load static %}
 {% load i18n %}
 {% block css %}
+<!-- Puedes agregar estilos personalizados aquí si es necesario -->
 {% endblock %}
 
 {% block contenido %}
@@ -14,22 +14,22 @@
                 {% csrf_token %}
                 <!-- Input Nombre -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="nombres" name="nombres" placeholder="nombre" required>
+                    <input type="text" class="form-control" id="nombres" name="nombres" placeholder="nombre" value="{{ usuario.first_name }}" required>
                     <label for="nombres">{% trans "Nombre"%}</label>
                 </div>
                 <!-- Input Apellidos -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" required>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="apellidos" value="{{ usuario.last_name }}" required>
                     <label for="apellidos">{% trans "Apellidos"%}</label>
                 </div>
                 <!-- Input Username -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="nombreusuario" placeholder="Nombre usuario" name="nombreusuario">
+                    <input type="text" class="form-control" id="nombreusuario" placeholder="Nombre usuario" name="nombreusuario" value="{{ usuario.username }}">
                     <label for="nombreusuario">{% trans "Nombre usuario"%}</label>
                 </div>
                 <!-- Input Correo Electrónico -->
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" required>
+                    <input type="email" class="form-control" id="correo" name="correo" placeholder="correo" value="{{ usuario.email }}" required>
                     <label for="correo">{% trans "Correo Electrónico"%}</label>
                 </div>
                 <!-- Checkbox Usuario Normal -->
@@ -59,13 +59,11 @@
             </form>
         </div>
     </div>
+    
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    // No se requiere ningún script adicional
-</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var checkboxes = document.querySelectorAll('.form-check-input');

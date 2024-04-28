@@ -10,7 +10,57 @@
 <div class="container-fluid" style="padding-top: 160px;">
     <div class="row justify-content-center">
         <div class="col">
-            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Historial Reservas"%}</h2>
+            <h2 class="titulo-general mt-3 mb-3 text-center">{% trans "Historial Reservas" %}</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+            {% if reservas|length == 0 %}
+                <p class="text-center mb-5">{% trans "No hay reservas."%}<p>
+            {% else %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col">{% trans "Id Reserva"%}</th>
+                            <th scope="col">{% trans "Id User"%}</th>
+                            <th scope="col">{% trans "Id Orden"%}</th>
+                            <th scope="col">{% trans "Fecha Llegada"%}</th>
+                            <th scope="col">{% trans "Fecha Salida"%}</th>
+                            <th scope="col">{% trans "Adultos"%}</th>
+                            <th scope="col">{% trans "Niños"%}</th>
+                            <th scope="col">{% trans "Habitación"%}</th>
+                            <th scope="col">{% trans "ID Método Pago"%}</th>
+                            <th scope="col">{% trans "Total"%}</th>
+                            <th scope="col">{% trans "Pago Inicial"%}</th>
+                            <th scope="col">{% trans "Pago Pendiente"%}</th>
+                            <th scope="col">{% trans "Estado Pago"%}</th>
+                            <th scope="col">{% trans "Fecha Creación"%}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="habitaciones-table">
+                        {% for reserva in reservas %}
+                        <tr class="text-center">
+                            <td>{{ reserva.id_reserva }}</td>
+                            <td>{{ reserva.id_user }}</td>
+                            <td>{{ reserva.order_id }}</td>
+                            <td>{{ reserva.fecha_llegada }}</td>
+                            <td>{{ reserva.fecha_salida }}</td>
+                            <td>{{ reserva.cant_adultos }}</td>
+                            <td>{{ reserva.cant_ninos }}</td>
+                            <td>{{ reserva.habitacion }}</td>
+                            <td>{{ reserva.id_metodo_pago }}</td>
+                            <td>{{ reserva.total }}</td>
+                            <td>{{ reserva.pago_inicial }}</td>
+                            <td>{{ reserva.pago_pendiente }}</td>
+                            <td>{{ reserva.estado_pago }}</td>
+                            <td>{{ reserva.fecha_creacion }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

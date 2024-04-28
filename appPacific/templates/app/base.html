@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Pacific</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/registro.css' %}">
@@ -27,95 +31,48 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
-    <!-- Contenido del Sidebar -->
-    <div class="sidebar">
-        <div class="top mb-4">
-            <div class="logo">
-                <i class='bx bx-building'></i>
-            </div>
-            <i class="bx bx-menu" id="btn"></i>
-        </div>
-        <ul class="mt-5">
-            <li class="item">
-                <a href="{% url 'index' %}">
-                    <i class="bx bxs-home ml-3"></i>
-                    <p class="nav-item">{% trans "Inicio"%}</p>
-                </a>
-
-            </li>
-            <li class="item">
-                <a href="{% url 'habitaciones' %}">
-                    <i class='bx bxs-search-alt-2 ml-3'></i>
-                    <p class="nav-item">{% trans "Explorar"%}</p>
-                </a>
-            </li>
-            <li class="item">
-                <a href="{% url 'nosotros' %}">
-                    <i class="bx bxs-info-circle ml-3"></i>
-                    <p class="nav-item">{% trans "Sobre Nosotros"%}</p>
-                </a>
-            </li>
-            <li class="item">
-                <a href="{% url 'contacto' %}">
-                    <i class="bx bxs-contact ml-3"></i>
-                    <p class="nav-item">{% trans "Contacto"%}</p>
-                </a>
-            </li>
-            <li class="item">
-                <a href="#">
-                    <i class='bx bxs-cog ml-3'></i>
-                    <p class="nav-item">{% trans "Configuración"%}</p>
-                </a>
-            </li>
-            {% if user.is_authenticated %}
-            <li class="item">
-                <a href="{% url 'cerrarsesion' %}">
-                    <i class='bx bx-log-out ml-3'></i>
-                    <p class="nav-item">{% trans "Cerrar Sesión"%}</p>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
+    
     <!-- Contenido Principal -->
     <div class="contenido-main">
-        <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #fff;">
+        <nav class="navbar navbar-expand-lg p-2" style="position: fixed; z-index: 4900; background: #0277e6;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
-                </a>
+                <div class="contenido-logo">
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="PacificLogo" class="img-fluid" style="max-width: 200px;">
+                    </a>
+                </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav justify-content-center flex-grow-1">
                         <li class="nav-item m-3">
-                            <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page">{% trans "Inicio" %}
-                            </a>
+                            <a href="{% url 'index' %}" class="nav-link btnLink" aria-current="page" style="color: white;">{% trans "Inicio" %}</a>
                         </li>
                         <li class="nav-item m-3">
-                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page">{% trans "Explorar" %}</a>
+                            <a href="{% url 'habitaciones' %}" class="nav-link btnLink" aria-current="page" style="color: white;">{% trans "Explorar" %}</a>
                         </li>
                         <li class="nav-item m-3">
-                            <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page">{% trans "Sobre Nosotros" %}</a>
+                            <a href="{% url 'nosotros' %}" class="nav-link btnLink" aria-current="page" style="color: white;">{% trans "Sobre Nosotros" %}</a>
                         </li>
                         <li class="nav-item m-3">
-                            <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page">{% trans "Contacto" %}</a>
+                            <a href="{% url 'contacto' %}" class="nav-link btnLink" aria-current="page" style="color: white;">{% trans "Contacto" %}</a>
                         </li>
                     </ul>
                     <div class="d-flex justify-content-center align-item-center">
                         <!-- Logo Cambio de Idioma -->
-                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-                            <input name="next" type="hidden" value="{{ redirect_to }}">
-                            <select name="language">
+                        <form id="language-form" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <img id="logo-chile" class="language-img" src="{% static 'img/logo-chile.png' %}" alt="es" style="width: 45px; height: auto;">
+                            <img id="logo-eng" class="language-img" src="{% static 'img/logo-eng.webp' %}" alt="en" style="width: 45px; height: auto; display: none;">
+                            <select id="language-select" name="language" class="ml-3 mr-3">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
-                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                        {{ language.name_local }} ({{ language.code }})
+                                    <option value="{{ language.code }}"
+                                        {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                        {{ language.name_local }}
                                     </option>
                                 {% endfor %}
                             </select>
-                            <button type="submit">{% trans "Traducir" %}</button>
                         </form>
                         <!--INICIO DE SESION Y REGISTRO-->
                         {% if not user.is_authenticated %}
@@ -126,20 +83,35 @@
                                 {% trans "Iniciar Sesión"%}
                             </a>
                             <!-- Botón Registro -->
-                            <a href="{% url 'registro' %}" class="btn-reg ms-2">
+                            <a href="{% url 'registro' %}" class="btn-reg ml-2 mr-4">
                                 {% trans "Regístrate"%}
                             </a>
                         {% else %}
-                            <a href="{% url 'misreservas' %}" class="btn-reg ms-2">
-                                {% trans "Mis Reservas"%}
+                            <a href="{% url 'misreservas' %}" class="btn-reservas ms-2">
+                                <i class='bx bxs-book-alt mr-2'></i>
+                                {% trans "Reservas"%}
                             </a>
-                            <a href="{% url 'misdatos' %}" class="btn-login me-2">
-                                <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                    style="width: 30px; height: 30px; margin-right: 15px;">
-                                {% trans "Datos Personales"%}
+                            <a href="{% url 'misdatos' %}">
+                                <!-- Icono Usuario -->
+                                <div class="contenedor-user" style="color: black;" >
+                                    <i class='bx bxs-user'></i>
+                                </div>
                             </a>
+                            <div class="lista-user" style="display: none;">
+                                <a href="{% url 'misdatos' %}">
+                                    <div class="btn-mi-perfil">
+                                        Mi Perfil 
+                                    </div>
+                                </a>
+                                <a href="{% url 'cerrarsesion' %}">
+                                    <div class="btn-cerrar-sesion">
+                                        Cerrar Sesión 
+                                    </div>
+                                </a>
+                                
+                            </div>
                         {% endif %}
-                        <li class="switch">
+                        <li class="switch" style="margin-top: 10px;">
                             <i class="bx bxs-sun"></i>
                             <i class="bx bxs-moon"></i>
                         </li>
@@ -147,31 +119,68 @@
                 </div>
             </div>
         </nav>
+        <!-- Sidebar -->
+        <!-- Contenido del Sidebar -->
+        <div class="sidebar">
+            <div class="top mb-4">
+                <div class="logo">
+                    <i class='bx bx-building'></i>
+                </div>
+                <i class="bx bx-menu" id="btn"></i>
+            </div>
+            <ul class="mt-5">
+                <li class="item">
+                    <a href="{% url 'index' %}">
+                        <i class="bx bxs-home ml-3"></i>
+                        <p class="nav-item">{% trans "Inicio"%}</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="{% url 'habitaciones' %}">
+                        <i class='bx bxs-search-alt-2 ml-3'></i>
+                        <p class="nav-item">{% trans "Explorar"%}</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="{% url 'nosotros' %}">
+                        <i class="bx bxs-info-circle ml-3"></i>
+                        <p class="nav-item">{% trans "Sobre Nosotros"%}</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="{% url 'contacto' %}">
+                        <i class="bx bxs-contact ml-3"></i>
+                        <p class="nav-item">{% trans "Contacto"%}</p>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#">
+                        <i class='bx bxs-cog ml-3'></i>
+                        <p class="nav-item">{% trans "Configuración"%}</p>
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="item">
+                    <a href="{% url 'cerrarsesion' %}">
+                        <i class='bx bx-log-out ml-3'></i>
+                        <p class="nav-item">{% trans "Cerrar Sesión"%}</p>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- Botón WhatsApp -->
+        <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta">
+            <div class="btn-wsp">
+                <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="70" height="70"
+                    class="mr-2">
+            </div>
+        </a>
+        
         {% block contenido %}
         {% endblock %}
-        <footer class="footer-pag" style="background-color: #3498db; color: #ffffff;">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6 text-md-left text-center mb-md-0 mb-3" style="margin-top: 5px;">
-                        <!-- Ajuste de margen superior -->
-                        <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
-                        <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
-                        <!-- Dirección ficticia -->
-                    </div>
-                    <div class="col-md-6 text-md-right text-center" style="margin-top: 5px;">
-                        <!-- Ajuste de margen superior -->
-                        <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta"
-                            class="btn btn-success">
-                            <img src="{% static 'img/whatsapp-icon.png' %}" alt="WhatsApp" width="30" height="30"
-                                class="mr-2">
-                            {% trans "Contáctanos por WhatsApp" %}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        
     </div>
-    
 
     <!-- index.js -->
     <script src="{% static 'js/index.js' %}"></script>
@@ -184,6 +193,7 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -197,8 +207,7 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <!-- Datepicker Spanish -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
 
     <script>
         // Calendario
@@ -255,10 +264,71 @@
             });
         });
 
+    document.getElementById("language-select").addEventListener("change", function() {
+        var selectedLanguage = this.value;
+        var logoChile = document.getElementById("logo-chile");
+        var logoEng = document.getElementById("logo-eng");
+
+        if (selectedLanguage === 'es') {
+            logoChile.style.display = "inline";
+            logoEng.style.display = "none";
+        } else {
+            logoChile.style.display = "none";
+            logoEng.style.display = "inline";
+        }
+        document.getElementById("language-form").submit();
+    });
+
+    window.onload = function() {
+        var selectedLanguage = document.getElementById("language-select").value;
+        var logoChile = document.getElementById("logo-chile");
+        var logoEng = document.getElementById("logo-eng");
+
+        if (selectedLanguage === 'es') {
+            logoChile.style.display = "inline";
+            logoEng.style.display = "none";
+        } else {
+            logoChile.style.display = "none";
+            logoEng.style.display = "inline";
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Obtener todos los elementos de precio
+    const precios = document.querySelectorAll('.precio');
+    
+    // Definir la traducción de "noche" según el idioma actual
+    const traduccionNoche = idioma === "en" ? "night" : "noche";
+
+    // Iterar sobre cada elemento de precio
+    precios.forEach(function(precioElement) {
+        // Obtener el precio sin formato de los datos del atributo data
+        const precioSinFormato = precioElement.getAttribute('data-precio');
+
+        // Convertir el precio sin formato a un número y formatearlo con el formato 99.999
+        const precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CL');
+
+        // Actualizar el contenido del elemento con el precio formateado y la traducción de "noche"
+        precioElement.innerHTML = `<strong>$${precioFormateado} CLP </strong>${traduccionNoche}`;
+    });
+});
+    
+    let listaUserVisible = false; // Variable para controlar si la lista de usuarios está visible
+
+    document.querySelector('.contenedor-user').addEventListener('click', function(event) {
+        event.preventDefault(); // Evita que el enlace se abra
+
+        let listaUser = document.querySelector('.lista-user');
+
+        if (!listaUserVisible) { // Si la lista no está visible
+            listaUser.style.display = 'block'; // Mostrar la lista de usuarios
+            listaUserVisible = true; // Actualizar el estado de la variable
+        } else { // Si la lista está visible
+            listaUser.style.display = 'none'; // Ocultar la lista de usuarios
+            listaUserVisible = false; // Actualizar el estado de la variable
+        }
+    });
     </script>
-
-
-
 </body>
 
 </html>
