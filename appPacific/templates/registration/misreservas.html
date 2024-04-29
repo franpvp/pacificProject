@@ -14,7 +14,11 @@
 
         </div>
     </div>
+<<<<<<< HEAD
     {% if habitaciones|length == 0 %}
+=======
+    {% if reservas|length == 0 %}
+>>>>>>> origin/rama-pame
         <p class="text-center mb-5">{% trans "No se han realizado reservas."%}<p>
     {% else %}
         <div class="row ">
@@ -41,17 +45,63 @@
                                         <li>Cantidad de Adultos: {{ reserva.cant_adultos }}</li>
                                         <li>Cantidad de Niños: {{ reserva.cant_ninos }}</li>
                                         <li>Habitación: {{ reserva.habitacion }}</li>
+<<<<<<< HEAD
                                         <li>Habitación: {{ reserva.habitacion }}</li>
+=======
+>>>>>>> origin/rama-pame
                                     </ul>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+<<<<<<< HEAD
                                     <button type="button" class="btn btn-primary">Guardar cambios</button>
+=======
+>>>>>>> origin/rama-pame
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+<<<<<<< HEAD
+=======
+                <div class="mas-informacion id-hab-{{ habitacion.id_hab }} text-center m-auto" style="max-height: 600px; overflow-y: auto;">
+                    <div class="btn-close" ></div>
+                    <div class="row">
+                        <h5 class="card-title m-0">{{ habitacion.titulo_hab }}</h5>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="contenido-imagenes">
+                                <img src="data:image/jpeg;base64,{{ habitacion.imagen }}"
+                                    alt="{{ habitacion.titulo }}" class="img-fluid"
+                                    style="border-radius: 40px;">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 d-flex justify-content-center">
+                            <div class="contenido-habitacion">
+                                <p>
+                                    {% trans "Esta habitación ofrece:" %}
+                                    {{ habitacion.camas }} {% trans "cama" %},
+                                    {{ habitacion.banos }} {% trans "baño" %}
+                                </p>
+                                <p class="mt-3">{% trans "Servicios Incluidos:" %}</p>
+                                <ul class="list-inline">
+                                    <li class="list-group-item">Desayuno</li>
+                                    <li class="list-group-item">Piscina</li>
+                                    <li class="list-group-item">Gimnasio</li>
+                                </ul>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                    <label class="form-check-label" for="inlineCheckbox1">Transporte Aereopuerto</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                    <label class="form-check-label" for="inlineCheckbox2">Restaurante VIP</label>
+                                </div>
+                                <p class="mt-3"> * Capacidad Máxima: <strong>{{ habitacion.capacidad_max }} {% trans "huéspedes" %}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+>>>>>>> origin/rama-pame
             </div>
         </div>
     {% endif %}

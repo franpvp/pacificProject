@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'pacific.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pacific_db',
+        'NAME': 'db_pacific',
         'USER': 'root',
         'PASSWORD': '123',
         'HOST': 'localhost',
