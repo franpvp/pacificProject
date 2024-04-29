@@ -9,6 +9,18 @@
 {% block contenido %}
 
 <div class="container-fluid" style="padding-top: 160px;">
+    <div class="row">
+        <div class="col d-flex m-auto justify-content-center">
+            <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">{% trans "Inicio"%}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'gestion_reservas' %}">{% trans "Gestión Reservas"%}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Crear Reserva"%}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col">
             <h2 class="titulo-general mb-3 text-center">{% trans "Crear Reserva"%}</h2>
@@ -255,22 +267,6 @@
             console.error("Error de red al enviar el formulario", error);
         });
     }
-    
-    
-    
-    // document.querySelector(".btn-editar").addEventListener("click", function() {
-        
-    //     // Habilitar cada campo individualmente
-    //     document.getElementById('id_tipo_hab').disabled = false;
-    //     document.getElementById('titulo').disabled = false;
-    //     document.getElementById('descripcion').disabled = false;
-    //     document.getElementById('cantidad').disabled = false;
-    //     document.getElementById('precio').disabled = false;
-        
-    //     // Mostrar el botón de guardar y ocultar el botón de editar
-    //     document.querySelector(".btn-guardar").style.display = "inline-block";
-    //     document.querySelector(".btn-editar").style.display = "none";
-    // });
     
     </script>
     

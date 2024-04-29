@@ -78,12 +78,11 @@
                         {% if not user.is_authenticated %}
                             <!-- Botón Login -->
                             <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
-                                <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                    style="width: 30px; height: 30px; margin-right: 15px;">
+                                <i class='bx bxs-user mr-3'></i>
                                 {% trans "Iniciar Sesión"%}
                             </a>
                             <!-- Botón Registro -->
-                            <a href="{% url 'registro' %}" class="btn-reg ms-2">
+                            <a href="{% url 'registro' %}" class="btn-reg ml-2 mr-4">
                                 {% trans "Regístrate"%}
                             </a>
                         {% else %}
@@ -91,19 +90,29 @@
                                 <i class='bx bxs-book-alt mr-2'></i>
                                 {% trans "Reservas"%}
                             </a>
-                            <a href="{% url 'misdatos' %}">
-                                <!-- Icono Usuario -->
-                                <div class="contenedor-user" style="color: black;" >
-                                    <i class='bx bxs-user'></i>
-                                </div>
+                            <!-- Icono Usuario -->
+                            <a class="contenedor-user" style="text-decoration: none; color: black;" href="{% url 'misdatos' %}">
+                                <i class='bx bxs-user'></i>
                             </a>
                             <div class="lista-user" style="display: none;">
-                                <div class="btn-mi-perfil">
-                                    Mi Perfil 
-                                </div>
-                                <div class="btn-cerrar-sesion">
-                                    Cerrar Sesión 
-                                </div>
+                                <a href="{% url 'misdatos' %}">
+                                    <div class="btn-mi-perfil">
+                                        <i class='bx bxs-user mr-2'></i>
+                                        {% trans "Mi Perfil"%}
+                                    </div>
+                                </a>
+                                <a href="{% url 'misreservas' %}">
+                                    <div class="btn-mis-reservas">
+                                        <i class='bx bxs-book-alt mr-2'></i>
+                                        {% trans "Mis Reservas"%}
+                                    </div>
+                                </a>
+                                <a href="{% url 'cerrarsesion' %}">
+                                    <div class="btn-cerrar-sesion">
+                                        <i class='bx bx-log-out mr-2'></i>
+                                        {% trans "Cerrar Sesión"%}
+                                    </div>
+                                </a>
                             </div>
                         {% endif %}
                         <li class="switch" style="margin-top: 10px;">
@@ -124,41 +133,60 @@
                 <i class="bx bx-menu" id="btn"></i>
             </div>
             <ul class="mt-5">
-                <li class="item">
+                <li class="item" style="margin-top: 10px;">
                     <a href="{% url 'index' %}">
-                        <i class="bx bxs-home ml-3"></i>
+                        <i class="bx bxs-home" style="margin-left: 19px;"></i>
                         <p class="nav-item">{% trans "Inicio"%}</p>
                     </a>
                 </li>
-                <li class="item">
+                <li class="item" style="margin-top: 10px;">
                     <a href="{% url 'habitaciones' %}">
-                        <i class='bx bxs-search-alt-2 ml-3'></i>
+                        <i class='bx bxs-search-alt-2' style="margin-left: 19px;"></i>
                         <p class="nav-item">{% trans "Explorar"%}</p>
                     </a>
                 </li>
-                <li class="item">
+                <li class="item" style="margin-top: 10px;">
                     <a href="{% url 'nosotros' %}">
-                        <i class="bx bxs-info-circle ml-3"></i>
+                        <i class="bx bxs-info-circle" style="margin-left: 19px;"></i>
                         <p class="nav-item">{% trans "Sobre Nosotros"%}</p>
                     </a>
                 </li>
-                <li class="item">
+                <li class="item" style="margin-top: 10px;">
                     <a href="{% url 'contacto' %}">
-                        <i class="bx bxs-contact ml-3"></i>
+                        <i class="bx bx-conversation" style="margin-left: 19px;"></i>
                         <p class="nav-item">{% trans "Contacto"%}</p>
                     </a>
                 </li>
-                <li class="item">
-                    <a href="#">
-                        <i class='bx bxs-cog ml-3'></i>
-                        <p class="nav-item">{% trans "Configuración"%}</p>
+                {% if user.is_authenticated %}
+                <li class="item mis-reservas" style="margin-top: 10px;">
+                    <a href="{% url 'misdatos' %}">
+                        <i class='bx bxs-user-badge' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Mi Perfil"%}</p>
                     </a>
                 </li>
-                {% if user.is_authenticated %}
-                <li class="item">
+                <li class="item mis-reservas" style="margin-top: 10px;">
+                    <a href="{% url 'misreservas' %}">
+                        <i class='bx bxs-book-alt' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Mis Reservas"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
                     <a href="{% url 'cerrarsesion' %}">
-                        <i class='bx bx-log-out ml-3'></i>
+                        <i class='bx bx-log-out' style="margin-left: 19px;"></i>
                         <p class="nav-item">{% trans "Cerrar Sesión"%}</p>
+                    </a>
+                </li>
+                {% else %}
+                <li class="item" style="margin-top: 300px;">
+                    <a href="{% url 'iniciosesion' %}" style="background: #0277e6;">
+                        <i class='bx bxs-user' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Iniciar Sesión"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'registro' %}" style="background: #FFA011;">
+                        <i class='bx bx-arrow-to-right' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Regístrate"%}</p>
                     </a>
                 </li>
                 {% endif %}
@@ -323,6 +351,19 @@
             listaUserVisible = false; // Actualizar el estado de la variable
         }
     });
+    // Agregar evento de clic al objeto window para ocultar la lista de usuarios cuando se hace clic fuera de ella
+    window.addEventListener('click', function(event) {
+        var listaUser = document.querySelector('.lista-user');
+        var targetElement = event.target; // Elemento que se ha hecho clic
+
+        // Verifica si el elemento clicado no está dentro de la lista de usuarios ni del contenedor de usuarios
+        if (!listaUser.contains(targetElement) && !targetElement.classList.contains('contenedor-user')) {
+            // Si no está dentro, oculta la lista de usuarios
+            listaUser.style.display = 'none';
+            listaUserVisible = false; // Actualizar el estado de la variable
+        }
+    });
+
     </script>
 </body>
 

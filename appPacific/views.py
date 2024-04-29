@@ -36,6 +36,9 @@ from rest_framework import generics
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
 import calendar
 from django.contrib.auth.models import AnonymousUser
+from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
 
 # Create your views here.
 
@@ -410,11 +413,11 @@ def crear_habitacion(request):
         imagen_base64_str = imagen_base64.decode('utf-8')
 
         # Buscar el objeto TipoHabitacion con el ID proporcionado (Esto trae Suite, Premium o Twin)
-        # tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab) 
+        row_tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab=id_tipo_hab)
 
         # Crear la instancia de Habitacion con la imagen codificada en base64
         habitacion = Habitacion(
-            id_tipo_hab=id_tipo_hab,
+            id_tipo_hab=row_tipo_habitacion,
             titulo_hab=titulo_hab,
             descripcion=descripcion,
             titulo_en=titulo_en,
@@ -457,9 +460,10 @@ def modificar_habitacion(request):
         estado = request.POST.get('estado')
 
         habitacion = Habitacion.objects.get(id_hab=id_hab)
+        row_tipo_habitacion = TipoHabitacion.objects.get(id_tipo_hab = id_tipo_hab)
 
         # Actualizar los campos de la habitación
-        habitacion.id_tipo_hab = id_tipo_hab
+        habitacion.id_tipo_hab = row_tipo_habitacion
         habitacion.titulo_hab = titulo_hab
         habitacion.descripcion = descripcion
         habitacion.capacidad_max = capacidad_max
@@ -536,13 +540,15 @@ def crear_reserva_pacific(request):
                 fecha_salida = fecha_salida,
                 cant_adultos =  cant_adultos,
                 cant_ninos =  cant_ninos,
-                habitacion = get_titulo_hab,
+                habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
                 tipo_metodo_pago = paypal,
                 total = get_precio,
                 pago_inicial = get_pago_inicial,
                 pago_pendiente = get_pago_pendiente,
                 estado_pago = 'En Espera de Pago'
             )
+
+            row_habitacion = Habitacion.objects.get()
             # Guardar reserva
             reserva.save()
         
@@ -553,7 +559,24 @@ def crear_reserva_pacific(request):
 # Vista Administrador Gestion Reservas -eliminar
 @admin_required
 def eliminar_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
+    # Se obtienen todos los registros de habitaciones
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html',{'reservas': reservas})
 
 # Vista Administrador Gestion Reservas -modificar
 @admin_required
@@ -580,7 +603,6 @@ def modificar_reserva_pacific(request):
         reserva.cant_adultos = cant_adultos
         reserva.cant_ninos = cant_ninos
         reserva.habitacion = habitacion
-        reserva.tipo_metodo_pago = tipo_metodo_pago
         reserva.estado_pago = estado_pago
         # Guardar actualizaciones de reserva
         reserva.save()
@@ -599,8 +621,8 @@ def modificar_reporte_reserva(request):
     id_reserva = requests.POST.get('id_reserva')
     reporte_reserva = ReporteReserva.objects.get(pk=id_reserva)
     if request.method == 'POST':
-        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time()) 
-        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time()) 
+        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time())
+        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time())
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
 # Obtener fechas calendario
@@ -651,11 +673,39 @@ def ver_calendario_pacific(request):
         'lista_dias': lista_dias
     })
 
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
 # Vista Administrador Gestion Reservas -ver reserva
 @admin_required
 def ver_reserva_pacific(request):
     reservas = Reserva.objects.all()
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html', {'reservas': reservas})
+
+@admin_required
+def ver_reporte_pacific(request):
+    reporte_reservas = ReporteReserva.objects.all()
+    return render(request, 'administrador/gestion_reservas/ver_reporte_pacific.html', {'reporte_reservas': reporte_reservas})
 
 # Vista Administrador Gestion Usuarios
 @admin_required
@@ -880,18 +930,24 @@ def capture_order(request, order_id):
             # Obtener cant_ninos
             cant_ninos = request.session.get('contador_ninos')
             titulo_hab = request.session.get('titulo_hab')
-            tipo_metodo_pago = 'PayPal'
             # Obtener total
             total = request.session.get('total')
+
             # Con el Id de la habitacion obtener el registro de datos
             row_hab = Habitacion.objects.get(pk=id_hab)
+
             # Mediante session obtener el pago_inicial de la reserva
             pago_inicial = request.session.get('pago_inicial')
+
             # Obtener mediante session el pago_pendiente de la reserva
             pago_pendiente = request.session.get('pago_pendiente')
+
             # Fechas formateadas
             fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
             fecha_salida_formateada = request.session.get('fecha_salida_hidden')
+            
+            # Obtener tipo_metodo_pago
+            row_tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago = 1)
 
             # Crear objeto Reserva
             reserva = Reserva(
@@ -901,19 +957,29 @@ def capture_order(request, order_id):
                 fecha_salida = fecha_salida_formateada,
                 cant_adultos = cant_adultos,
                 cant_ninos = cant_ninos,
+                id_hab = row_hab,
                 habitacion = titulo_hab,
-                tipo_metodo_pago = tipo_metodo_pago,
+                id_metodo_pago = row_tipo_metodo_pago,
                 total = total,
                 pago_inicial = pago_inicial,
                 pago_pendiente = pago_pendiente,
             )
+            # Guardar objeto Reserva
+            reserva.save()
+            # Obtener la reserva recién creada
+            reserva_creada = Reserva.objects.latest('fecha_creacion')
+
             # Crear Reporte Reserva
             reporte_reserva = ReporteReserva(
+                id_reserva = reserva_creada,
                 dia_ingreso = fecha_llegada_formateada,
                 dia_salida = fecha_salida_formateada
             )
-            # Guardar objeto Reserva y Reporte Reserva en la base de datos
-            reserva.save()
+            # Cambiar estado de habitación a "No Disponible"
+            row_hab.estado = "No Disponible"
+            row_hab.save()
+            # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
+            # Guardar Reporte Reserva en la base de datos
             reporte_reserva.save()
 
         else:
@@ -957,7 +1023,7 @@ def handle_response(response):
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
 # DELIMITER $
@@ -1001,37 +1067,101 @@ def crear_reserva_pacific_vendedor(request):
 # Vista Vendedor Gestion Reservas -eliminar
 @seller_required
 def eliminar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html',{'reservas': reservas})
 
 # Vista Vendedor Gestion Reservas -modificar
 @seller_required
 def modificar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+
+        fecha_llegada_obj = datetime.strptime(fecha_llegada, '%Y-%m-%d').date()
+        fecha_salida_obj = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        habitacion = request.POST.get('habitacion')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        estado_pago = request.POST.get('estado_pago')
+        
+        # Obtener datos de reserva por id_reserva
+        reserva = Reserva.objects.get(id_reserva = id_reserva)
+        # Actualizar campos de reserva
+        reserva.fecha_llegada = fecha_llegada_obj
+        reserva.fecha_salida = fecha_salida_obj
+        reserva.cant_adultos = cant_adultos
+        reserva.cant_ninos = cant_ninos
+        reserva.habitacion = habitacion
+        reserva.estado_pago = estado_pago
+        # Guardar actualizaciones de reserva
+        reserva.save()
+
+    reservas = Reserva.objects.all()
+
+    for reserva in reservas:
+        reserva.fecha_llegada = reserva.fecha_llegada.strftime('%Y-%m-%d')
+        reserva.fecha_salida = reserva.fecha_salida.strftime('%Y-%m-%d')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html', {'reservas':reservas})
 
 # Vista Vendedor Gestion Reservas -ver calendario
 @seller_required
 def ver_calendario_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+    # Establecer la localización en español
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    # Obtener día actual
+    dia_actual = datetime.now().day
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+
+    # Obtener los días del mes actual
+    nombre_mes_actual, dias_mes_actual = obtener_dias_mes(mes_actual, año_actual)
+    nombre_mes_actual = nombre_mes_actual.capitalize()
+
+    lista_dias = ['Lun.', 'Mar.', 'Mié.','Jue.','Vié.','Sáb.','Dom.']
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html', {
+        'dia_actual': dia_actual,
+        'nombre_mes_actual': nombre_mes_actual,
+        'dias_mes_actual': dias_mes_actual,
+        'año_actual': año_actual,
+        'lista_dias': lista_dias
+    })
 
 # Vista Vendedor Gestion Reservas -ver reserva
 @seller_required
 def ver_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html',{'reservas':reservas})
 
 @seller_required
 def cerrarsesionvendedor(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # Serializadores API REST
 
 class MetodoPagoListCreate(generics.ListCreateAPIView):
     queryset = MetodoPago.objects.all()
     serializer_class = MetodoPagoSerializer
-
-class ReservaListCreate(generics.ListCreateAPIView):
-    queryset = Reserva.objects.all()
-    serializer_class = ReservaSerializer
 
 class ReporteReservaListCreate(generics.ListCreateAPIView):
     queryset = ReporteReserva.objects.all()
@@ -1041,13 +1171,21 @@ class TipoHabitacionListCreate(generics.ListCreateAPIView):
     queryset = TipoHabitacion.objects.all()
     serializer_class = TipoHabitacionSerializer
 
-class HabitacionListCreate(generics.ListCreateAPIView):
+class HabitacionListView(ListAPIView):
     queryset = Habitacion.objects.all()
     serializer_class = HabitacionSerializer
 
 class DatosBancariosListCreate(generics.ListCreateAPIView):
     queryset = DatosBancarios.objects.all()
     serializer_class = DatosBancariosSerializer
+
+class ReservaListCreateAPIView(ListCreateAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
 
 # Enviar correo a cliente para realizar pago mediante paypal
 # @admin_required
