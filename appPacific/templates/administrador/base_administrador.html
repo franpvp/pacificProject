@@ -123,16 +123,22 @@
                                 {% endfor %}
                             </select>
                         </form>
-                        <!-- Botón Login -->
-                        <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                style="width: 30px; height: 30px; margin-right: 15px;">
-                            {% trans "Iniciar Sesión" %}
-                        </a>
-                        <!-- Botón Registro -->
-                        <a href="{% url 'registro' %}" class="btn-reg">
-                            {% trans "Regístrate" %}
-                        </a>
+                        {% if user.is_authenticated%}
+                            <a href="{% url 'misdatos' %}">
+                                <!-- Icono Usuario -->
+                                <div class="contenedor-user" style="color: black;" >
+                                    <i class='bx bxs-user'></i>
+                                </div>
+                            </a>
+                            <div class="lista-user" style="display: none;">
+                                <div class="btn-mi-perfil">
+                                    Mi Perfil 
+                                </div>
+                                <a href="{% url 'cerrarsesionadmin' %}" class="btn-cerrar-sesion">
+                                    Cerrar Sesión 
+                                </a>
+                            </div>
+                        {% endif %}
                         <li class="switch">
                             <i class="bx bxs-sun"></i>
                             <i class="bx bxs-moon"></i>

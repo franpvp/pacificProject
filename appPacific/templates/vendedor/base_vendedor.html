@@ -64,7 +64,7 @@
     <!-- Contenido Principal -->
     <div class="contenido-main">
         <!-- Contenido principal de la página -->
-        <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #fff;">
+        <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #0277e6;">
             <div class="container-fluid">
                 <!-- Logo Hotel Pacific -->
                 <a class="navbar-brand" href="{% url 'vendedor_home' %}">
@@ -74,39 +74,47 @@
                     <ul class="navbar-nav justify-content-center flex-grow-1">
                         <li class="nav-item m-3">
                             <a href="{% url 'vendedor_home' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Inicio" %}</a>
+                                aria-current="page" style="color: white;">{% trans "Inicio" %}</a>
                         </li>
                         <li class="nav-item m-3">
                             <a href="{% url 'gestion_reservas_vendedor' %}" class="nav-link btnLink"
-                                aria-current="page">{% trans "Reservas" %}</a>
+                                aria-current="page" style="color: white;">{% trans "Reservas" %}</a>
                         </li>
                     </ul>
                     <div class="d-flex justify-content-center align-item-center ml-4 mr-5">
                         <!-- Logo Cambio de Idioma -->
-                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-                            <input name="next" type="hidden" value="{{ redirect_to }}">
-                            <select name="language">
+                        <form id="language-form" action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <img id="logo-chile" class="language-img" src="{% static 'img/logo-chile.png' %}" alt="es" style="width: 45px; height: auto;">
+                            <img id="logo-eng" class="language-img" src="{% static 'img/logo-eng.webp' %}" alt="en" style="width: 45px; height: auto; display: none;">
+                            <select id="language-select" name="language" class="ml-3 mr-3">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
-                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                                        {{ language.name_local }} ({{ language.code }})
+                                    <option value="{{ language.code }}"
+                                        {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                        {{ language.name_local }} 
                                     </option>
                                 {% endfor %}
                             </select>
-                            <button type="submit">{% trans "Traducir" %}</button>
                         </form>
-                        <!-- Botón Login -->
-                        <a href="{% url 'iniciosesion' %}" class="btn-login me-2">
-                            <img class="img-fluid" src="{% static 'img/usuario.png' %}" alt="img-user"
-                                style="width: 30px; height: 30px; margin-right: 15px;">
-                            {% trans "Iniciar Sesión" %}
-                        </a>
-                        <!-- Botón Registro -->
-                        <a href="{% url 'registro' %}" class="btn-reg">
-                            {% trans "Regístrate" %}
-                        </a>
+                        {% if user.is_authenticated%}
+                            <a href="{% url 'misdatos' %}">
+                                <!-- Icono Usuario -->
+                                <div class="contenedor-user" style="color: black;" >
+                                    <i class='bx bxs-user'></i>
+                                </div>
+                            </a>
+                            <div class="lista-user" style="display: none;">
+                                <div class="btn-mi-perfil">
+                                    Mi Perfil 
+                                </div>
+                                <a href="{% url 'cerrarsesionvendedor' %}" class="btn-cerrar-sesion">
+                                    Cerrar Sesión 
+                                </a>
+                            </div>
+                        {% endif %}
                         <!-- Botón Darkmode -->
                         <li class="switch">
                             <i class="bx bxs-sun"></i>
@@ -159,6 +167,37 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        document.getElementById("language-select").addEventListener("change", function() {
+            var selectedLanguage = this.value;
+            var logoChile = document.getElementById("logo-chile");
+            var logoEng = document.getElementById("logo-eng");
+    
+            if (selectedLanguage === 'es') {
+                logoChile.style.display = "inline";
+                logoEng.style.display = "none";
+            } else {
+                logoChile.style.display = "none";
+                logoEng.style.display = "inline";
+            }
+            document.getElementById("language-form").submit();
+        });
+    
+        window.onload = function() {
+            var selectedLanguage = document.getElementById("language-select").value;
+            var logoChile = document.getElementById("logo-chile");
+            var logoEng = document.getElementById("logo-eng");
+    
+            if (selectedLanguage === 'es') {
+                logoChile.style.display = "inline";
+                logoEng.style.display = "none";
+            } else {
+                logoChile.style.display = "none";
+                logoEng.style.display = "inline";
+            }
+        };
+    </script>
 
 </body>
 

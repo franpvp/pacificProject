@@ -168,8 +168,8 @@ def iniciosesion(request):
                 #Valida si el user es superusuario:
                 if user.is_superuser:
                     return redirect('administrador_home')
-                else:
-                    return redirect('index')
+                # else:
+                #     return redirect('index')
                 #Valida si el user es vender:
                 if user.is_staff:
                     return redirect('vendedor_home')           
