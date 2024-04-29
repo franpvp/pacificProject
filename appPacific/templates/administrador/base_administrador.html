@@ -21,8 +21,11 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-</head>
 
+</head>
+<style>
+
+</style>
 <body>
     <!-- Sidebar -->
     <!-- Contenido del Sidebar -->
@@ -59,7 +62,7 @@
                 </a>
             </li>
             {% if user.is_authenticated %}
-            <li class="item"> 
+            <li class="item" style="margin-top: 400px;"> 
                 <!--Es importante la url cerrarsesionadmin para cerrar la sesion del usuario-->
                 <a href="{% url 'cerrarsesionadmin' %}">
                     <i class='bx bx-log-out ml-3'></i>
@@ -74,9 +77,9 @@
     <div class="contenido-main">
         <!-- Contenido principal de la página -->
         <nav class="navbar navbar-expand-lg p-3" style="border-bottom: 1px solid #D9D9D9; position: fixed; z-index: 1100; background: #0277e6;">
-            <div class="container-fluid">
+            <div class="container-fluid ">
                 <!-- Logo Hotel Pacific -->
-                <a class="navbar-brand" href="{% url 'administrador_home' %}">
+                <a class="navbar-brand logo" href="{% url 'administrador_home' %}">
                     <img src="{% static 'img/logo.png' %}" alt= "PacificLogo" class="img-fluid" style="max-width: 200px;">
                 </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -131,21 +134,20 @@
                             <i class="bx bxs-moon"></i>
                         </li>
                         {% else %}
-                            <div class="lista-user" style="display: none;">
-                                <a href="{% url 'misdatos' %}">
-                                    <div class="btn-mi-perfil">
-                                        <i class='bx bxs-user mr-2'></i>
-                                        {% trans "Mi Perfil"%}
-                                    </div>
-                                </a>
-                                <a href="{% url 'cerrarsesion' %}">
-                                    <div class="btn-cerrar-sesion">
-                                        <i class='bx bx-log-out mr-2'></i>
-                                        {% trans "Cerrar Sesión"%}
-                                    </div>
-                                </a>
+                        <a href="{% url 'cerrarsesion' %}">
+                            <div class="btn-cerrar-sesion-admin ml-3 mr-3">
+                            
+                                <i class='bx bx-log-out mr-2'></i>
+                                {% trans "Cerrar Sesión"%}
                             </div>
+                        </a>
+                        
+                        </a>
                         {% endif %}
+                        <li class="switch" style="margin-top: 10px;">
+                            <i class="bx bxs-sun"></i>
+                            <i class="bx bxs-moon"></i>
+                        </li>
                     </div>
                 </div>
             </div>

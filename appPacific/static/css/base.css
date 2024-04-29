@@ -513,6 +513,37 @@ li{
     background: #FFA011;
 }
 
+.btn-cerrar-sesion-admin{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 18px;
+    background: #eee;
+    cursor: pointer;
+}
+
+.btn-cerrar-sesion-admin:hover{
+    color: #fff;
+    background: #e42525;
+}
+
+@media (max-width: 1165px) {
+    .btn-cerrar-sesion-admin{
+        display: none;
+    }
+}
+
+@media (max-width: 990px){
+    .navbar-brand.logo{
+        display: block; /* Asegura que el elemento sea un bloque para aplicar estilos de alineación */
+        margin: 0 auto; /* Centra horizontalmente */
+        text-align: center;
+    }
+}
+
+
+
 .btn-cerrar-sesion{
     display: flex;
     align-items: center;

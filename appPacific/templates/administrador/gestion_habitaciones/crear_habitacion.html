@@ -47,7 +47,7 @@
             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-6 pb-4">
                 <!-- Input ID Tipo Habitación -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="id_tipo_hab" name="id_tipo_hab" placeholder="Tipo Habitación" required>
+                    <input type="text" class="form-control" id="id_tipo_hab" name="id_tipo_hab" placeholder="Tipo Habitación" pattern="^[1-3]$" title="Solo se permiten los valores 1, 2 o 3" required>
                     <label for="id_tipo_hab">{% trans "ID Tipo Habitación"%}</label>
                 </div>
                 <!-- Input Título -->
