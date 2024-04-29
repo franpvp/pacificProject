@@ -145,11 +145,11 @@ def registro(request):
 
 def iniciosesion(request):
 
-    if request.user.is_authenticated:
-        if request.user.is_superuser:
-            return redirect('administrador_home')
-        else:
-            return redirect('index')
+    # if request.user.is_authenticated:
+    #     if request.user.is_superuser:
+    #         return redirect('administrador_home')
+    #     else:
+    #         return redirect('index')
 
     if request.method == 'POST':
         try:       
