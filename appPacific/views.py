@@ -36,6 +36,9 @@ from rest_framework import generics
 from .serializers import MetodoPagoSerializer, ReservaSerializer, ReporteReservaSerializer, TipoHabitacionSerializer, HabitacionSerializer, DatosBancariosSerializer
 import calendar
 from django.contrib.auth.models import AnonymousUser
+from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
 
 # Create your views here.
 
@@ -622,6 +625,30 @@ def modificar_reporte_reserva(request):
         reporte_reserva.hacer_checkout(hora_salida=datetime.now().time())
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
 
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
+
 # Vista Administrador Gestion Reservas -ver calendario
 @admin_required
 def ver_calendario_pacific(request):
@@ -1136,10 +1163,6 @@ class MetodoPagoListCreate(generics.ListCreateAPIView):
     queryset = MetodoPago.objects.all()
     serializer_class = MetodoPagoSerializer
 
-class ReservaListCreate(generics.ListCreateAPIView):
-    queryset = Reserva.objects.all()
-    serializer_class = ReservaSerializer
-
 class ReporteReservaListCreate(generics.ListCreateAPIView):
     queryset = ReporteReserva.objects.all()
     serializer_class = ReporteReservaSerializer
@@ -1148,13 +1171,21 @@ class TipoHabitacionListCreate(generics.ListCreateAPIView):
     queryset = TipoHabitacion.objects.all()
     serializer_class = TipoHabitacionSerializer
 
-class HabitacionListCreate(generics.ListCreateAPIView):
+class HabitacionListView(ListAPIView):
     queryset = Habitacion.objects.all()
     serializer_class = HabitacionSerializer
 
 class DatosBancariosListCreate(generics.ListCreateAPIView):
     queryset = DatosBancarios.objects.all()
     serializer_class = DatosBancariosSerializer
+
+class ReservaListCreateAPIView(ListCreateAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
 
 # Enviar correo a cliente para realizar pago mediante paypal
 # @admin_required
