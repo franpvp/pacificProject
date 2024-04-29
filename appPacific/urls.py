@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ReservaListCreateAPIView, crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin
-from .views import iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, ver_calendario_pacific, ver_habitacion, ver_reserva_pacific, ver_usuarios_admin
+from .views import ReservaListCreateAPIView, crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reporte_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import views as auth_views
 from .views import (MetodoPagoListCreate, ReporteReservaListCreate, TipoHabitacionListCreate, 
@@ -31,6 +30,7 @@ urlpatterns = [
     path('crear_reserva_pacific/', crear_reserva_pacific, name="crear_reserva_pacific"),
     path('eliminar_reserva_pacific/', eliminar_reserva_pacific, name="eliminar_reserva_pacific"),
     path('modificar_reserva_pacific/', modificar_reserva_pacific, name="modificar_reserva_pacific"),
+    path('ver_reporte_pacific/', ver_reporte_pacific, name="ver_reporte_pacific"),
     path('modificar_reporte_reserva/', modificar_reporte_reserva, name="modificar_reporte_reserva"),
     path('ver_calendario_pacific/', ver_calendario_pacific, name="ver_calendario_pacific"),
     path('ver_reserva_pacific/', ver_reserva_pacific, name="ver_reserva_pacific"),
