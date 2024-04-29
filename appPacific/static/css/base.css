@@ -69,7 +69,8 @@ a{
     margin-right: 30px;
     align-items: center;
     justify-content: center;
-    width: 130px !important;
+    padding-left: 20px;
+    padding-right: 20px;
     height: 50px !important;
     background: #25303f;
     color: #fff;
@@ -118,7 +119,8 @@ a{
     justify-content: center;
     margin-left: 10px;
     margin-right: 10px;
-    width: 170px !important;
+    padding-left: 20px;
+    padding-right: 20px;
     height: 50px !important;
     border: 1px solid #3498db;
     background: white;
@@ -365,8 +367,17 @@ li{
     #language-form{
         display: none !important;
     }
+    .btn-login{
+        display: none !important;
+    }
+    .btn-reg{
+        display: none !important;
+    }
     .btn-reservas{
         display: none !important;
+    }
+    .btn-mis-reservas{
+        display: flex; 
     }
     .contenido-logo{
         position: relative;
@@ -387,7 +398,37 @@ li{
         min-height: 100vh;
         margin-left: 80px;
     }
-    
+}
+@media (max-width: 992px) {
+    .contenedor-user {
+        display: flex !important; /* Mostrar el contenedor de usuario */
+        justify-content: flex-end; /* Alinear al final del contenedor padre (costado derecho) */
+    }
+}
+
+/* @media (max-width: 1030px){
+    .contenedor-user{
+        display: none !important;
+    }
+} */
+
+/* Para pantallas con una anchura mínima de 990px */
+@media (min-width: 1030px) {
+    .contenedor-user {
+        display: flex !important; 
+        justify-content: flex-end;
+    }
+
+    .switch {
+        display: flex !important;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .d-md-block {
+        display: block !important;
+    }
 }
 
 /* Botón wsp */
@@ -458,6 +499,20 @@ li{
     background: #3498db;
 }
 
+.btn-mis-reservas{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #eee;
+    cursor: pointer;
+}
+
+.btn-mis-reservas:hover{
+    color: #fff;
+    background: #FFA011;
+}
+
 .btn-cerrar-sesion{
     display: flex;
     align-items: center;
@@ -470,7 +525,7 @@ li{
 
 .btn-cerrar-sesion:hover{
     color: #fff;
-    background: #3498db;
+    background: #e42525;
 }
 
 .listado-idiomas{

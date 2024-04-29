@@ -8,6 +8,18 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
+    <div class="row">
+        <div class="col d-flex m-auto justify-content-center">
+            <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'administrador_home' %}">{% trans "Inicio"%}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'gestion_reservas' %}">{% trans "Gestión Reservas"%}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{% trans "Calendario Reservas"%}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col">
             <h2 class="titulo-general mb-3 text-center">{% trans "Calendario Reservas"%}</h2>
@@ -73,8 +85,3 @@
 {% block scripts %}
 
 {% endblock %}
-
-
-<script>
-
-</script>

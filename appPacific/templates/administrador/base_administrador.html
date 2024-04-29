@@ -39,7 +39,6 @@
                     <i class="bx bxs-home ml-3"></i>
                     <p class="nav-item">{% trans "Inicio" %}</p>
                 </a>
-
             </li>
             <li class="item">
                 <a href="{% url 'gestion_reservas' %}">
@@ -57,12 +56,6 @@
                 <a href="{% url 'gestion_usuarios' %}">
                     <i class='bx bxs-user-detail ml-3'></i>
                     <p class="nav-item">{% trans "Usuarios" %}</p>
-                </a>
-            </li>
-            <li class="item">
-                <a href="#">
-                    <i class='bx bxs-cog ml-3'></i>
-                    <p class="nav-item">{% trans "Configuración" %}</p>
                 </a>
             </li>
             {% if user.is_authenticated %}
@@ -143,6 +136,22 @@
                             <i class="bx bxs-sun"></i>
                             <i class="bx bxs-moon"></i>
                         </li>
+                        {% else %}
+                            <div class="lista-user" style="display: none;">
+                                <a href="{% url 'misdatos' %}">
+                                    <div class="btn-mi-perfil">
+                                        <i class='bx bxs-user mr-2'></i>
+                                        {% trans "Mi Perfil"%}
+                                    </div>
+                                </a>
+                                <a href="{% url 'cerrarsesion' %}">
+                                    <div class="btn-cerrar-sesion">
+                                        <i class='bx bx-log-out mr-2'></i>
+                                        {% trans "Cerrar Sesión"%}
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -226,7 +235,7 @@
             });
         });
 
-        document.getElementById("language-select").addEventListener("change", function() {
+    document.getElementById("language-select").addEventListener("change", function() {
         var selectedLanguage = this.value;
         var logoChile = document.getElementById("logo-chile");
         var logoEng = document.getElementById("logo-eng");

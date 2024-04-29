@@ -557,7 +557,24 @@ def crear_reserva_pacific(request):
 # Vista Administrador Gestion Reservas -eliminar
 @admin_required
 def eliminar_reserva_pacific(request):
-    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html')
+    # Se obtienen todos los registros de habitaciones
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html',{'reservas': reservas})
 
 # Vista Administrador Gestion Reservas -modificar
 @admin_required
@@ -602,33 +619,9 @@ def modificar_reporte_reserva(request):
     id_reserva = requests.POST.get('id_reserva')
     reporte_reserva = ReporteReserva.objects.get(pk=id_reserva)
     if request.method == 'POST':
-        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time()) 
-        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time()) 
+        reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time())
+        reporte_reserva.hacer_checkout(hora_salida=datetime.now().time())
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
-
-# Obtener fechas calendario
-def obtener_dias_mes(mes, año):
-    # Obtener el nombre del mes
-    nombre_mes = calendar.month_name[mes]
-    
-    # Obtener el calendario del mes
-    calendario_mes = calendar.monthcalendar(año, mes)
-    
-    # Lista para almacenar los días del mes junto con el nombre del día
-    dias_del_mes = []
-    
-    # Iterar sobre cada semana del calendario del mes
-    for semana in calendario_mes:
-        for dia in semana:
-            # Si el día es diferente de 0, es un día del mes
-            if dia != 0:
-                # Obtener el nombre del día
-                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
-                # Agregar el día y el nombre del día a la lista
-                dias_del_mes.append((dia, nombre_dia))
-    
-    return nombre_mes, dias_del_mes
-
 
 # Vista Administrador Gestion Reservas -ver calendario
 @admin_required
@@ -654,11 +647,39 @@ def ver_calendario_pacific(request):
         'lista_dias': lista_dias
     })
 
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
 # Vista Administrador Gestion Reservas -ver reserva
 @admin_required
 def ver_reserva_pacific(request):
     reservas = Reserva.objects.all()
     return render(request, 'administrador/gestion_reservas/ver_reserva_pacific.html', {'reservas': reservas})
+
+@admin_required
+def ver_reporte_pacific(request):
+    reporte_reservas = ReporteReserva.objects.all()
+    return render(request, 'administrador/gestion_reservas/ver_reporte_pacific.html', {'reporte_reservas': reporte_reservas})
 
 # Vista Administrador Gestion Usuarios
 @admin_required
@@ -894,6 +915,7 @@ def capture_order(request, order_id):
 
             # Obtener mediante session el pago_pendiente de la reserva
             pago_pendiente = request.session.get('pago_pendiente')
+
             # Fechas formateadas
             fecha_llegada_formateada = request.session.get('fecha_llegada_hidden')
             fecha_salida_formateada = request.session.get('fecha_salida_hidden')
@@ -975,7 +997,7 @@ def handle_response(response):
 @admin_required
 def cerrarsesionadmin(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # DROP PROCEDURE IF EXISTS obtener_todos_usuarios;
 # DELIMITER $
@@ -1019,27 +1041,95 @@ def crear_reserva_pacific_vendedor(request):
 # Vista Vendedor Gestion Reservas -eliminar
 @seller_required
 def eliminar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    if request.method == 'POST':
+        # Obtener el input hidden id_reserva
+        id_reserva = request.POST.get('id_reserva')
+        # Obtener del input hidden el id_hab de la reserva
+        id_hab = request.POST.get('id_hab')
+        reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
+        reserva.delete()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
+        # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
+        habitacion = Habitacion.objects.get(pk= id_hab)
+        # Cambiar estado a "Disponible"
+        habitacion.estado = "Disponible"
+        # Actualizar el estado en BBDD
+        habitacion.save()
+    
+    return render(request, 'vendedor/gestion_reservas_vendedor/eliminar_reserva_pacific_vendedor.html',{'reservas': reservas})
 
 # Vista Vendedor Gestion Reservas -modificar
 @seller_required
 def modificar_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html')
+    if request.method == 'POST':
+        id_reserva = request.POST.get('id_reserva')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+
+        fecha_llegada_obj = datetime.strptime(fecha_llegada, '%Y-%m-%d').date()
+        fecha_salida_obj = datetime.strptime(fecha_salida, '%Y-%m-%d').date()
+
+        cant_adultos = request.POST.get('cant_adultos')
+        cant_ninos = request.POST.get('cant_ninos')
+        habitacion = request.POST.get('habitacion')
+        tipo_metodo_pago = request.POST.get('tipo_metodo_pago')
+        estado_pago = request.POST.get('estado_pago')
+        
+        # Obtener datos de reserva por id_reserva
+        reserva = Reserva.objects.get(id_reserva = id_reserva)
+        # Actualizar campos de reserva
+        reserva.fecha_llegada = fecha_llegada_obj
+        reserva.fecha_salida = fecha_salida_obj
+        reserva.cant_adultos = cant_adultos
+        reserva.cant_ninos = cant_ninos
+        reserva.habitacion = habitacion
+        reserva.estado_pago = estado_pago
+        # Guardar actualizaciones de reserva
+        reserva.save()
+
+    reservas = Reserva.objects.all()
+
+    for reserva in reservas:
+        reserva.fecha_llegada = reserva.fecha_llegada.strftime('%Y-%m-%d')
+        reserva.fecha_salida = reserva.fecha_salida.strftime('%Y-%m-%d')
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/modificar_reserva_pacific_vendedor.html', {'reservas':reservas})
 
 # Vista Vendedor Gestion Reservas -ver calendario
 @seller_required
 def ver_calendario_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html')
+    # Establecer la localización en español
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+    # Obtener día actual
+    dia_actual = datetime.now().day
+    mes_actual = datetime.now().month
+    año_actual = datetime.now().year
+
+    # Obtener los días del mes actual
+    nombre_mes_actual, dias_mes_actual = obtener_dias_mes(mes_actual, año_actual)
+    nombre_mes_actual = nombre_mes_actual.capitalize()
+
+    lista_dias = ['Lun.', 'Mar.', 'Mié.','Jue.','Vié.','Sáb.','Dom.']
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_calendario_pacific_vendedor.html', {
+        'dia_actual': dia_actual,
+        'nombre_mes_actual': nombre_mes_actual,
+        'dias_mes_actual': dias_mes_actual,
+        'año_actual': año_actual,
+        'lista_dias': lista_dias
+    })
 
 # Vista Vendedor Gestion Reservas -ver reserva
 @seller_required
 def ver_reserva_pacific_vendedor(request):
-    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html')
+    reservas = Reserva.objects.all()
+    return render(request, 'vendedor/gestion_reservas_vendedor/ver_reserva_pacific_vendedor.html',{'reservas':reservas})
 
 @seller_required
 def cerrarsesionvendedor(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 # Serializadores API REST
 
