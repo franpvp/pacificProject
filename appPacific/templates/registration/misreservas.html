@@ -18,7 +18,7 @@
         <p class="text-center mb-5">{% trans "No se han realizado reservas."%}<p>
     {% else %}
         <div class="row">
-            <div class="col d-flex justify-content-center align-item-center m-3">
+            <div class="col text-center m-3">
                 <!-- Scrollable modal -->
                 <!-- Botón para abrir el modal -->
                 {% for reserva in reservas %}
@@ -35,12 +35,19 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <ul>
-                                        <li>Fecha de Llegada: {{ reserva.fecha_llegada }}</li>
-                                        <li>Fecha de Salida: {{ reserva.fecha_salida }}</li>
-                                        <li>Cantidad de Adultos: {{ reserva.cant_adultos }}</li>
-                                        <li>Cantidad de Niños: {{ reserva.cant_ninos }}</li>
-                                        <li>Habitación: {{ reserva.habitacion }}</li>
+                                    <ul style="list-style: none; text-align: center;">
+                                        <li style="text-align: left;">ID Reserva: {{ reserva.id_reserva }}</li>
+                                        {% if reserva.order_id == '' %}
+                                            <li style="text-align: left;">Order ID: <strong>{{ reserva.order_id }}</strong> </li>
+                                        {% else %}
+                                            <li style="text-align: left;">Order ID: <strong>{{ reserva.order_id }}</strong></li>
+                                        {% endif %}
+                                        <li style="text-align: left;">Habitación: {{ reserva.habitacion }}</li>
+                                        <li style="text-align: left;">Fecha de Llegada: {{ reserva.fecha_llegada }}</li>
+                                        <li style="text-align: left;">Fecha de Salida: {{ reserva.fecha_salida }}</li>
+                                        <li style="text-align: left;">Cantidad de Adultos: {{ reserva.cant_adultos }}</li>
+                                        <li style="text-align: left;">Cantidad de Niños: {{ reserva.cant_ninos }}</li>
+                                        <li style="text-align: left;">Estado Pago: {{ reserva.estado_pago }}</li>
                                     </ul>
                                 </div>
                                 <div class="modal-footer">

@@ -603,7 +603,7 @@ def crear_reserva_pacific(request):
         else:
             mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
             messages.error(request, mensaje)
-            
+
     # Si la reserva se completa con éxito, mostrar un mensaje de éxito
     messages.success(request, "¡Reserva realizada con éxito!")
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
