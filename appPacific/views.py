@@ -1226,7 +1226,7 @@ class TipoHabitacionListCreate(generics.ListCreateAPIView):
     queryset = TipoHabitacion.objects.all()
     serializer_class = TipoHabitacionSerializer
 
-class HabitacionListCreate(generics.ListCreateAPIView):
+class HabitacionListView(generics.ListCreateAPIView):
     queryset = Habitacion.objects.all()
     serializer_class = HabitacionSerializer
 
