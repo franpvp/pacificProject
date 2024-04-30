@@ -11,7 +11,7 @@
 <div class="container-fluid" style="padding-top: 160px;">
     <!-- Mostrar mensaje -->
     {% if messages %}
-    <div class="row">
+    <div class="row justify-content-center align-item-center">
         <div class="col p-0" style="width: 100%;">
             {% for message in messages %}
                 {% if message.tags == 'error' %}
@@ -169,15 +169,6 @@
                     </button>
                 </div>
             </div>
-            <!-- <div class="row mt-4">
-                <div class="col">
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                        <input type="hidden" name="id_reserva" value="{{ reserva.id_reserva }}">
-                        <input type="hidden" name="id_venta" value="{{ reserva.order_id }}">
-                        <button class="btn btn-primary" type="submit">{% trans "Enviar Confirmación"%} </button>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </form>
     <div class="row">
@@ -192,45 +183,22 @@
     </div>
 </div>
 
-<script>
-
-    $.ajax({
-        type: "POST",
-        url: "{% url 'crear_reserva_pacific' %}",
-        data: data, // Datos de la reserva
-        dataType: 'json',
-        success: function(response) {
-            if (response.success) {
-                console.log("Reserva Realizada")
-                // La reserva se completó con éxito
-                // Aquí puedes redirigir al usuario a otra página o mostrar otra confirmación
-            } else {
-                console.log("No se pudo completar la reserva")
-                // La reserva no se pudo completar
-                alert(response.message); // Muestra la alerta con el mensaje de error
-            }
-        },
-        error: function(xhr, status, error) {
-            // Manejar errores de la solicitud AJAX si es necesario
-            console.error(error);
-        }
-    });    
-
-    function validateInput(input, mensajeErrorId) {
-        var inputValue = input.value;
-        if (!/^[0-9]+$/.test(inputValue)) {
-            document.getElementById(mensajeErrorId).style.display = 'inline';
-        } else {
-            document.getElementById(mensajeErrorId).style.display = 'none';
-        }
-    }
+<script> 
 
     contenedorMensaje = document.querySelector('.contenedor-mensajes')
     btnClose = document.querySelector('.btn-close')
 
     btnClose.addEventListener('click', function() {
         contenedorMensaje.style.display = 'none'
-    })  
+    }) 
+
+    // Quitar mensaje después de 4 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        setTimeout(function() {
+            mensaje.style.display = 'none';
+        }, 4000);
+    });
     </script>
     
     

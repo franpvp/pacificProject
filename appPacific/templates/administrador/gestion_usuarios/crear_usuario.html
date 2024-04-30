@@ -6,13 +6,35 @@
 
 {% block contenido %}
 <div class="container-fluid" style="padding-top: 160px;">
+    <!-- Mensajes de Error -->
+    {% if messages %}
+    <div class="row justify-content-center align-item-center">
+        <div class="col p-0" style="width: 100%;">
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="contenedor-mensajes alert alert-danger" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                            <p class="m-0">{{ message }}</p>
+                        </div>
+                        <div class="btn-close" style="cursor: pointer;"></div>
+                    </div>
+                {% else %}
+                    <div class="contenedor-mensajes alert alert-success" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
+                            <p class="m-0">{{ message }}</p>
+                        </div>
+                        <div class="btn-close" style="cursor: pointer;"></div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
     <div class="row mt-4">
         <div class="col-lg-6 reg-box">
             <h1 class="titulo-general text-center">{% trans "Registro de Usuario"%}</h1>
             <!-- Formulario de registro -->
-
-        
-            <form id="registroForm" action="{% url 'crear_usuario_admin' %}" method="post">
+            <form id="registroForm" action="{% url 'crear_usuario_admin' %}" method="post" onsubmit="handleSubmit(event)">
                 {% csrf_token %}
                 <div class="row justify-content-center align-item-center">
                     <div class="col-xs-10 col-sm-10 col-md-10 col-lg-6 pb-4">
@@ -80,20 +102,6 @@
                             <button type="submit" class="btn btn-primary btn-reg">{% trans "Registrar"%}</button>
                         </div>
                         <br>
-                        <!-- Mensajes de Error -->
-                        {% if messages %}
-                        <div class="row justify-content-center align-item-center">
-                            <div class="col-lg-12">
-                                {% for message in messages %}
-                                    {% if message.tags == 'error' %}
-                                        <div class="alert alert-danger"> {{ message }} </div>
-                                    {% elif message.tags == 'success' %}
-                                        <div class="alert alert-success"> {{ message }} </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </form>
@@ -124,6 +132,21 @@
                 }
             });
         });
+    });
+
+    contenedorMensaje = document.querySelector('.contenedor-mensajes')
+    btnClose = document.querySelector('.btn-close')
+
+    btnClose.addEventListener('click', function() {
+        contenedorMensaje.style.display = 'none'
+    }) 
+
+    // Quitar mensaje después de 4 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        setTimeout(function() {
+            mensaje.style.display = 'none';
+        }, 4000); // 5000 milisegundos = 5 segundos
     });
 </script>
 {% endblock %}

@@ -515,7 +515,6 @@ def crear_reserva_pacific(request):
 
         print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
         
-
         return JsonResponse({'habitaciones': list(hab_disponibles)})
     
     if request.method == 'POST':
@@ -604,8 +603,8 @@ def crear_reserva_pacific(request):
             mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
             messages.error(request, mensaje)
 
-    # Si la reserva se completa con éxito, mostrar un mensaje de éxito
-    messages.success(request, "¡Reserva realizada con éxito!")
+        # Si la reserva se completa con éxito, mostrar un mensaje de éxito
+        messages.success(request, "¡Reserva realizada con éxito!")
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Administrador Gestion Reservas -eliminar
@@ -814,7 +813,6 @@ def crear_usuario_admin(request):
         user.save()
 
         messages.success(request, _("Usuario creado con exito"))
-        return redirect('ver_usuarios_admin')
     
     return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
 
