@@ -47,9 +47,41 @@ class RegistroViewTestCase(TestCase):
     pass
 
 # Test Vista Inicio Sesión
+
 @pytest.mark.django_db
 class InicioSesionViewTestCase(TestCase):
-    pass
+    def test_common_user_creation(self):
+        user = User.objects.create_superuser(
+            username='usuario1',
+            email='usuario1@gmail.com',
+            password='12345'
+        )
+        assert user.username == 'usuario1'
+
+    def test_superuser_creation(self):
+        user = User.objects.create_superuser(
+            username='usuario1',
+            email='usuario1@gmail.com',
+            password='12345'
+        )
+        assert user.is_superuser
+
+    def test_is_staff_user_creation(self):
+        user = User.objects.create_user(
+            username='usuario1',
+            email='usuario1@gmail.com',
+            password='12345',
+            is_staff=True
+        )
+
+        assert user.is_staff
+
+    def test_user_creation_fail(self):
+        with pytest.raises(Exception):
+            User.objects.create_user(
+                password='12345',
+                is_staff=False
+            )
 
 # Test Vista Cerrar Sesión
 @pytest.mark.django_db
@@ -462,3 +494,8 @@ class CerrarSesionVendedorViewTestCase(TestCase):
 
         # Verificamos que la vista haya redirigido a la página correcta ('index')
         self.assertEqual(response.url, reverse('index'))
+
+
+
+# Con el decorador @pytest.mark.django_db se da acceso a la base de datos.
+# Es importante no usar informacion de produccion en las pruebas.
