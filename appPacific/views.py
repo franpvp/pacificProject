@@ -175,7 +175,7 @@ def iniciosesion(request):
                 if user.is_staff:
                     return redirect('vendedor_home')           
                 else:
-                    return redirect('home')
+                    return redirect('index')
                     
             else:
                 messages.error(request, _("Usuario o contraseña no es correcta"))
@@ -496,62 +496,116 @@ def crear_reserva_pacific(request):
 
     if request.method == 'GET' and 'id_tipo_hab' in request.GET:
         id_tipo_hab = request.GET.get('id_tipo_hab')
-        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab', 'titulo_hab', 'capacidad_max','precio')
+        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab','id_hab','titulo_hab', 'capacidad_max','precio')
+        # Declarar capacidad_max como global
+        global capacidad_max
         for habitacion in hab_disponibles:
             id_tipo_hab = habitacion['id_tipo_hab']
+            id_hab = habitacion['id_hab']
             titulo_hab = habitacion['titulo_hab']
-            print("La habitacion es: ", titulo_hab)
             capacidad_max = habitacion['capacidad_max']
             precio = int(habitacion['precio'])
             pago_inicial = int(precio*0.3)
             pago_pendiente = int(precio*0.7)
+
+            request.session['id_hab'] = id_hab
             request.session['titulo_hab'] = titulo_hab
             request.session['precio'] = precio
             request.session['pago_inicial'] = pago_inicial
             request.session['pago_pendiente'] = pago_pendiente
-            print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
+
+        print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
+        
         return JsonResponse({'habitaciones': list(hab_disponibles)})
     
     if request.method == 'POST':
-        nombre_cli = request.POST.get('nombre_cli')
-        apellidos_cli = request.POST.get('apellidos_cli')
-        user = User.objects.get(first_name=nombre_cli, last_name=apellidos_cli)
-        id_user = user.id
         correo = request.POST.get('correo')
+        try: 
+            user = User.objects.get(email=correo)
+            id_user = user.id
+        except User.DoesNotExist:
+            mensaje = "Usuario no registrado en BBDD"
+            messages.error(request, mensaje)
+            # Retorna la plantilla con el mensaje de error
+            return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
+        
         celular = request.POST.get('celular')
         fecha_llegada = request.POST.get('fecha_llegada')
         fecha_salida = request.POST.get('fecha_salida')
-        cant_adultos = request.POST.get('cant_adultos')
-        cant_ninos = request.POST.get('cant_ninos')
-
+        cant_adultos = int(request.POST.get('cant_adultos'))
+        cant_ninos_str = request.POST.get('cant_ninos')
+        cant_ninos = int(cant_ninos_str) if cant_ninos_str else 0
+        total_huespedes = int(cant_adultos + cant_ninos)
+        print("Total: ", total_huespedes)
         paypal = request.POST.get('paypal')
+        
         get_titulo_hab = request.session.get('titulo_hab')
         print("Titulo habitacion POST: ", get_titulo_hab)
         get_precio = request.session.get('precio')
         get_pago_inicial = request.session.get('pago_inicial')
         get_pago_pendiente = request.session.get('pago_pendiente')
 
-        if paypal:
-            reserva = Reserva(
-                id_user = id_user,
-                fecha_llegada = fecha_llegada,
-                fecha_salida = fecha_salida,
-                cant_adultos =  cant_adultos,
-                cant_ninos =  cant_ninos,
-                habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
-                tipo_metodo_pago = paypal,
-                total = get_precio,
-                pago_inicial = get_pago_inicial,
-                pago_pendiente = get_pago_pendiente,
-                estado_pago = 'En Espera de Pago'
-            )
+        # Validar que total_huespedes no supere la capacidad
+        if total_huespedes <= capacidad_max:
+            print("Dió True en validación huespedes y capacidad")
+            if paypal:
+                print("Entre cuando selecciono el botón Paypal")
+                tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=1)
+                print("Tipo Metodo pago:", tipo_metodo_pago)
+                get_id_hab = request.session.get('id_hab')
+                id_habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+                reserva = Reserva(
+                    id_user = id_user,
+                    fecha_llegada = fecha_llegada,
+                    fecha_salida = fecha_salida,
+                    cant_adultos =  cant_adultos,
+                    cant_ninos =  cant_ninos,
+                    id_hab = id_habitacion,
+                    habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
+                    id_metodo_pago = tipo_metodo_pago,
+                    total = get_precio,
+                    pago_inicial = get_pago_inicial,
+                    pago_pendiente = get_pago_pendiente,
+                    estado_pago = 'En Espera de Pago'
+                )
+                # Cambiar estado de Habitación de manera temporal hasta que se realice pago
+                habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+                habitacion.estado = 'No Disponible'
+                habitacion.save()
 
-            row_habitacion = Habitacion.objects.get()
-            # Guardar reserva
-            reserva.save()
-        
-        return JsonResponse({'success': True})  # Devuelve una respuesta JSON de éxito
+                # Guardar reserva
+                reserva.save()
 
+            else:
+                transferencia = int(request.POST.get('transferencia'))
+                tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=transferencia)
+                reserva = Reserva(
+                    id_user = id_user,
+                    fecha_llegada = fecha_llegada,
+                    fecha_salida = fecha_salida,
+                    cant_adultos =  cant_adultos,
+                    cant_ninos =  cant_ninos,
+                    id_hab = id_habitacion,
+                    habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
+                    id_metodo_pago = tipo_metodo_pago,
+                    total = get_precio,
+                    pago_inicial = get_pago_inicial,
+                    pago_pendiente = get_pago_pendiente,
+                    estado_pago = 'En Espera de Pago'
+                )
+                # Cambiar estado de Habitación de manera temporal hasta que se realice pago
+                habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+                habitacion.estado = 'No Disponible'
+                habitacion.save()
+
+                # Guardar reserva
+                reserva.save()
+        else:
+            mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
+            messages.error(request, mensaje)
+
+        # Si la reserva se completa con éxito, mostrar un mensaje de éxito
+        messages.success(request, "¡Reserva realizada con éxito!")
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Administrador Gestion Reservas -eliminar
@@ -622,6 +676,30 @@ def modificar_reporte_reserva(request):
         reporte_reserva.hacer_checkin(hora_ingreso=datetime.now().time())
         reporte_reserva.hacer_checkout(hora_salida=datetime.now().time())
     return render(request, 'administrador/gestion_reservas/modificar_reporte_reserva.html')
+
+# Obtener fechas calendario
+def obtener_dias_mes(mes, año):
+    # Obtener el nombre del mes
+    nombre_mes = calendar.month_name[mes]
+    
+    # Obtener el calendario del mes
+    calendario_mes = calendar.monthcalendar(año, mes)
+    
+    # Lista para almacenar los días del mes junto con el nombre del día
+    dias_del_mes = []
+    
+    # Iterar sobre cada semana del calendario del mes
+    for semana in calendario_mes:
+        for dia in semana:
+            # Si el día es diferente de 0, es un día del mes
+            if dia != 0:
+                # Obtener el nombre del día
+                nombre_dia = calendar.day_name[calendar.weekday(año, mes, dia)]
+                # Agregar el día y el nombre del día a la lista
+                dias_del_mes.append((dia, nombre_dia))
+    
+    return nombre_mes, dias_del_mes
+
 
 # Vista Administrador Gestion Reservas -ver calendario
 @admin_required
@@ -736,7 +814,6 @@ def crear_usuario_admin(request):
         user.save()
 
         messages.success(request, _("Usuario creado con exito"))
-        return redirect('ver_usuarios_admin')
     
     return render(request, 'administrador/gestion_usuarios/crear_usuario.html')
 
@@ -1157,6 +1234,13 @@ class DatosBancariosListCreate(generics.ListCreateAPIView):
     queryset = DatosBancarios.objects.all()
     serializer_class = DatosBancariosSerializer
     
+class ReservaListCreateAPIView(ListCreateAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class ReservaRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
 
 # Enviar correo a cliente para realizar pago mediante paypal
 # @admin_required

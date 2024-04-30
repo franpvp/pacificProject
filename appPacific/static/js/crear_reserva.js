@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
         precioElement.textContent = precio ? `Precio: $${precio} CLP` : '';
 
         // Calcular el pago inicial y pendiente
-        const pagoInicial = precio ? parseInt(precio) * 0.3 : 0;
-        const pagoPendiente = precio ? parseInt(precio) * 0.7 : 0;
+        const pagoInicial = precio ? parseInt(precio * 0.3) : 0;
+        const pagoPendiente = precio ? parseInt(precio * 0.7) : 0;
         pagoInicialElement.textContent = `Pago inicial: $${pagoInicial} CLP`;
         pagoPendienteElement.textContent = `Pago pendiente: $${pagoPendiente} CLP`;
     }

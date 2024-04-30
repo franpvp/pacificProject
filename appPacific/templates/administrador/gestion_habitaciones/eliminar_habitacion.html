@@ -30,7 +30,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th scope="col">{% trans "ID Habitación"%}</th>
                             <th scope="col">{% trans "Título"%}</th>
                             <th scope="col">{% trans "Descripción"%}</th>
@@ -43,7 +43,7 @@
                         {% for habitacion in habitaciones %}
                         <form method="post">
                             {% csrf_token %}
-                            <tr>
+                            <tr class="text-center">
                                 <td>{{ habitacion.id_hab }}</td>
                                 <td>{{ habitacion.titulo_hab }}</td>
                                 <td>{{ habitacion.descripcion }}</td>
