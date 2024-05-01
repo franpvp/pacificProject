@@ -3,6 +3,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.test import RequestFactory
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from appPacific.models import TipoHabitacion, Habitacion, Reserva, MetodoPago
 import pytest
 from appPacific.test_utils import test_setup
@@ -44,23 +45,56 @@ class IndexViewTestCase(TestCase):
 # Test Vista Registro
 @pytest.mark.django_db
 class RegistroViewTestCase(TestCase):
-    pass
+    
+    def setUp(self):
+        self.client = Client()
+
+    def test_registro_success(self):
+        data = {
+            'nombre': 'John',
+            'apellidos': 'Doe',
+            'correo': 'john@example.com',
+            'username': 'johndoe',
+            'celular': '123456789',
+            'password1': 'password',
+            'password2': 'password',
+        }
+
+        # Hace un POST request a la vista
+        response = self.client.post(reverse('registro'), data)
+
+        # Verifica si la respuesta redirecciona a la URL esperada (index)
+        self.assertRedirects(response, reverse('index'))
+
+        # Optionally, check if the user is created and has the correct attributes
+        user = User.objects.get(username=data['username'])
+        self.assertEqual(user.first_name, data['nombre'])
+        self.assertEqual(user.last_name, data['apellidos'])
+        self.assertEqual(user.email, data['correo'])
 
 # Test Vista Inicio Sesión
 
 @pytest.mark.django_db
 class InicioSesionViewTestCase(TestCase):
-    def test_common_user_creation(self):
-        user = User.objects.create_superuser(
-            username='usuario1',
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='usuario2',
             email='usuario1@gmail.com',
-            password='12345'
+            password='12345',
+            is_staff=False,
+            is_superuser=False
         )
-        assert user.username == 'usuario1'
+
+    def test_user_creation(self):
+        self.assertEqual(self.user.is_active,True)
+        self.assertEqual(self.user.is_staff,False)
+        self.assertEqual(self.user.is_superuser,False)
 
     def test_superuser_creation(self):
         user = User.objects.create_superuser(
-            username='usuario1',
+            username='usuario3',
             email='usuario1@gmail.com',
             password='12345'
         )
@@ -68,12 +102,11 @@ class InicioSesionViewTestCase(TestCase):
 
     def test_is_staff_user_creation(self):
         user = User.objects.create_user(
-            username='usuario1',
+            username='usuario4',
             email='usuario1@gmail.com',
             password='12345',
             is_staff=True
         )
-
         assert user.is_staff
 
     def test_user_creation_fail(self):
@@ -82,6 +115,28 @@ class InicioSesionViewTestCase(TestCase):
                 password='12345',
                 is_staff=False
             )
+
+    def test_login(self):
+        # Preparando el POST data
+        data = {
+            'username': 'usuario1',
+            'password': '12345',
+        }
+
+        # Hacer una POST request a la vista
+        response = self.client.post(reverse('iniciosesion'), data)
+
+        # Verificar si el response status code es 200 (exitoso)
+        self.assertEqual(response.status_code, 200)
+
+        # Verificar si el usuario es logged in después de un successful login
+        user = authenticate(username=data['username'], password=data['password'])
+
+        # Si el user es not None, verificar is es authenticated
+        if user is not None:
+            self.assertTrue(user.is_authenticated)
+        else:
+            print("Authentication failed. User is None.")
 
 # Test Vista Cerrar Sesión
 @pytest.mark.django_db
@@ -499,3 +554,14 @@ class CerrarSesionVendedorViewTestCase(TestCase):
 
 # Con el decorador @pytest.mark.django_db se da acceso a la base de datos.
 # Es importante no usar informacion de produccion en las pruebas.
+# SETUP es un método es donde se crean todas las instancias
+# que se necesite o las variables o datos iniciales que se necesitará
+# para crear los tests y que se van a utilizar en mis tests.
+# Aparte de los modelos necesito probar mis vistas, etc
+# Las vistas se pueden llamar a traves de rutas, por eso se puede probar:
+# que cuando la persona interectúe con una ruta, la ejecución y la lógica
+# asociada a esa ruta se llame de manera correcta para eso:
+# tengo que simular que soy un cliente que relice la petición o que
+# envié los datos, etc, lo que requiera la ruta para que esta pueda 
+# interactuar con la vista y pueda devolver la respuesta que sea necesaria.
+# 
