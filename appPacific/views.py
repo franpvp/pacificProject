@@ -574,6 +574,18 @@ def crear_reserva_pacific(request):
 
                 # Guardar reserva
                 reserva.save()
+                
+                # Obtener la reserva recién creada
+                reserva_creada = Reserva.objects.latest('fecha_creacion')
+                # Crear Reporte Reserva
+                reporte_reserva = ReporteReserva(
+                    id_reserva = reserva_creada,
+                    dia_ingreso = fecha_llegada,
+                    dia_salida = fecha_salida
+                )
+                # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
+                # Guardar Reporte Reserva en la base de datos
+                reporte_reserva.save()
 
             else:
                 transferencia = int(request.POST.get('transferencia'))
@@ -599,6 +611,16 @@ def crear_reserva_pacific(request):
 
                 # Guardar reserva
                 reserva.save()
+
+                # Crear Reporte Reserva
+                reporte_reserva = ReporteReserva(
+                    id_reserva = reserva_creada,
+                    dia_ingreso = fecha_llegada_formateada,
+                    dia_salida = fecha_salida_formateada
+                )
+                # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
+                # Guardar Reporte Reserva en la base de datos
+                reporte_reserva.save()
         else:
             mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
             messages.error(request, mensaje)
