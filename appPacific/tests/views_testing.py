@@ -66,11 +66,13 @@ class RegistroViewTestCase(TestCase):
         # Verifica si la respuesta redirecciona a la URL esperada (index)
         self.assertRedirects(response, reverse('index'))
 
-        # Optionally, check if the user is created and has the correct attributes
+        # Opcional, verifica si el usuario es creado y tiene los atributos correctos
         user = User.objects.get(username=data['username'])
         self.assertEqual(user.first_name, data['nombre'])
         self.assertEqual(user.last_name, data['apellidos'])
         self.assertEqual(user.email, data['correo'])
+
+        
 
 # Test Vista Inicio Sesión
 
@@ -79,35 +81,11 @@ class InicioSesionViewTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='usuario2',
-            email='usuario1@gmail.com',
+        self.user = User.objects.create_superuser(
+            username='admin',
+            email='admin@gmail.com',
             password='12345',
-            is_staff=False,
-            is_superuser=False
         )
-
-    def test_user_creation(self):
-        self.assertEqual(self.user.is_active,True)
-        self.assertEqual(self.user.is_staff,False)
-        self.assertEqual(self.user.is_superuser,False)
-
-    def test_superuser_creation(self):
-        user = User.objects.create_superuser(
-            username='usuario3',
-            email='usuario1@gmail.com',
-            password='12345'
-        )
-        assert user.is_superuser
-
-    def test_is_staff_user_creation(self):
-        user = User.objects.create_user(
-            username='usuario4',
-            email='usuario1@gmail.com',
-            password='12345',
-            is_staff=True
-        )
-        assert user.is_staff
 
     def test_user_creation_fail(self):
         with pytest.raises(Exception):
@@ -137,6 +115,34 @@ class InicioSesionViewTestCase(TestCase):
             self.assertTrue(user.is_authenticated)
         else:
             print("Authentication failed. User is None.")
+
+    def test_login_success_superuser(self):
+        data = {
+            'username':'admin',
+            'password':'12345'
+        }
+
+        response = self.client.post(reverse('iniciosesion'),data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('administrador_home'))
+        self.assertTrue('_auth_user_id' in self.client.session)
+
+    def test_login_success_staff(self):
+        seller = User.objects.create_user(username='vendedor',password='12345')
+        seller.is_staff = True
+        seller.save()
+
+        data = {
+            'username':'vendedor',
+            'password':'12345',
+        }
+
+        response = self.client.post(reverse('iniciosesion'),data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('vendedor_home'))
+        self.assertTrue('_auth_user_id' in self.client.session)
 
 # Test Vista Cerrar Sesión
 @pytest.mark.django_db
