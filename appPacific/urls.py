@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ReservaListCreateAPIView, crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reporte_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin
-from django.contrib.auth import views as auth_views
+from .views import ReservaListCreateAPIView, crear_reserva_pacific_vendedor, eliminar_reserva_pacific_vendedor, gestion_reservas_vendedor, iniciosesion, cerrarsesion, misreservas, misdatos, administrador_home, crear_habitacion, crear_reserva_pacific, crear_usuario_admin, eliminar_habitacion, eliminar_reserva_pacific, eliminar_usuario_admin, gestion_habitaciones, gestion_reservas, gestion_usuarios, index, home, login, modificar_habitacion, modificar_reserva_pacific, modificar_reporte_reserva, modificar_reserva_pacific_vendedor, modificar_usuario_admin, modificar_usuario_admin, registro, habitaciones, metodo_pago, transferencias, reserva_realizada, contacto, nosotros, tipo_usuario_admin, vendedor_home, ver_calendario_pacific, ver_calendario_pacific_vendedor, ver_habitacion, ver_reserva_pacific, ver_reporte_pacific, ver_reserva_pacific_vendedor, ver_usuarios_admin,vista_correo
 from django.contrib.auth import views as auth_views
 from .views import (MetodoPagoListCreate, ReporteReservaListCreate, TipoHabitacionListCreate, 
                     HabitacionListView, DatosBancariosListCreate)
@@ -61,4 +60,5 @@ urlpatterns = [
     path('tipo_habitacion/', TipoHabitacionListCreate.as_view(), name='tipo-habitacion-list-create'),
     path('habitacion/', HabitacionListView.as_view(), name='habitacion-list-create'),
     path('datos_bancarios/', DatosBancariosListCreate.as_view(), name='datos-bancarios-list-create'),
+    path('vista_correo/', vista_correo, name='vista_correo'),
 ]

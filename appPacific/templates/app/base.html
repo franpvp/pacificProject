@@ -34,6 +34,75 @@
     
     <!-- Contenido Principal -->
     <div class="contenido-main">
+        <!-- Sidebar -->
+        <!-- Contenido del Sidebar -->
+        <div class="sidebar">
+            <div class="top mb-4">
+                <div class="logo">
+                    <i class='bx bx-building'></i>
+                </div>
+                <i class="bx bx-menu" id="btn"></i>
+            </div>
+            <ul class="mt-5">
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'index' %}">
+                        <i class="bx bxs-home" style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Inicio"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'habitaciones' %}">
+                        <i class='bx bxs-search-alt-2' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Explorar"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'nosotros' %}">
+                        <i class="bx bxs-info-circle" style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Sobre Nosotros"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'contacto' %}">
+                        <i class="bx bx-conversation" style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Contacto"%}</p>
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="item mis-reservas" style="margin-top: 10px;">
+                    <a href="{% url 'misdatos' %}">
+                        <i class='bx bxs-user-badge' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Mi Perfil"%}</p>
+                    </a>
+                </li>
+                <li class="item mis-reservas" style="margin-top: 10px;">
+                    <a href="{% url 'misreservas' %}">
+                        <i class='bx bxs-book-alt' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Mis Reservas"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'cerrarsesion' %}">
+                        <i class='bx bx-log-out' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Cerrar Sesión"%}</p>
+                    </a>
+                </li>
+                {% else %}
+                <li class="item" style="margin-top: 300px;">
+                    <a href="{% url 'iniciosesion' %}" style="background: #0277e6;">
+                        <i class='bx bxs-user' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Iniciar Sesión"%}</p>
+                    </a>
+                </li>
+                <li class="item" style="margin-top: 10px;">
+                    <a href="{% url 'registro' %}" style="background: #FFA011;">
+                        <i class='bx bx-arrow-to-right' style="margin-left: 19px;"></i>
+                        <p class="nav-item">{% trans "Regístrate"%}</p>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
         <nav class="navbar navbar-expand-lg p-2" style="position: fixed; z-index: 4900; background: #0277e6;">
             <div class="container-fluid">
                 <div class="contenido-logo">
@@ -123,75 +192,7 @@
                 </div>
             </div>
         </nav>
-        <!-- Sidebar -->
-        <!-- Contenido del Sidebar -->
-        <div class="sidebar">
-            <div class="top mb-4">
-                <div class="logo">
-                    <i class='bx bx-building'></i>
-                </div>
-                <i class="bx bx-menu" id="btn"></i>
-            </div>
-            <ul class="mt-5">
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'index' %}">
-                        <i class="bx bxs-home" style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Inicio"%}</p>
-                    </a>
-                </li>
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'habitaciones' %}">
-                        <i class='bx bxs-search-alt-2' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Explorar"%}</p>
-                    </a>
-                </li>
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'nosotros' %}">
-                        <i class="bx bxs-info-circle" style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Sobre Nosotros"%}</p>
-                    </a>
-                </li>
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'contacto' %}">
-                        <i class="bx bx-conversation" style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Contacto"%}</p>
-                    </a>
-                </li>
-                {% if user.is_authenticated %}
-                <li class="item mis-reservas" style="margin-top: 10px;">
-                    <a href="{% url 'misdatos' %}">
-                        <i class='bx bxs-user-badge' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Mi Perfil"%}</p>
-                    </a>
-                </li>
-                <li class="item mis-reservas" style="margin-top: 10px;">
-                    <a href="{% url 'misreservas' %}">
-                        <i class='bx bxs-book-alt' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Mis Reservas"%}</p>
-                    </a>
-                </li>
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'cerrarsesion' %}">
-                        <i class='bx bx-log-out' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Cerrar Sesión"%}</p>
-                    </a>
-                </li>
-                {% else %}
-                <li class="item" style="margin-top: 300px;">
-                    <a href="{% url 'iniciosesion' %}" style="background: #0277e6;">
-                        <i class='bx bxs-user' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Iniciar Sesión"%}</p>
-                    </a>
-                </li>
-                <li class="item" style="margin-top: 10px;">
-                    <a href="{% url 'registro' %}" style="background: #FFA011;">
-                        <i class='bx bx-arrow-to-right' style="margin-left: 19px;"></i>
-                        <p class="nav-item">{% trans "Regístrate"%}</p>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+        
         <!-- Botón WhatsApp -->
         <a href="https://api.whatsapp.com/send?phone=+56957066834&text=Hola,%20estoy%20interesado(a)%20en%20realizar%20una%20consulta">
             <div class="btn-wsp">

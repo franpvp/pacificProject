@@ -19,14 +19,14 @@
                         <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
                             <p class="m-0">{{ message }}</p>
                         </div>
-                        <div class="btn-close" style="cursor: pointer;"></div>
+                        <div class="btn-close" onclick="cerrarMensaje()" style="cursor: pointer;"></div>
                     </div>
                 {% else %}
                     <div class="contenedor-mensajes alert alert-success" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="mensaje-container" style="flex-grow: 1; text-align: center;">
                             <p class="m-0">{{ message }}</p>
                         </div>
-                        <div class="btn-close" style="cursor: pointer;"></div>
+                        <div class="btn-close" onclick="cerrarMensaje()" style="cursor: pointer;"></div>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -177,21 +177,27 @@
                 <!-- Ajuste de margen superior -->
                 <p class="mb-0">{% trans "Hotel Pacific - Todos los derechos reservados" %}</p>
                 <p style="font-size: 14px;">{% trans "Santiago de Chile, Moneda #85" %}</p>
-                <!-- Dirección ficticia -->
             </div>
         </footer>
     </div>
 </div>
 
-<script> 
+<script>
 
-    contenedorMensaje = document.querySelector('.contenedor-mensajes')
-    btnClose = document.querySelector('.btn-close')
+    function validateInput(input, mensajeErrorId) {
+        var inputValue = input.value;
+        if (!/^[0-9]+$/.test(inputValue)) {
+            document.getElementById(mensajeErrorId).style.display = 'inline';
+        } else {
+            document.getElementById(mensajeErrorId).style.display = 'none';
+        }
+    }
 
-    btnClose.addEventListener('click', function() {
-        contenedorMensaje.style.display = 'none'
-    }) 
-
+    // Funcion para dar display none a contenedor de mensajes
+    function cerrarMensaje() {
+        var mensaje = document.querySelector('.contenedor-mensajes');
+        mensaje.style.display = 'none';
+    }
     // Quitar mensaje después de 4 segundos
     document.addEventListener('DOMContentLoaded', function() {
         var mensaje = document.querySelector('.contenedor-mensajes');
@@ -200,7 +206,6 @@
         }, 4000);
     });
     </script>
-    
     
     {% endblock %}
     

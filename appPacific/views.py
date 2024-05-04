@@ -38,7 +38,9 @@ import calendar
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.generics import ListAPIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -233,8 +235,8 @@ def habitaciones(request):
     total_huespedes_str = request.session.get('total_huespedes_str')
 
     # Validar si los campos son nulos y redirigir si es necesario
-    if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
-        return redirect('index')
+    # if fecha_llegada is None or fecha_salida is None or contador_adultos == 0:
+    #     return redirect('index')
 
     if request.method == 'POST' and fecha_llegada and fecha_salida and contador_adultos > 0:
         # Obtener los id de la habitacion cuando se haga clic en botón Reserva
@@ -496,6 +498,8 @@ def crear_reserva_pacific(request):
     if request.method == 'GET' and 'id_tipo_hab' in request.GET:
         id_tipo_hab = request.GET.get('id_tipo_hab')
         hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab','id_hab','titulo_hab', 'capacidad_max','precio')
+        # Inicializar titulo_hab con un valor predeterminado
+        titulo_hab = None
         # Declarar capacidad_max como global
         global capacidad_max
         for habitacion in hab_disponibles:
@@ -507,6 +511,7 @@ def crear_reserva_pacific(request):
             pago_inicial = int(precio*0.3)
             pago_pendiente = int(precio*0.7)
 
+            # Guardar variables en sesiones
             request.session['id_hab'] = id_hab
             request.session['titulo_hab'] = titulo_hab
             request.session['precio'] = precio
@@ -546,9 +551,7 @@ def crear_reserva_pacific(request):
 
         # Validar que total_huespedes no supere la capacidad
         if total_huespedes <= capacidad_max:
-            print("Dió True en validación huespedes y capacidad")
             if paypal:
-                print("Entre cuando selecciono el botón Paypal")
                 tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=1)
                 print("Tipo Metodo pago:", tipo_metodo_pago)
                 get_id_hab = request.session.get('id_hab')
@@ -560,7 +563,7 @@ def crear_reserva_pacific(request):
                     cant_adultos =  cant_adultos,
                     cant_ninos =  cant_ninos,
                     id_hab = id_habitacion,
-                    habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
+                    habitacion = get_titulo_hab,
                     id_metodo_pago = tipo_metodo_pago,
                     total = get_precio,
                     pago_inicial = get_pago_inicial,
@@ -569,9 +572,11 @@ def crear_reserva_pacific(request):
                 )
                 # Cambiar estado de Habitación de manera temporal hasta que se realice pago
                 habitacion = Habitacion.objects.get(id_hab=get_id_hab)
-                habitacion.estado = 'No Disponible'
-                habitacion.save()
 
+                # Una vez hecha la reserva cambiar habitación a "No Disponible"
+                habitacion.estado = 'No Disponible'
+                # Guardar cambios de la habitación reservada
+                habitacion.save()
                 # Guardar reserva
                 reserva.save()
                 
@@ -587,6 +592,49 @@ def crear_reserva_pacific(request):
                 # Guardar Reporte Reserva en la base de datos
                 reporte_reserva.save()
 
+                # Obtener la reserva recién creada
+                reserva_creada = Reserva.objects.latest('fecha_creacion')
+                # Crear reporte
+                reporte_reserva = ReporteReserva(
+                    id_reserva = reserva_creada,
+                    dia_ingreso = fecha_llegada,
+                    dia_salida = fecha_salida
+                )
+                # Guardar Reporte
+                reporte_reserva.save()
+
+                # ID de reserva recién almacenada
+                id_reserva = reserva.id_reserva
+
+                # Obtener correo con id_user
+                usuario = User.objects.get(id = id_user)
+                correo_destino = usuario.email
+                
+                # Filtrar datos de la reserva a partir de datos del usuario
+                reserva_user = Reserva.objects.get(id_reserva=id_reserva, id_user=usuario.id, id_hab=reserva.id_hab)
+                # Imprimir la cadena base64 en la consola
+                # print("Cadena base64 de la imagen:", imagen)
+                # Lógica para enviar el correo de reserva
+                subject = 'Confirmación de reserva'
+                reservation_details = {
+                    'titulo_hab': reserva_user.habitacion,
+                    'fecha_llegada': reserva_user.fecha_llegada,
+                    'fecha_salida': reserva_user.fecha_salida,
+                    'cant_adultos': reserva_user.cant_adultos,
+                    'cant_ninos': reserva_user.cant_ninos,
+                    'total': reserva_user.total,
+                    'pago_inicial':reserva_user.pago_inicial,
+                    'pago_pendiente': reserva_user.pago_pendiente
+                }
+
+                context = {'user': usuario.first_name, 'reservation_details': reservation_details}
+                html_message = render_to_string('reserva_confirmacion/correo_confirmacion_reserva.html', context)
+                sender = settings.EMAIL_HOST_USER
+                # Eliminar las etiquetas HTML del mensaje para tener una versión de texto plano
+                plain_message = strip_tags(html_message)
+                # Enviar Correo de Confirmación
+                send_mail(subject, plain_message, sender, [correo_destino], html_message=html_message)
+            
             else:
                 transferencia = int(request.POST.get('transferencia'))
                 tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=transferencia)
@@ -612,21 +660,24 @@ def crear_reserva_pacific(request):
                 # Guardar reserva
                 reserva.save()
 
-                # Crear Reporte Reserva
+                # Obtener la reserva recién creada
+                reserva_creada = Reserva.objects.latest('fecha_creacion')
+                # Guardar Reporte
                 reporte_reserva = ReporteReserva(
                     id_reserva = reserva_creada,
-                    dia_ingreso = fecha_llegada_formateada,
-                    dia_salida = fecha_salida_formateada
+                    dia_ingreso = fecha_llegada,
+                    dia_salida = fecha_salida
                 )
-                # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
-                # Guardar Reporte Reserva en la base de datos
+                # Guardar Reporte
                 reporte_reserva.save()
+
+            # Si la reserva se completa con éxito, mostrar un mensaje de éxito
+            messages.success(request, "¡Reserva realizada con éxito!")
+
         else:
             mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
             messages.error(request, mensaje)
 
-        # Si la reserva se completa con éxito, mostrar un mensaje de éxito
-        messages.success(request, "¡Reserva realizada con éxito!")
     return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Administrador Gestion Reservas -eliminar
@@ -641,13 +692,13 @@ def eliminar_reserva_pacific(request):
         id_hab = request.POST.get('id_hab')
         reserva = get_object_or_404(Reserva, id_reserva=id_reserva)
         reserva.delete()
-        messages.success(request, _("Reserva Eliminada Exitosamente"))
         # Cuando se elimine una reserva, cambiar estado de habitación a "Disponible"
         habitacion = Habitacion.objects.get(pk= id_hab)
         # Cambiar estado a "Disponible"
         habitacion.estado = "Disponible"
         # Actualizar el estado en BBDD
         habitacion.save()
+        messages.success(request, _("Reserva Eliminada Exitosamente"))
     
     return render(request, 'administrador/gestion_reservas/eliminar_reserva_pacific.html',{'reservas': reservas})
 
@@ -1050,10 +1101,39 @@ def capture_order(request, order_id):
             # Cambiar estado de habitación a "No Disponible"
             row_hab.estado = "No Disponible"
             row_hab.save()
-            # Aqui sale el error -> Error: {"error":"get() returned more than one Reserva -- it returned 2!"}
             # Guardar Reporte Reserva en la base de datos
             reporte_reserva.save()
 
+            # ID de reserva recién almacenada
+            id_reserva = reserva.id_reserva
+
+            # Obtener correo con id_user
+            usuario = User.objects.get(id = id_user)
+            correo_destino = usuario.email
+            
+            # Filtrar datos de la reserva a partir de datos del usuario
+            reserva_user = Reserva.objects.get(id_reserva=id_reserva, id_user=usuario.id, id_hab=reserva.id_hab)
+
+            # Una vez creada la Reserva y el Reporte enviar un correo al usuario
+            subject = 'Confirmación Pago Reserva'
+            reservation_details = {
+                'titulo_hab': reserva_user.habitacion,
+                'fecha_llegada': reserva_user.fecha_llegada,
+                'fecha_salida': reserva_user.fecha_salida,
+                'cant_adultos': reserva_user.cant_adultos,
+                'cant_ninos': reserva_user.cant_ninos,
+                'total': reserva_user.total,
+                'pago_inicial':reserva_user.pago_inicial,
+                'pago_pendiente': reserva_user.pago_pendiente
+            }
+
+            context = {'user': usuario.first_name, 'reservation_details': reservation_details}
+            html_message = render_to_string('reserva_confirmacion/user_reserva.html', context)
+            sender = settings.EMAIL_HOST_USER
+            # Eliminar las etiquetas HTML del mensaje para tener una versión de texto plano
+            plain_message = strip_tags(html_message)
+            # Enviar Correo de Confirmación
+            send_mail(subject, plain_message, sender, [correo_destino], html_message=html_message)
         else:
             return JsonResponse(response_data, status=response.status_code)
 
@@ -1124,17 +1204,179 @@ def gestion_reservas_vendedor(request):
 # Vista Vendedor Gestion Reservas -crear
 @seller_required
 def crear_reserva_pacific_vendedor(request):
-    if request.method == 'POST':
-        id_reserva = request.POST.get('id_reserva')
-        nombre_cli = request.POST.get('nombre_cli')
-        apellidos_cli = request.POST.get('apellidos_cli')
-        rut_cli = request.POST.get('rut_cli')
-        metodo_pago = request.POST.get('metodo_pago')
-        pago_reserva = request.POST.get('pago_reserva')
-        total_restante = request.POST.get('total_restante')
-        estado_pago = request.POST.get('estado_pago')
+    # Obtener lista de tipos de habitaciones
+    lista_tipo_hab = TipoHabitacion.objects.all()
 
-    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html')
+    if request.method == 'GET' and 'id_tipo_hab' in request.GET:
+        id_tipo_hab = request.GET.get('id_tipo_hab')
+        hab_disponibles = Habitacion.objects.filter(id_tipo_hab=id_tipo_hab, estado='Disponible').values('id_tipo_hab','id_hab','titulo_hab', 'capacidad_max','precio')
+        # Declarar capacidad_max como global
+        global capacidad_max
+        for habitacion in hab_disponibles:
+            id_tipo_hab = habitacion['id_tipo_hab']
+            id_hab = habitacion['id_hab']
+            titulo_hab = habitacion['titulo_hab']
+            capacidad_max = habitacion['capacidad_max']
+            precio = int(habitacion['precio'])
+            pago_inicial = int(precio*0.3)
+            pago_pendiente = int(precio*0.7)
+
+            # Guardar variables en sesiones
+            request.session['id_hab'] = id_hab
+            request.session['titulo_hab'] = titulo_hab
+            request.session['precio'] = precio
+            request.session['pago_inicial'] = pago_inicial
+            request.session['pago_pendiente'] = pago_pendiente
+
+        print(f'ID del tipo de habitación: {id_tipo_hab}, Título de la habitación: {titulo_hab}, Capacidad máxima: {capacidad_max}')
+        
+        return JsonResponse({'habitaciones': list(hab_disponibles)})
+    
+    if request.method == 'POST':
+        correo = request.POST.get('correo')
+        try: 
+            user = User.objects.get(email=correo)
+            id_user = user.id
+        except User.DoesNotExist:
+            mensaje = "Usuario no registrado en BBDD"
+            messages.error(request, mensaje)
+            # Retorna la plantilla con el mensaje de error
+            return render(request, 'administrador/gestion_reservas/crear_reserva_pacific.html', {'lista_tipo_hab': lista_tipo_hab})
+        
+        celular = request.POST.get('celular')
+        fecha_llegada = request.POST.get('fecha_llegada')
+        fecha_salida = request.POST.get('fecha_salida')
+        cant_adultos = int(request.POST.get('cant_adultos'))
+        cant_ninos_str = request.POST.get('cant_ninos')
+        cant_ninos = int(cant_ninos_str) if cant_ninos_str else 0
+        total_huespedes = int(cant_adultos + cant_ninos)
+        print("Total: ", total_huespedes)
+        paypal = request.POST.get('paypal')
+        
+        get_titulo_hab = request.session.get('titulo_hab')
+        print("Titulo habitacion POST: ", get_titulo_hab)
+        get_precio = request.session.get('precio')
+        get_pago_inicial = request.session.get('pago_inicial')
+        get_pago_pendiente = request.session.get('pago_pendiente')
+
+        # Validar que total_huespedes no supere la capacidad
+        if total_huespedes <= capacidad_max:
+            if paypal:
+                tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=1)
+                print("Tipo Metodo pago:", tipo_metodo_pago)
+                get_id_hab = request.session.get('id_hab')
+                id_habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+                reserva = Reserva(
+                    id_user = id_user,
+                    fecha_llegada = fecha_llegada,
+                    fecha_salida = fecha_salida,
+                    cant_adultos =  cant_adultos,
+                    cant_ninos =  cant_ninos,
+                    id_hab = id_habitacion,
+                    habitacion = get_titulo_hab,
+                    id_metodo_pago = tipo_metodo_pago,
+                    total = get_precio,
+                    pago_inicial = get_pago_inicial,
+                    pago_pendiente = get_pago_pendiente,
+                    estado_pago = 'En Espera de Pago'
+                )
+                # Cambiar estado de Habitación de manera temporal hasta que se realice pago
+                habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+
+                # Una vez hecha la reserva cambiar habitación a "No Disponible"
+                habitacion.estado = 'No Disponible'
+                # Guardar cambios de la habitación reservada
+                habitacion.save()
+                # Guardar reserva
+                reserva.save()
+
+                # Obtener la reserva recién creada
+                reserva_creada = Reserva.objects.latest('fecha_creacion')
+                # Crear reporte
+                reporte_reserva = ReporteReserva(
+                    id_reserva = reserva_creada,
+                    dia_ingreso = fecha_llegada,
+                    dia_salida = fecha_salida
+                )
+                # Guardar Reporte
+                reporte_reserva.save()
+
+                # ID de reserva recién almacenada
+                id_reserva = reserva.id_reserva
+
+                # Obtener correo con id_user
+                usuario = User.objects.get(id = id_user)
+                correo_destino = usuario.email
+                
+                # Filtrar datos de la reserva a partir de datos del usuario
+                reserva_user = Reserva.objects.get(id_reserva=id_reserva, id_user=usuario.id, id_hab=reserva.id_hab)
+                # Imprimir la cadena base64 en la consola
+                # print("Cadena base64 de la imagen:", imagen)
+                # Lógica para enviar el correo de reserva
+                subject = 'Confirmación de reserva'
+                reservation_details = {
+                    'titulo_hab': reserva_user.habitacion,
+                    'fecha_llegada': reserva_user.fecha_llegada,
+                    'fecha_salida': reserva_user.fecha_salida,
+                    'cant_adultos': reserva_user.cant_adultos,
+                    'cant_ninos': reserva_user.cant_ninos,
+                    'total': reserva_user.total,
+                    'pago_inicial':reserva_user.pago_inicial,
+                    'pago_pendiente': reserva_user.pago_pendiente
+                }
+
+                context = {'user': usuario.first_name, 'reservation_details': reservation_details}
+                html_message = render_to_string('reserva_confirmacion/correo_confirmacion_reserva.html', context)
+                sender = settings.EMAIL_HOST_USER
+                # Eliminar las etiquetas HTML del mensaje para tener una versión de texto plano
+                plain_message = strip_tags(html_message)
+                # Enviar Correo de Confirmación
+                send_mail(subject, plain_message, sender, [correo_destino], html_message=html_message)
+            
+            else:
+                transferencia = int(request.POST.get('transferencia'))
+                tipo_metodo_pago = MetodoPago.objects.get(id_metodo_pago=transferencia)
+                reserva = Reserva(
+                    id_user = id_user,
+                    fecha_llegada = fecha_llegada,
+                    fecha_salida = fecha_salida,
+                    cant_adultos =  cant_adultos,
+                    cant_ninos =  cant_ninos,
+                    id_hab = id_habitacion,
+                    habitacion = get_titulo_hab, # Se debe cambiar a ID Habitación
+                    id_metodo_pago = tipo_metodo_pago,
+                    total = get_precio,
+                    pago_inicial = get_pago_inicial,
+                    pago_pendiente = get_pago_pendiente,
+                    estado_pago = 'En Espera de Pago'
+                )
+                # Cambiar estado de Habitación de manera temporal hasta que se realice pago
+                habitacion = Habitacion.objects.get(id_hab=get_id_hab)
+                habitacion.estado = 'No Disponible'
+                habitacion.save()
+
+                # Guardar reserva
+                reserva.save()
+
+                # Obtener la reserva recién creada
+                reserva_creada = Reserva.objects.latest('fecha_creacion')
+                # Guardar Reporte
+                reporte_reserva = ReporteReserva(
+                    id_reserva = reserva_creada,
+                    dia_ingreso = fecha_llegada,
+                    dia_salida = fecha_salida
+                )
+                # Guardar Reporte
+                reporte_reserva.save()
+
+            # Si la reserva se completa con éxito, mostrar un mensaje de éxito
+            messages.success(request, "¡Reserva realizada con éxito!")
+
+        else:
+            mensaje = "El número total de huéspedes supera la capacidad máxima de la habitación."
+            messages.error(request, mensaje)
+
+    return render(request, 'vendedor/gestion_reservas_vendedor/crear_reserva_pacific_vendedor.html',{'lista_tipo_hab': lista_tipo_hab})
 
 # Vista Vendedor Gestion Reservas -eliminar
 @seller_required
@@ -1229,6 +1471,28 @@ def cerrarsesionvendedor(request):
     logout(request)
     return redirect('index')
 
+# Vista para ver correo
+def vista_correo(request):
+    usuario = User.objects.get(id = 3)
+    nombre = usuario.first_name
+    correo = usuario.email
+    datos_usuario = {
+        'nombre': nombre,
+        'correo': correo
+    }
+
+    subject = 'Confirmación de reserva'
+    reservation_details = {
+        'titulo_hab': 'Habitación Twin v1',
+        'fecha_llegada': '01/05/2024',
+        'fecha_salida': '04/05/2024',
+        'total': '100000',
+        'pago_inicial': '30000',
+        'pago_pendiente': '70000'
+    }
+    return render(request, 'reserva_confirmacion/correo_confirmacion_reserva.html', {'datos_usuario':datos_usuario, 'reservation_details':reservation_details})
+
+
 # Serializadores API REST
 
 class MetodoPagoListCreate(generics.ListCreateAPIView):
@@ -1258,23 +1522,3 @@ class ReservaListCreateAPIView(ListCreateAPIView):
 class ReservaRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
-
-# Enviar correo a cliente para realizar pago mediante paypal
-# @admin_required
-# def enviar_correo_paypal(request):
-#     if request.method == 'POST' and request.is_ajax():
-#         correo_electronico = request.POST.get('correo')
-
-#         # Aquí puedes enviar el correo electrónico usando la función send_mail de Django
-#         # Ejemplo:
-#         send_mail(
-#             'Asunto del correo',
-#             'Cuerpo del correo',
-#             'tu_correo@example.com',
-#             [correo_electronico],
-#             fail_silently=False,
-#         )
-
-#         return JsonResponse({'mensaje': 'Correo electrónico enviado con éxito.'})
-#     else:
-#         return JsonResponse({'error': 'La solicitud debe ser POST y AJAX.'}, status=400)
