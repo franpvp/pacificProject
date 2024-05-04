@@ -25,15 +25,14 @@
             <h2 class="titulo-general mb-3 text-center">{% trans "Cancelar Reserva"%}</h2>
         </div>
     </div>
-        {% csrf_token %}
         <div class="row justify-content-center mt-3 mb-3">
-            
             <div class="col-lg-12">
                 {% if reservas|length == 0 %}
                     <p class="text-center mb-5">{% trans "No hay reservas."%}<p></p>
                 {% else %}
                     <div class="table-responsive">
                         <form id="formulario-cancelar" method="post" onsubmit="handleSubmit(event)">
+                            {% csrf_token %}
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="text-center">

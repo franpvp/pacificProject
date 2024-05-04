@@ -69,12 +69,12 @@ class DatosBancarios(models.Model):
 class Reserva(models.Model):
     id_reserva = models.AutoField(primary_key=True, unique=True, verbose_name="Id reserva")
     id_user = models.CharField(max_length=20, verbose_name="Id Usuario")
+    id_hab = models.ForeignKey(Habitacion, on_delete=models.CASCADE, verbose_name="ID Tipo Habitación")
     order_id = models.CharField(max_length=100, verbose_name="Id Orden PayPal", default='')
     fecha_llegada = models.DateField(null=False, verbose_name="Fecha Llegada")
     fecha_salida = models.DateField(null=False, verbose_name="Fecha Salida")
     cant_adultos = models.IntegerField(verbose_name="Cantidad Adultos", null=False)
     cant_ninos = models.IntegerField(verbose_name="Cantidad Niños", null=True)
-    id_hab = models.ForeignKey(Habitacion, on_delete=models.CASCADE, verbose_name="ID Tipo Habitación")
     habitacion = models.CharField(max_length=50, verbose_name="Titulo Habitación")
     id_metodo_pago = models.ForeignKey(MetodoPago, on_delete=models.CASCADE, verbose_name="ID Método de Pago cliente")
     total = models.IntegerField(verbose_name="Total Reserva")
