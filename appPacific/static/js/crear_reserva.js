@@ -84,19 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
         });
 
-<<<<<<< HEAD
-        // Calcular el pago inicial y pendiente
-        const pagoInicial = precio ? parseInt(precio * 0.3) : 0;
-        const pagoPendiente = precio ? parseInt(precio * 0.7) : 0;
-        pagoInicialElement.textContent = `Pago inicial: $${pagoInicial} CLP`;
-        pagoPendienteElement.textContent = `Pago pendiente: $${pagoPendiente} CLP`;
-=======
         // Agregar evento de cambio al select de habitaciones
         tituloHabSelect.addEventListener('change', function() {
             // Mostrar el precio y la capacidad máxima cuando cambia la selección
             mostrarPrecioYPagos();
             mostrarCapacidadMaxima();
         });
->>>>>>> rama-fran
     }
 });
